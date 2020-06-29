@@ -1,0 +1,993 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{useful}
+
+% {-- Required Packages
+\RequirePackage{calc}
+\RequirePackage{amsmath}
+\RequirePackage{url}
+\RequirePackage{hyperref}
+\RequirePackage{esint}
+\RequirePackage[listingsutf8]{tcolorbox}
+\RequirePackage{xparse}
+\tcbuselibrary{skins,breakable}
+\RequirePackage{listings}
+\RequirePackage{tikz}
+\RequirePackage{varwidth}
+\usetikzlibrary{shadows.blur}
+\RequirePackage{totcount}
+\RequirePackage{xcntperchap}
+% --} End Required Packages
+
+% {-- Optional Packages
+\DeclareOption{optionalpackages}{
+\RequirePackage{amssymb}
+\RequirePackage{amsbsy}
+\RequirePackage{colortbl}
+\RequirePackage{accents}
+\RequirePackage{mathtools}
+\RequirePackage[thicklines]{cancel}
+\RequirePackage{stackengine}
+\RequirePackage{courier}
+\RequirePackage{rotating}
+\RequirePackage{pdflscape}
+\RequirePackage{float}
+}
+% --} End Optional Packages
+
+% {-- map outline
+
+\DeclareOption{mapoutline}{
+
+% \usepackage{tikz}
+\usetikzlibrary{mindmap,trees,shadows}
+% total number of sections %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{totalsection}
+\regtotcounter{totalsection}
+
+\AtBeginDocument{%
+   \pretocmd{\section}{\refstepcounter{totalsection}}{}{}%
+}%
+
+% number of subsections per section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RegisterCounters{section}{subsection}
+\newcounter{totalsubsection}
+\setcounter{totalsubsection}{0}
+
+% creating automatic label %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% based on https://tex.stackexchange.com/a/386557/36296
+
+\AtBeginSection[]{\label{sec:\thesection}\begin{frame}{\nameref{sec:\thesection}}\mindoutline\end{frame}}
+\AtBeginSubsection[]{\label{subsec:\thesection:\thesubsection}\begin{frame}{\nameref{sec:\thesection}}\mindoutline\end{frame}}
+\newcounter{currentsub}
+\newcounter{totsection}
+
+\pgfmathsetmacro{\firstDist}{4.5}
+\pgfmathsetmacro{\secondDist}{3}
+
+\newcommand{\mindtoc}{%
+    \centering
+    \setcounter{totsection}{\number\totvalue{totalsection}}
+    \resizebox{!}{0.8\textheight}{
+    \begin{tikzpicture}[
+        mindmap,
+        every node/.style = {
+            concept,
+            scale = 0.8,
+            execute at begin node = \hskip0pt
+        },
+        root concept/.append style = {
+            concept color = ForegroundColour,
+            text = AccentTextColour
+        },
+        concept color = ForegroundColour,
+        text = AccentTextColour,
+        grow cyclic,
+        level 1/.append style = {
+            level distance = \firstDist*1cm,
+            sibling angle=360/\thetotsection,
+            % sibling angle = 90
+        },
+        level 2/.append style = {
+            level distance = \secondDist*1cm,
+        }
+    ]
+    \pgfmathsetmacro\totalSections\thetotsection
+        \node[root concept, text width = \firstDist*1cm] {\inserttitle}    [clockwise from=135] child[concept color = Accent1]
+        foreach \i in {1,...,\thetotsection}{%
+            node[text = AccentTextColour, text width = \secondDist*0.85cm] {\hyperlink{sec:\i}{\i\\\nameref{sec:\i}}
+                \setcounter{currentsub}{\ObtainTrackedValueExp[\i]{section}{subsection}}
+            }%
+            \ifnum\thecurrentsub>0%
+                child[sibling angle = 180 / (\thecurrentsub + 1), clockwise from = {135 - (360 / \totalSections) * (\i - 1) + (180 / (\thecurrentsub + 1)) * (\thecurrentsub - 1) / 2}, concept color = Accent2, text width = \secondDist*0.75cm] foreach \j in {1,...,\thecurrentsub}{%
+                    node[text = AccentTextColour] {\hyperlink{subsec:\i:\j}{\i.\j\\\nameref{subsec:\i:\j}}}
+                }
+            \fi%
+        };
+  \end{tikzpicture}
+  }
+}
+
+\newcommand{\mindoutline}{%
+%\pgfmathsetmacro\thesection{\thesection}
+%\pgfmathsetmacro\thesubsection{\thesubsection}
+\pgfmathsetmacro\transparency{15}
+\centering
+\setcounter{totsection}{\number\totvalue{totalsection}}
+\resizebox{!}{0.8\textheight}{
+\begin{tikzpicture}[
+    mindmap,
+    every node/.style = {
+    concept,
+    scale = 0.8,
+    execute at begin node = \hskip0pt,
+    align = center
+    },
+    root concept/.append style = {
+    concept color = ForegroundColour,
+    text = AccentTextColour
+    },
+    concept color = ForegroundColour,
+    text = AccentTextColour,
+    grow cyclic,
+    level 1/.append style = {
+    level distance = \firstDist*1cm,
+    sibling angle=360/\thetotsection,
+    % sibling angle = 90
+    },
+    level 2/.append style = {
+    level distance = \secondDist*1cm,
+    }
+    ]
+    \pgfmathsetmacro\totalSections\thetotsection
+    \node[root concept, text width = \firstDist*1cm] (root) {\inserttitle}    [clockwise from=135] child[concept color = Accent1!\transparency!BackgroundColour]
+    foreach \i in {1,...,\thetotsection}{%
+    node[text = {\ifnum\i=\thesection DarkTextColour\else AccentTextColour!\transparency!BackgroundColour\fi}, concept color = {\ifnum\i=\thesection Accent1\else Accent1!\transparency!BackgroundColour\fi}, text width = \secondDist*0.85cm] (\i) {\hyperlink{sec:\i}{\i\\\nameref{sec:\i}}
+    \setcounter{currentsub}{\ObtainTrackedValueExp[\i]{section}{subsection}}
+    }%
+    \ifnum\thecurrentsub>0%
+    child[sibling angle = 180 / (\thecurrentsub + 1), clockwise from = {135 - (360 / \totalSections) * (\i - 1) + (180 / (\thecurrentsub + 1)) * (\thecurrentsub - 1) / 2}, concept color = Accent2!\transparency!BackgroundColour] foreach \j in {1,...,\thecurrentsub}{%
+    node[text = {\ifnum\i=\thesection \ifnum\j=\thesubsection DarkTextColour\else AccentTextColour!\transparency!BackgroundColour\fi\else AccentTextColour!\transparency!BackgroundColour\fi}, concept color = {\ifnum\i=\thesection \ifnum\j=\thesubsection Accent2\else Accent2!\transparency!BackgroundColour\fi\else Accent2!\transparency!BackgroundColour\fi}, text width = \secondDist*0.75cm] (\i \j) {\hyperlink{subsec:\i:\j}{\i.\j\\\nameref{subsec:\i:\j}}}
+    }
+    \fi%
+    };
+    \foreach \i in {1,...,\thetotsection}{%
+    \ifnum\thesection=\i %
+    \path (root) to[circle connection bar switch color=from (ForegroundColour) to (Accent1)] (\i);%
+    \else %
+    \path (root) to[circle connection bar switch color=from (ForegroundColour) to (Accent1!\transparency!BackgroundColour)] (\i);%
+    \fi%
+    \setcounter{currentsub}{\ObtainTrackedValueExp[\i]{section}{subsection}}
+    \ifnum\thecurrentsub>0%
+    \foreach \j in {1,...,\thecurrentsub}{%
+    \ifnum\thesection=\i %
+    \ifnum\thesubsection=\j %
+    \path (\i) to[circle connection bar switch color=from (Accent1) to (Accent2)] (\i \j);%
+    \else %
+    \path (\i) to[circle connection bar switch color=from (Accent1) to (Accent2!\transparency!BackgroundColour)] (\i \j);%
+    \fi%
+    \else %
+    \path (\i) to[circle connection bar switch color=from (Accent1!\transparency!BackgroundColour) to (Accent2!\transparency!BackgroundColour)] (\i \j);%
+    \fi%
+    }
+    \fi
+    }
+\end{tikzpicture}
+}
+}
+}
+
+
+\DeclareOption{mapoutlinesection}{
+
+% \usepackage{tikz}
+\usetikzlibrary{mindmap,trees,shadows}
+% total number of sections %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{totalsection}
+\regtotcounter{totalsection}
+
+\AtBeginDocument{%
+   \pretocmd{\section}{\refstepcounter{totalsection}}{}{}%
+}%
+
+% number of subsections per section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RegisterCounters{section}{subsection}
+\newcounter{totalsubsection}
+\setcounter{totalsubsection}{0}
+
+% creating automatic label %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% based on https://tex.stackexchange.com/a/386557/36296
+
+\AtBeginSection[]{\label{sec:\thesection}\begin{frame}{\nameref{sec:\thesection}}\mindoutlinesection\end{frame}}
+\AtBeginSubsection[]{\label{subsec:\thesection:\thesubsection}\begin{frame}{\nameref{sec:\thesection}}\mindoutlinesubsection\end{frame}}
+\newcounter{currentsub}
+\newcounter{totsection}
+
+\pgfmathsetmacro{\firstDist}{4.5}
+\pgfmathsetmacro{\secondDist}{3}
+
+\newcommand{\mindtoc}{%
+    \centering
+    \setcounter{totsection}{\number\totvalue{totalsection}}
+    \resizebox{!}{0.8\textheight}{
+    \begin{tikzpicture}[
+        mindmap,
+        every node/.style = {
+            concept,
+            scale = 0.8,
+            execute at begin node = \hskip0pt
+        },
+        root concept/.append style = {
+            concept color = ForegroundColour,
+            text = AccentTextColour
+        },
+        concept color = ForegroundColour,
+        text = AccentTextColour,
+        grow cyclic,
+        level 1/.append style = {
+            level distance = \firstDist*1cm,
+            sibling angle=360/\thetotsection,
+            % sibling angle = 90
+        },
+        level 2/.append style = {
+            level distance = \secondDist*1cm,
+        }
+    ]
+    \pgfmathsetmacro\totalSections\thetotsection
+        \node[root concept, text width = \firstDist*1cm] {\inserttitle}    [clockwise from=135] child[concept color = Accent1]
+        foreach \i in {1,...,\thetotsection}{%
+            node[text = AccentTextColour, text width = \secondDist*0.85cm] {\hyperlink{sec:\i}{\i\\\nameref{sec:\i}}
+                \setcounter{currentsub}{\ObtainTrackedValueExp[\i]{section}{subsection}}
+            }%
+            \ifnum\thecurrentsub>0%
+                child[sibling angle = 180 / (\thecurrentsub + 1), clockwise from = {135 - (360 / \totalSections) * (\i - 1) + (180 / (\thecurrentsub + 1)) * (\thecurrentsub - 1) / 2}, concept color = Accent2, text width = \secondDist*0.75cm] foreach \j in {1,...,\thecurrentsub}{%
+                    node[text = AccentTextColour] {\hyperlink{subsec:\i:\j}{\i.\j\\\nameref{subsec:\i:\j}}}
+                }
+            \fi%
+        };
+  \end{tikzpicture}
+  }
+}
+
+\newcommand{\mindoutlinesection}{%
+    %\pgfmathsetmacro\thesection{\thesection}
+    %\pgfmathsetmacro\thesubsection{\thesubsection}
+    \pgfmathsetmacro\transparency{25}
+    \centering
+    \setcounter{totsection}{\number\totvalue{totalsection}}
+    \resizebox{!}{0.8\textheight}{
+    \begin{tikzpicture}[
+        mindmap,
+        every node/.style = {
+            concept,
+            scale = 0.8,
+            execute at begin node = \hskip0pt,
+            align = center
+        },
+        root concept/.append style = {
+            concept color = ForegroundColour,
+            text = AccentTextColour
+        },
+        concept color = ForegroundColour,
+        text = AccentTextColour,
+        grow cyclic,
+        level 1/.append style = {
+            level distance = \firstDist*1cm,
+            sibling angle=360/\thetotsection,
+            % sibling angle = 90
+        }
+    ]
+    \pgfmathsetmacro\totalSections\thetotsection
+        \node[root concept, text width = \firstDist*1cm] (root) {\inserttitle}    [clockwise from=135] child[concept color = Accent1!\transparency!BackgroundColour]
+        foreach \i in {1,...,\thetotsection}{%
+            node[text = {\ifnum\i=\thesection DarkTextColour\else AccentTextColour\fi}, concept color = {\ifnum\i=\thesection Accent1\else Accent1!\transparency!BackgroundColour\fi}, text width = \secondDist*0.85cm] (\i) {\hyperlink{sec:\i}{\i\\\nameref{sec:\i}}
+            }%
+        };
+        \foreach \i in {1,...,\thetotsection}{%
+            \ifnum\thesection=\i %
+                \path (root) to[circle connection bar switch color=from (ForegroundColour) to (Accent1)] (\i);%
+            \else %
+                \path (root) to[circle connection bar switch color=from (ForegroundColour) to (Accent1!\transparency!BackgroundColour)] (\i);%
+            \fi%
+        }
+  \end{tikzpicture}
+  }
+}
+
+
+\newcommand{\mindoutlinesubsection}{%
+    %\pgfmathsetmacro\thesection{\thesection}
+    %\pgfmathsetmacro\thesubsection{\thesubsection}
+    \pgfmathsetmacro\transparency{25}
+    \centering
+    \setcounter{currentsub}{\ObtainTrackedValueExp[\thesection]{section}{subsection}}
+    \resizebox{!}{0.8\textheight}{
+    \begin{tikzpicture}[
+        mindmap,
+        every node/.style = {
+            concept,
+            scale = 0.8,
+            execute at begin node = \hskip0pt,
+            align = center
+        },
+        root concept/.append style = {
+            concept color = Accent1,
+            text = AccentTextColour
+        },
+        concept color = Accent1,
+        text = AccentTextColour,
+        grow cyclic,
+        level 1/.append style = {
+            level distance = \firstDist*1cm,
+            sibling angle=360/\thecurrentsub,
+        }
+    ]
+        every node/.style = {
+            concept,
+            scale = 0.8,
+            execute at begin node = \hskip0pt,
+            align = center
+        },
+        root concept/.append style = {
+            concept color = Accent1,
+            text = AccentTextColour
+        },
+        concept color = Accent1,
+        text = AccentTextColour,
+        grow cyclic,
+        level 1/.append style = {
+            level distance = \firstDist*1cm,
+            sibling angle=360/\thecurrentsub,
+        }
+    ]
+        \node[root concept, text width = \firstDist*1cm] (root) {\nameref{sec:\thesection}} [clockwise from=135] child[concept color = Accent2!\transparency!BackgroundColour]
+        foreach \i in {1,...,\thecurrentsub} {
+            node[
+                text = {\ifnum\i=\thesubsection DarkTextColour\else AccentTextColour\fi},
+                concept color = {\ifnum\i=\thesubsection Accent2\else Accent2!\transparency!BackgroundColour\fi},
+                text width = \secondDist*0.85cm
+            ] (\i) {\hyperlink{subsec:\thesection:\i}{\thesection.\i\\\nameref{subsec:\thesection:\i}}}
+        };
+        \foreach \i in {1,...,\thecurrentsub}{%
+            \ifnum\thesubsection=\i %
+                \path (root) to[circle connection bar switch color=from (Accent1) to (Accent2)] (\i);%
+            \fi%
+        }
+  \end{tikzpicture}
+  }
+}
+
+}
+% --} end map outline
+
+
+% % {-- Colour Options
+%
+% % {-- Setting Default Scheme
+% \definecolor{LightBackgroundColour}{HTML}{E1DBCE}
+% \definecolor{LightForegroundColour}{HTML}{47474B}
+% \definecolor{LightAccent1}{HTML}{AAB58B}
+% \definecolor{LightAccent2}{HTML}{97A7B7}
+% \definecolor{LightAccent3}{HTML}{836972}
+% \definecolor{LightAccent4}{HTML}{B8AC97}
+% \definecolor{LightAccent5}{HTML}{938165}
+% % --} End Setting Default Scheme
+%
+% % {-- Colour Schemes
+% \input{./colsDef.tex}
+% % --} End Colour Schemes
+%
+% % {-- Setting Default Variant
+% \colorlet{ForegroundColour}{LightForegroundColour}
+% \colorlet{BackgroundColour}{LightBackgroundColour}
+% \colorlet{Accent1}{LightAccent1}
+% \colorlet{Accent2}{LightAccent2}
+% \colorlet{Accent3}{LightAccent3}
+% \colorlet{Accent4}{LightAccent4}
+% \colorlet{Accent5}{LightAccent5}
+% \colorlet{AccentTextColour}{BackgroundColour!50!white}
+% \colorlet{DarkTextColour}{ForegroundColour}
+% % --} End Setting Default Variant
+%
+% % {-- Scheme Variants
+%
+% \DeclareOption{light}{
+% 	\colorlet{ForegroundColour}{LightForegroundColour}
+% 	\colorlet{BackgroundColour}{LightBackgroundColour}
+% 	\colorlet{Accent1}{LightAccent1}
+% 	\colorlet{Accent2}{LightAccent2}
+% 	\colorlet{Accent3}{LightAccent3}
+% 	\colorlet{Accent4}{LightAccent4}
+% 	\colorlet{Accent5}{LightAccent5}
+%     \colorlet{AccentTextColour}{BackgroundColour!50!white}
+%     \colorlet{DarkTextColour}{ForegroundColour}
+% }
+%
+% \DeclareOption{dark}{
+% 	\colorlet{ForegroundColour}{DarkForegroundColour}
+% 	\colorlet{BackgroundColour}{DarkBackgroundColour}
+% 	\colorlet{Accent1}{DarkAccent1}
+% 	\colorlet{Accent2}{DarkAccent2}
+% 	\colorlet{Accent3}{DarkAccent3}
+% 	\colorlet{Accent4}{DarkAccent4}
+% 	\colorlet{Accent5}{DarkAccent5}
+%     \colorlet{AccentTextColour}{BackgroundColour!50!black}
+%     \colorlet{DarkTextColour}{BackgroundColour!50!black}
+% }
+%
+% % --} End Scheme Variants
+%
+% % --} End Colour Options
+%
+% {-- Process Options
+\DeclareOption*{\PackageWarning{examplepackage}{Unknown ‘\CurrentOption’}}
+\ProcessOptions\relax
+% --} End Process Options
+
+% {-- Time-Saving Commands
+\newcommand{\colvec}[1]{\left( \begin{array}{c} #1 \end{array} \right)}
+\newcommand{\rowvec}[2][c c]{\left( \begin{array}{#1} #2 \end{array} \right)}
+\renewcommand{\matrix}[2][c c]{\left( \begin{array}{#1} #2 \end{array} \right)}
+
+\newcommand{\bigO}[1]{\mathcal{O}\left( #1 \right)}
+\newcommand{\st}{$^\text{st}\ $}
+\newcommand{\nd}{$^\text{nd}\ $}
+\newcommand{\rd}{$^\text{rd}\ $}
+\renewcommand{\th}{$^\text{th}\ $}
+\newcommand{\e}[1]{\text{e}^{#1}} %For exponentials
+\newcommand{\ee}[1]{\text{e}^{{}^{#1}}} %For exponentials with bulky powers
+\newcommand{\curl}{\vec{ \nabla }\times}
+\renewcommand{\div}{\vec{ \nabla }\cdot}
+\newcommand{\lap}{{\nabla}^2}
+\newcommand{\veclap}{{\vec{\nabla}}^2}
+\newcommand{\p}[3][{}]{\dfrac{\partial^{#1} {#2}}{\partial {#3}^{#1}}} %Optional argument is order of derivative
+\newcommand{\pp}[3]{\dfrac{\partial^2{#1}}{\partial {#2} \partial{#3}}}
+\newcommand{\dv}[3][{}]{\dfrac{\d^{#1} {#2}}{\d {#3}^{#1}}} %optional argument is order of derivative
+\newcommand{\fdv}[3][{}]{\dfrac{\delta^{#1} {#2}}{\delta {#3}^{#1}}} %optional argument is order of derivative
+\newcommand{\Dv}[3][{}]{\dfrac{\text{D}^{#1} {#2}}{\text{D} {#3}^{#1}}}
+\newcommand{\util}{\underaccent{\tilde}}
+\newcommand{\ogamma}{\left(1-\frac{v^2}{c^2} \right)^\frac{1}{2}}
+\newcommand{\gammav}[1]{\frac{1}{\sqrt{1-\frac{\left({#1}\right)^2}{c^2} }}}
+\newcommand{\erf}{\text{erf}\,}
+\renewcommand{\d}{\,\text d}
+\newcommand{\lr}[1]{\left({#1}\right)}
+\newcommand{\slr}[1]{\left[{#1}\right]}
+\newcommand{\set}[1]{\left\lbrace{#1}\right\rbrace}
+\newcommand{\alr}[1]{\left\langle{#1}\right\rangle}
+\newcommand{\abs}[1]{\left| {#1} \right|}
+\newcommand{\eval}[2]{\left. {#1} \mathrlap{\Big|}\right| _{#2}}
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\setC}{\mathbb{C}}
+\newcommand{\setZ}{\mathbb{Z}}
+\newcommand{\setN}{\mathbb{N}}
+\newcommand{\pr}{{}^\prime\,}
+\let\oldint\int
+\renewcommand{\int}{\oldint\limits}
+\let\oldiint\iint
+\renewcommand{\iint}{\oldiint\limits}
+\let\oldiiint\iiint
+\renewcommand{\iiint}{\oldiiiint\limits}
+\let\oldoint\oint
+\renewcommand{\oint}{\oldoint\limits}
+\let\oldoiint\oiint
+\renewcommand{\oiint}{\oldoiint\limits}
+\let\oldsum\sum
+\renewcommand{\sum}{\oldsum\limits}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+%\let\oldsec{\section}
+%\renewcommand{\section}[1]{\clearpage\thispagestyle{plain}\leavevmode\\\vspace{0.3\textheight}\leavevmode\\ \oldsec{#1} \clearpage}
+\newcommand{\anti}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\To}{\ \longrightarrow\ }
+
+\newcommand{\pfrac}[2]{{{}^\frac{#1}{#2}}}
+
+
+\newcommand\funderline[1]{%
+  \stackengine{0pt}{\underline{\;\,\vphantom{#1}}}{#1}{O}{c}{F}{F}{L}}
+\newcommand{\mat}[1]{\ensuremath{\funderline{\smash{#1}}}}
+\newcommand{\newdate}[1]{\clearpage
+  \vspace{2cm}\hrule\hrule\hrule\leavevmode\\\vspace{-0.4cm}\hrule\leavevmode\\\vspace{-0.4cm}\hrule\hrule\hrule
+  \begin{center}
+    {#1}
+  \end{center}
+  \hrule\hrule\hrule\leavevmode\\\vspace{-0.4cm}\hrule\leavevmode\\\vspace{-0.4cm}\hrule\hrule\hrule\vspace{2cm}}
+
+\newcommand{\chem}[3]{\ensuremath{\prescript{#2}{#3}{\text{#1}}}}
+% --} End Time Saving Commands
+
+% {-- General Set-up
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+\urlstyle{same}
+\setlength{\columnseprule}{0pt}
+\setlength{\columnsep}{15pt}
+\parskip 1em
+% --} End General Set-Up
+
+% {-- Listings
+\lstdefinestyle{main}{
+    language=[LaTeX]TeX,
+    backgroundcolor=\color{BackgroundColour},
+    commentstyle=\color{Accent3}\textit,
+    keywordstyle=\color{Accent1}\textbf,
+    numberstyle=\tiny\color{Accent1},
+    stringstyle=\color{Accent2},
+    basicstyle=\ttfamily\small\color{ForegroundColour},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+	xleftmargin=1.25cm,
+	xrightmargin=1cm,
+    frame=single
+}
+
+\lstdefinestyle{exampleBox}{
+    language=[LaTeX]TeX,
+    backgroundcolor=\color{BackgroundColour},
+    commentstyle=\color{Accent3}\textit,
+    keywordstyle=\color{Accent1}\textbf,
+    numberstyle=\tiny\color{Accent1},
+    stringstyle=\color{Accent2},
+    basicstyle=\ttfamily\small\color{ForegroundColour},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=0.6cm,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+	xleftmargin=-0.2cm,
+	xrightmargin=-0.2cm,
+    frame=none
+}
+
+\lstset{style = exampleBox}
+
+% --} End Listings
+%
+% % {-- Boxes
+%
+% \newcounter{boxExampleCounter}
+% \newcounter{boxTheoremCounter}
+%
+% \newtcblisting{%
+%     exampleCompiled%
+% } [3] [] {%
+%     enhanced,%
+%     listing engine = listings,%
+%     bicolor,%
+%     colframe = Accent3,%
+%     colback = BackgroundColour,%
+%     colbacklower = white,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent3,%
+%             right color = Accent3,%
+%             middle color = Accent3!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     collower = DarkTextColour,%
+%     step = boxExampleCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     listing options = {style = exampleBox, #1},%
+%     title = Example \arabic{boxExampleCounter}:\ {#2},%
+%     label = #3%
+% }
+%
+% \newtcblisting{%
+%     exampleCode%
+% } [3] [] {%
+%     enhanced,%
+%     listing engine = listings,%
+%     bicolor,%
+%     colframe = Accent3,%
+%     colback = BackgroundColour,%
+%     colbacklower = white,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent3,%
+%             right color = Accent3,%
+%             middle color = Accent3!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     step = boxExampleCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     listing options = {style = exampleBox, #1},%
+%     title = Example \arabic{boxExampleCounter}:\ {#2},%
+%     label = #3,%
+%     listing only
+% }
+%
+% \renewtcolorbox
+% {example}[3][]{%
+%     enhanced,%
+%     before skip = 2mm,%
+%     after skip = 2mm,%
+%     colback = BackgroundColour,%
+%     colframe = Accent3,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent3,%
+%             right color = Accent3,%
+%             middle color = Accent3!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     step = boxExampleCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     title = Example \arabic{boxExampleCounter}:\ {#2},%
+%     label = #3,%
+%     #1%
+% }
+%
+%
+% \newtcblisting{%
+%     exampleCompiled*%
+% } [2] [] {%
+%     enhanced,%
+%     listing engine = listings,%
+%     bicolor,%
+%     colframe = Accent3,%
+%     colback = BackgroundColour,%
+%     colbacklower = white,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent3,%
+%             right color = Accent3,%
+%             middle color = Accent3!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     collower = DarkTextColour,%
+%     % step = boxExampleCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     listing options = {style = exampleBox, #1},%
+%     title = Example:\ {#2}%
+% }
+%
+% \newtcblisting{%
+%     exampleCode*%
+% } [2] [] {%
+%     enhanced,%
+%     listing engine = listings,%
+%     bicolor,%
+%     colframe = Accent3,%
+%     colback = BackgroundColour,%
+%     colbacklower = white,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent3,%
+%             right color = Accent3,%
+%             middle color = Accent3!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     % step = boxExampleCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     listing options = {style = exampleBox, #1},%
+%     title = Example:\ {#2},%
+%     listing only
+% }
+%
+% \newtcolorbox
+% {example*}[2][]{%
+%     enhanced,%
+%     before skip = 2mm,%
+%     after skip = 2mm,%
+%     colback = BackgroundColour,%
+%     colframe = Accent3,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent3,%
+%             right color = Accent3,%
+%             middle color = Accent3!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     % step = boxExampleCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     title = Example:\ {#2},%
+%     #1%
+% }
+%
+%
+% \newtcolorbox
+% {important}[2][]{%
+%     enhanced,%
+%     before skip = 2mm,%
+%     after skip = 2mm,%
+%     colback = BackgroundColour,%
+%     colframe = Accent2,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent2!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent2,%
+%             right color = Accent2,%
+%             middle color = Accent2!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     title = Important:\ {#2},%
+%     #1%
+% }
+%
+% \renewtcolorbox
+% {theorem}[3][]{%
+%     enhanced,%
+%     before skip = 2mm,%
+%     after skip = 2mm,%
+%     colback = BackgroundColour,%
+%     colframe = Accent5,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent5!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent5,%
+%             right color = Accent5,%
+%             middle color = Accent5!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     step = boxTheoremCounter,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     title = Theorem \arabic{boxTheoremCounter}:\ {#2},%
+%     label = #3,%
+%     #1%
+% }
+%
+% \newtcolorbox
+% {theorem*}[2][]{%
+%     enhanced,%
+%     before skip = 2mm,%
+%     after skip = 2mm,%
+%     colback = BackgroundColour,%
+%     colframe = Accent5,%
+%     boxrule = 0.5mm,%
+%     attach boxed title to top left = {%
+%         xshift=1cm,%
+%         yshift*=1mm-\tcboxedtitleheight%
+%     },%
+%     varwidth boxed title* = -3cm,%
+%     boxed title style = {%
+%         frame code = {%
+%         \path[fill = Accent5!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+%         \path[%
+%             left color = Accent5,%
+%             right color = Accent5,%
+%             middle color = Accent5!85!white,%
+%             blur shadow = {%
+%                 shadow blur steps=5,%
+%                 shadow xshift = 0.5mm,%
+%                 shadow yshift = -1.7mm,%
+%                 shadow scale = 1.025
+%             }%
+%         ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+%         },%
+%         interior engine = empty,%
+%     },%
+%     coltext = ForegroundColour,%
+%     fonttitle = \color{AccentTextColour}\bfseries,%
+%     title = Theorem:\ {#2},%
+%     #1%
+% }
+%
+%
+% % --} End Boxes
+
+% {-- Bra Ket Notation
+% Taken from the Physics package, https://ctan.org/pkg/physics?lang=en
+
+\DeclareDocumentCommand\bra{ s m t\ket s g }
+{ % Bra
+  \IfBooleanTF{#3}
+  { % Contraction
+    \IfBooleanTF{#1}
+    { % Bra has a star: no resize
+      \IfNoValueTF{#5}
+      {\braket*{#2}{} \IfBooleanTF{#4}{*}{}}
+      {\braket*{#2}{#5}}
+    }
+    {
+      \IfBooleanTF{#4}
+      { % Ket has a star: no resize
+        \IfNoValueTF{#5}
+        {\braket{#2}{} *}
+        {\braket*{#2}{#5}}
+      }
+      {\braket{#2}{\IfNoValueTF{#5}{}{#5}}} % Neither term is starred: auto sizing
+    }
+  }
+  { % No contraction
+    \IfBooleanTF{#1}
+    {\vphantom{#2}\left\langle\smash{#2}\right\rvert}
+    {\left\langle{#2}\right\rvert}
+    \IfBooleanTF{#4}{*}{}
+    \IfNoValueTF{#5}{}{#5}
+  }
+}
+
+\DeclareDocumentCommand\ket{ s m }
+{ % Ket
+  \IfBooleanTF{#1}
+  {\vphantom{#2}\left\lvert\smash{#2}\right\rangle} % No resize
+  {\left\lvert{#2}\right\rangle} % Auto sizing
+}
+
+\DeclareDocumentCommand\innerproduct{ s m g }
+{ % Inner product
+  \IfBooleanTF{#1}
+  { % No resize
+    \IfNoValueTF{#3}
+    {\vphantom{#2}\left\langle\smash{#2}\middle\vert\smash{#2}\right\rangle}
+    {\vphantom{#2#3}\left\langle\smash{#2}\middle\vert\smash{#3}\right\rangle}
+  }
+  { % Auto resize
+    \IfNoValueTF{#3}
+    {\left\langle{#2}\middle\vert{#2}\right\rangle}
+    {\left\langle{#2}\middle\vert{#3}\right\rangle}
+  }
+}
+\DeclareDocumentCommand\braket{}{\innerproduct} % Alternative for \innerproduct
+\DeclareDocumentCommand\ip{}{\innerproduct} % Shorthand for \innerproduct
+
+\DeclareDocumentCommand\outerproduct{ s m g }
+{ % Dyad
+  \IfBooleanTF{#1}
+  { % No resize
+    \IfNoValueTF{#3}
+    {\vphantom{#2}\left\lvert\smash{#2}\middle\rangle\!\middle\langle\smash{#2}\right\rvert}
+    {\vphantom{#2#3}\left\lvert\smash{#2}\middle\rangle\!\middle\langle\smash{#3}\right\rvert}
+  }
+  { % Auto resize
+    \IfNoValueTF{#3}
+    {\left\lvert{#2}\middle\rangle\!\middle\langle{#2}\right\rvert}
+    {\left\lvert{#2}\middle\rangle\!\middle\langle{#3}\right\rvert}
+  }
+}
+
+% --} End Bra Ket Notation

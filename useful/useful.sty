@@ -1,0 +1,2076 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{useful}
+
+% {-- Required Packages
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsbsy}
+\RequirePackage{mathtools}
+\RequirePackage{accents}
+\RequirePackage[thicklines]{cancel}
+\RequirePackage{xparse}
+\RequirePackage{esint}
+\RequirePackage{url}
+\RequirePackage{hyperref}
+\RequirePackage{varwidth}
+\RequirePackage[listingsutf8]{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\RequirePackage{colortbl}
+\RequirePackage{listings}
+\RequirePackage{tikz}
+\usetikzlibrary{shadows.blur}
+\RequirePackage{stackengine}
+\RequirePackage{courier}
+\RequirePackage{float}
+\RequirePackage{rotating}
+\RequirePackage{pdflscape}
+% --} End Required Packages
+
+
+% --} End Optional Packages
+
+% {-- Colour Options
+
+% {-- Setting Default Scheme
+\definecolor{LightBackgroundColour}{HTML}{E1DBCE}
+\definecolor{LightForegroundColour}{HTML}{47474B}
+\definecolor{LightAccent1}{HTML}{AAB58B}
+\definecolor{LightAccent2}{HTML}{97A7B7}
+\definecolor{LightAccent3}{HTML}{836972}
+\definecolor{LightAccent4}{HTML}{B8AC97}
+\definecolor{LightAccent5}{HTML}{938165}
+% --} End Setting Default Scheme
+
+% {-- Colour Schemes
+\DeclareOption{midnight} {
+	\definecolor{DarkBackgroundColour}{HTML}{000000}
+	\definecolor{DarkForegroundColour}{HTML}{E6E6FF}
+	\definecolor{DarkAccent1}{HTML}{817FCF}
+	\definecolor{DarkAccent2}{HTML}{92CC88}
+	\definecolor{DarkAccent3}{HTML}{61609B}
+	\definecolor{DarkAccent4}{HTML}{414067}
+	\definecolor{DarkAccent5}{HTML}{417639}
+	\definecolor{LightBackgroundColour}{HTML}{E6E6FF}
+	\definecolor{LightForegroundColour}{HTML}{000000}
+	\definecolor{LightAccent1}{HTML}{817FCF}
+	\definecolor{LightAccent2}{HTML}{92CC88}
+	\definecolor{LightAccent3}{HTML}{61609B}
+	\definecolor{LightAccent4}{HTML}{414067}
+	\definecolor{LightAccent5}{HTML}{417639}
+}
+
+\DeclareOption{bold} {
+	\definecolor{LightBackgroundColour}{HTML}{F3F2DD}
+	\definecolor{LightForegroundColour}{HTML}{292935}
+	\definecolor{LightAccent1}{HTML}{808DA0}
+	\definecolor{LightAccent2}{HTML}{D3523C}
+	\definecolor{LightAccent3}{HTML}{92A298}
+	\definecolor{LightAccent4}{HTML}{CB7257}
+	\definecolor{LightAccent5}{HTML}{CB5164}
+	\definecolor{DarkBackgroundColour}{HTML}{4A4A4A}
+	\definecolor{DarkForegroundColour}{HTML}{B3B6BA}
+	\definecolor{DarkAccent1}{HTML}{94B8CE}
+	\definecolor{DarkAccent2}{HTML}{CB7257}
+	\definecolor{DarkAccent3}{HTML}{CB5164}
+	\definecolor{DarkAccent4}{HTML}{DBC25C}
+	\definecolor{DarkAccent5}{HTML}{86D178}
+}
+
+\DeclareOption{sage} {
+	\definecolor{LightBackgroundColour}{HTML}{E1DBCE}
+	\definecolor{LightForegroundColour}{HTML}{47474B}
+	\definecolor{LightAccent1}{HTML}{AAB58B}
+	\definecolor{LightAccent2}{HTML}{97A7B7}
+	\definecolor{LightAccent3}{HTML}{836972}
+	\definecolor{LightAccent4}{HTML}{B8AC97}
+	\definecolor{LightAccent5}{HTML}{938165}
+	\definecolor{DarkBackgroundColour}{HTML}{786C70}
+	\definecolor{DarkForegroundColour}{HTML}{DDDDDD}
+	\definecolor{DarkAccent1}{HTML}{B7AE53}
+	\definecolor{DarkAccent2}{HTML}{CE543F}
+	\definecolor{DarkAccent3}{HTML}{E8B54C}
+	\definecolor{DarkAccent4}{HTML}{97A7B7}
+	\definecolor{DarkAccent5}{HTML}{836972}
+}
+
+\DeclareOption{succulent} {
+	\definecolor{DarkBackgroundColour}{HTML}{3B3347}
+	\definecolor{DarkForegroundColour}{HTML}{D0DAC0}
+	\definecolor{DarkAccent1}{HTML}{B3ACBD}
+	\definecolor{DarkAccent2}{HTML}{99B8A4}
+	\definecolor{DarkAccent3}{HTML}{5A7477}
+	\definecolor{DarkAccent4}{HTML}{D0DAC0}
+	\definecolor{DarkAccent5}{HTML}{99B8A4}
+	\definecolor{LightBackgroundColour}{HTML}{D0DAC0}
+	\definecolor{LightForegroundColour}{HTML}{3B3347}
+	\definecolor{LightAccent1}{HTML}{B3ACBD}
+	\definecolor{LightAccent2}{HTML}{99B8A4}
+	\definecolor{LightAccent3}{HTML}{5A7477}
+	\definecolor{LightAccent4}{HTML}{D0DAC0}
+	\definecolor{LightAccent5}{HTML}{99B8A4}
+}
+
+\DeclareOption{muted} {
+	\definecolor{LightBackgroundColour}{HTML}{E4DCCF}
+	\definecolor{LightForegroundColour}{HTML}{46454A}
+	\definecolor{LightAccent1}{HTML}{A7B78A}
+	\definecolor{LightAccent2}{HTML}{8D6972}
+	\definecolor{LightAccent3}{HTML}{92A9B9}
+	\definecolor{LightAccent4}{HTML}{9A8264}
+	\definecolor{LightAccent5}{HTML}{706F73}
+	\definecolor{DarkBackgroundColour}{HTML}{46454A}
+	\definecolor{DarkForegroundColour}{HTML}{E4DCCF}
+	\definecolor{DarkAccent1}{HTML}{A7B78A}
+	\definecolor{DarkAccent2}{HTML}{8D6972}
+	\definecolor{DarkAccent3}{HTML}{92A9B9}
+	\definecolor{DarkAccent4}{HTML}{9A8264}
+	\definecolor{DarkAccent5}{HTML}{706F73}
+}
+
+\DeclareOption{office2011} {
+	\definecolor{LightBackgroundColour}{HTML}{ECECE4}
+	\definecolor{LightForegroundColour}{HTML}{264B77}
+	\definecolor{LightAccent1}{HTML}{5882B4}
+	\definecolor{LightAccent2}{HTML}{BA5253}
+	\definecolor{LightAccent3}{HTML}{9CB864}
+	\definecolor{LightAccent4}{HTML}{7D669A}
+	\definecolor{LightAccent5}{HTML}{50ACBB}
+	\definecolor{DarkBackgroundColour}{HTML}{264B77}
+	\definecolor{DarkForegroundColour}{HTML}{ECECE4}
+	\definecolor{DarkAccent1}{HTML}{5882B4}
+	\definecolor{DarkAccent2}{HTML}{BA5253}
+	\definecolor{DarkAccent3}{HTML}{9CB864}
+	\definecolor{DarkAccent4}{HTML}{7D669A}
+	\definecolor{DarkAccent5}{HTML}{50ACBB}
+}
+
+\DeclareOption{grayscale} {
+	\definecolor{LightBackgroundColour}{HTML}{FAFAFA}
+	\definecolor{LightForegroundColour}{HTML}{000000}
+	\definecolor{LightAccent1}{HTML}{DFDFDF}
+	\definecolor{LightAccent2}{HTML}{B2B2B2}
+	\definecolor{LightAccent3}{HTML}{979797}
+	\definecolor{LightAccent4}{HTML}{818181}
+	\definecolor{LightAccent5}{HTML}{5D5D5D}
+	\definecolor{DarkBackgroundColour}{HTML}{000000}
+	\definecolor{DarkForegroundColour}{HTML}{FAFAFA}
+	\definecolor{DarkAccent1}{HTML}{DFDFDF}
+	\definecolor{DarkAccent2}{HTML}{B2B2B2}
+	\definecolor{DarkAccent3}{HTML}{979797}
+	\definecolor{DarkAccent4}{HTML}{818181}
+	\definecolor{DarkAccent5}{HTML}{5D5D5D}
+}
+
+\DeclareOption{adjacency} {
+	\definecolor{LightBackgroundColour}{HTML}{DFDCBD}
+	\definecolor{LightForegroundColour}{HTML}{66614D}
+	\definecolor{LightAccent1}{HTML}{A8A586}
+	\definecolor{LightAccent2}{HTML}{A1BFBD}
+	\definecolor{LightAccent3}{HTML}{CFCA79}
+	\definecolor{LightAccent4}{HTML}{92A19C}
+	\definecolor{LightAccent5}{HTML}{C1A365}
+	\definecolor{DarkBackgroundColour}{HTML}{66614D}
+	\definecolor{DarkForegroundColour}{HTML}{DFDCBD}
+	\definecolor{DarkAccent1}{HTML}{A8A586}
+	\definecolor{DarkAccent2}{HTML}{A1BFBD}
+	\definecolor{DarkAccent3}{HTML}{CFCA79}
+	\definecolor{DarkAccent4}{HTML}{92A19C}
+	\definecolor{DarkAccent5}{HTML}{C1A365}
+}
+
+\DeclareOption{advantage} {
+	\definecolor{LightBackgroundColour}{HTML}{C4B2C8}
+	\definecolor{LightForegroundColour}{HTML}{2C1B2E}
+	\definecolor{LightAccent1}{HTML}{643966}
+	\definecolor{LightAccent2}{HTML}{34153E}
+	\definecolor{LightAccent3}{HTML}{676894}
+	\definecolor{LightAccent4}{HTML}{9C9A73}
+	\definecolor{LightAccent5}{HTML}{F0931A}
+	\definecolor{DarkBackgroundColour}{HTML}{2C1B2E}
+	\definecolor{DarkForegroundColour}{HTML}{C4B2C8}
+	\definecolor{DarkAccent1}{HTML}{643966}
+	\definecolor{DarkAccent2}{HTML}{34153E}
+	\definecolor{DarkAccent3}{HTML}{676894}
+	\definecolor{DarkAccent4}{HTML}{9C9A73}
+	\definecolor{DarkAccent5}{HTML}{F0931A}
+}
+
+\DeclareOption{angeles} {
+	\definecolor{LightBackgroundColour}{HTML}{CED6D9}
+	\definecolor{LightForegroundColour}{HTML}{464646}
+	\definecolor{LightAccent1}{HTML}{7B7C7E}
+	\definecolor{LightAccent2}{HTML}{FB6D1B}
+	\definecolor{LightAccent3}{HTML}{0BA4D0}
+	\definecolor{LightAccent4}{HTML}{809958}
+	\definecolor{LightAccent5}{HTML}{C2B197}
+	\definecolor{DarkBackgroundColour}{HTML}{464646}
+	\definecolor{DarkForegroundColour}{HTML}{CED6D9}
+	\definecolor{DarkAccent1}{HTML}{7B7C7E}
+	\definecolor{DarkAccent2}{HTML}{FB6D1B}
+	\definecolor{DarkAccent3}{HTML}{0BA4D0}
+	\definecolor{DarkAccent4}{HTML}{809958}
+	\definecolor{DarkAccent5}{HTML}{C2B197}
+}
+
+\DeclareOption{apothecary} {
+	\definecolor{LightBackgroundColour}{HTML}{E9EBD3}
+	\definecolor{LightForegroundColour}{HTML}{5A4D44}
+	\definecolor{LightAccent1}{HTML}{96A199}
+	\definecolor{LightAccent2}{HTML}{C6564A}
+	\definecolor{LightAccent3}{HTML}{B3AD5F}
+	\definecolor{LightAccent4}{HTML}{848160}
+	\definecolor{LightAccent5}{HTML}{E5BA52}
+	\definecolor{DarkBackgroundColour}{HTML}{5A4D44}
+	\definecolor{DarkForegroundColour}{HTML}{E9EBD3}
+	\definecolor{DarkAccent1}{HTML}{96A199}
+	\definecolor{DarkAccent2}{HTML}{C6564A}
+	\definecolor{DarkAccent3}{HTML}{B3AD5F}
+	\definecolor{DarkAccent4}{HTML}{848160}
+	\definecolor{DarkAccent5}{HTML}{E5BA52}
+}
+
+\DeclareOption{austin} {
+	\definecolor{LightBackgroundColour}{HTML}{CDEF81}
+	\definecolor{LightForegroundColour}{HTML}{3E3F31}
+	\definecolor{LightAccent1}{HTML}{95C205}
+	\definecolor{LightAccent2}{HTML}{6F695D}
+	\definecolor{LightAccent3}{HTML}{FE6B04}
+	\definecolor{LightAccent4}{HTML}{90956D}
+	\definecolor{LightAccent5}{HTML}{8F6D4A}
+	\definecolor{DarkBackgroundColour}{HTML}{3E3F31}
+	\definecolor{DarkForegroundColour}{HTML}{CDEF81}
+	\definecolor{DarkAccent1}{HTML}{95C205}
+	\definecolor{DarkAccent2}{HTML}{6F695D}
+	\definecolor{DarkAccent3}{HTML}{FE6B04}
+	\definecolor{DarkAccent4}{HTML}{90956D}
+	\definecolor{DarkAccent5}{HTML}{8F6D4A}
+}
+
+\DeclareOption{blacktie} {
+	\definecolor{LightBackgroundColour}{HTML}{E3DDD1}
+	\definecolor{LightForegroundColour}{HTML}{49494B}
+	\definecolor{LightAccent1}{HTML}{737278}
+	\definecolor{LightAccent2}{HTML}{A9B793}
+	\definecolor{LightAccent3}{HTML}{BDB09D}
+	\definecolor{LightAccent4}{HTML}{94A7B5}
+	\definecolor{LightAccent5}{HTML}{99856D}
+	\definecolor{DarkBackgroundColour}{HTML}{49494B}
+	\definecolor{DarkForegroundColour}{HTML}{E3DDD1}
+	\definecolor{DarkAccent1}{HTML}{737278}
+	\definecolor{DarkAccent2}{HTML}{A9B793}
+	\definecolor{DarkAccent3}{HTML}{BDB09D}
+	\definecolor{DarkAccent4}{HTML}{94A7B5}
+	\definecolor{DarkAccent5}{HTML}{99856D}
+}
+
+\DeclareOption{breeze} {
+	\definecolor{LightBackgroundColour}{HTML}{D8EDF2}
+	\definecolor{LightForegroundColour}{HTML}{0F233B}
+	\definecolor{LightAccent1}{HTML}{367B9A}
+	\definecolor{LightAccent2}{HTML}{2D4B56}
+	\definecolor{LightAccent3}{HTML}{DE7D1F}
+	\definecolor{LightAccent4}{HTML}{FAB80A}
+	\definecolor{LightAccent5}{HTML}{83B806}
+	\definecolor{DarkBackgroundColour}{HTML}{0F233B}
+	\definecolor{DarkForegroundColour}{HTML}{D8EDF2}
+	\definecolor{DarkAccent1}{HTML}{367B9A}
+	\definecolor{DarkAccent2}{HTML}{2D4B56}
+	\definecolor{DarkAccent3}{HTML}{DE7D1F}
+	\definecolor{DarkAccent4}{HTML}{FAB80A}
+	\definecolor{DarkAccent5}{HTML}{83B806}
+}
+
+\DeclareOption{capital} {
+	\definecolor{LightBackgroundColour}{HTML}{819095}
+	\definecolor{LightForegroundColour}{HTML}{6D6E60}
+	\definecolor{LightAccent1}{HTML}{4D5B5E}
+	\definecolor{LightAccent2}{HTML}{945543}
+	\definecolor{LightAccent3}{HTML}{4F493D}
+	\definecolor{LightAccent4}{HTML}{C1B084}
+	\definecolor{LightAccent5}{HTML}{69755F}
+	\definecolor{DarkBackgroundColour}{HTML}{6D6E60}
+	\definecolor{DarkForegroundColour}{HTML}{819095}
+	\definecolor{DarkAccent1}{HTML}{4D5B5E}
+	\definecolor{DarkAccent2}{HTML}{945543}
+	\definecolor{DarkAccent3}{HTML}{4F493D}
+	\definecolor{DarkAccent4}{HTML}{C1B084}
+	\definecolor{DarkAccent5}{HTML}{69755F}
+}
+
+\DeclareOption{civic} {
+	\definecolor{LightBackgroundColour}{HTML}{CAD1D7}
+	\definecolor{LightForegroundColour}{HTML}{686D83}
+	\definecolor{LightAccent1}{HTML}{CD6653}
+	\definecolor{LightAccent2}{HTML}{C7B509}
+	\definecolor{LightAccent3}{HTML}{8DABA9}
+	\definecolor{LightAccent4}{HTML}{8C7E75}
+	\definecolor{LightAccent5}{HTML}{90AD8F}
+	\definecolor{DarkBackgroundColour}{HTML}{686D83}
+	\definecolor{DarkForegroundColour}{HTML}{CAD1D7}
+	\definecolor{DarkAccent1}{HTML}{CD6653}
+	\definecolor{DarkAccent2}{HTML}{C7B509}
+	\definecolor{DarkAccent3}{HTML}{8DABA9}
+	\definecolor{DarkAccent4}{HTML}{8C7E75}
+	\definecolor{DarkAccent5}{HTML}{90AD8F}
+}
+
+\DeclareOption{clarity} {
+	\definecolor{LightBackgroundColour}{HTML}{F0F1DF}
+	\definecolor{LightForegroundColour}{HTML}{C65744}
+	\definecolor{LightAccent1}{HTML}{96A199}
+	\definecolor{LightAccent2}{HTML}{AB9371}
+	\definecolor{LightAccent3}{HTML}{74665D}
+	\definecolor{LightAccent4}{HTML}{505C68}
+	\definecolor{LightAccent5}{HTML}{8490A0}
+	\definecolor{DarkBackgroundColour}{HTML}{C65744}
+	\definecolor{DarkForegroundColour}{HTML}{F0F1DF}
+	\definecolor{DarkAccent1}{HTML}{96A199}
+	\definecolor{DarkAccent2}{HTML}{AB9371}
+	\definecolor{DarkAccent3}{HTML}{74665D}
+	\definecolor{DarkAccent4}{HTML}{505C68}
+	\definecolor{DarkAccent5}{HTML}{8490A0}
+}
+
+\DeclareOption{couture} {
+	\definecolor{LightBackgroundColour}{HTML}{D1CEBF}
+	\definecolor{LightForegroundColour}{HTML}{36312D}
+	\definecolor{LightAccent1}{HTML}{9E9063}
+	\definecolor{LightAccent2}{HTML}{9E9985}
+	\definecolor{LightAccent3}{HTML}{85786F}
+	\definecolor{LightAccent4}{HTML}{B0B1AB}
+	\definecolor{LightAccent5}{HTML}{8F898D}
+	\definecolor{DarkBackgroundColour}{HTML}{36312D}
+	\definecolor{DarkForegroundColour}{HTML}{D1CEBF}
+	\definecolor{DarkAccent1}{HTML}{9E9063}
+	\definecolor{DarkAccent2}{HTML}{9E9985}
+	\definecolor{DarkAccent3}{HTML}{85786F}
+	\definecolor{DarkAccent4}{HTML}{B0B1AB}
+	\definecolor{DarkAccent5}{HTML}{8F898D}
+}
+
+\DeclareOption{elemental} {
+	\definecolor{LightBackgroundColour}{HTML}{B2CCF1}
+	\definecolor{LightForegroundColour}{HTML}{292B52}
+	\definecolor{LightAccent1}{HTML}{6B9EC9}
+	\definecolor{LightAccent2}{HTML}{347BCD}
+	\definecolor{LightAccent3}{HTML}{8490A8}
+	\definecolor{LightAccent4}{HTML}{5369A5}
+	\definecolor{LightAccent5}{HTML}{66A2AA}
+	\definecolor{DarkBackgroundColour}{HTML}{292B52}
+	\definecolor{DarkForegroundColour}{HTML}{B2CCF1}
+	\definecolor{DarkAccent1}{HTML}{6B9EC9}
+	\definecolor{DarkAccent2}{HTML}{347BCD}
+	\definecolor{DarkAccent3}{HTML}{8490A8}
+	\definecolor{DarkAccent4}{HTML}{5369A5}
+	\definecolor{DarkAccent5}{HTML}{66A2AA}
+}
+
+\DeclareOption{essential} {
+	\definecolor{LightBackgroundColour}{HTML}{C8C9B7}
+	\definecolor{LightForegroundColour}{HTML}{D42836}
+	\definecolor{LightAccent1}{HTML}{7B7B7B}
+	\definecolor{LightAccent2}{HTML}{EFC20D}
+	\definecolor{LightAccent3}{HTML}{596FA9}
+	\definecolor{LightAccent4}{HTML}{9998A6}
+	\definecolor{LightAccent5}{HTML}{D85B2D}
+	\definecolor{DarkBackgroundColour}{HTML}{D42836}
+	\definecolor{DarkForegroundColour}{HTML}{C8C9B7}
+	\definecolor{DarkAccent1}{HTML}{7B7B7B}
+	\definecolor{DarkAccent2}{HTML}{EFC20D}
+	\definecolor{DarkAccent3}{HTML}{596FA9}
+	\definecolor{DarkAccent4}{HTML}{9998A6}
+	\definecolor{DarkAccent5}{HTML}{D85B2D}
+}
+
+\DeclareOption{executive} {
+	\definecolor{LightBackgroundColour}{HTML}{E5E5ED}
+	\definecolor{LightForegroundColour}{HTML}{365A8E}
+	\definecolor{LightAccent1}{HTML}{6574AD}
+	\definecolor{LightAccent2}{HTML}{955758}
+	\definecolor{LightAccent3}{HTML}{E28B24}
+	\definecolor{LightAccent4}{HTML}{836952}
+	\definecolor{LightAccent5}{HTML}{678726}
+	\definecolor{DarkBackgroundColour}{HTML}{365A8E}
+	\definecolor{DarkForegroundColour}{HTML}{E5E5ED}
+	\definecolor{DarkAccent1}{HTML}{6574AD}
+	\definecolor{DarkAccent2}{HTML}{955758}
+	\definecolor{DarkAccent3}{HTML}{E28B24}
+	\definecolor{DarkAccent4}{HTML}{836952}
+	\definecolor{DarkAccent5}{HTML}{678726}
+}
+
+\DeclareOption{expo} {
+	\definecolor{LightBackgroundColour}{HTML}{7CB4E7}
+	\definecolor{LightForegroundColour}{HTML}{2B3D7D}
+	\definecolor{LightAccent1}{HTML}{F8C222}
+	\definecolor{LightAccent2}{HTML}{EADFA9}
+	\definecolor{LightAccent3}{HTML}{F28914}
+	\definecolor{LightAccent4}{HTML}{BD030E}
+	\definecolor{LightAccent5}{HTML}{621215}
+	\definecolor{DarkBackgroundColour}{HTML}{2B3D7D}
+	\definecolor{DarkForegroundColour}{HTML}{7CB4E7}
+	\definecolor{DarkAccent1}{HTML}{F8C222}
+	\definecolor{DarkAccent2}{HTML}{EADFA9}
+	\definecolor{DarkAccent3}{HTML}{F28914}
+	\definecolor{DarkAccent4}{HTML}{BD030E}
+	\definecolor{DarkAccent5}{HTML}{621215}
+}
+
+\DeclareOption{folio} {
+	\definecolor{LightBackgroundColour}{HTML}{DEDDD8}
+	\definecolor{LightForegroundColour}{HTML}{2D2F2C}
+	\definecolor{LightAccent1}{HTML}{30416C}
+	\definecolor{LightAccent2}{HTML}{7B8EB6}
+	\definecolor{LightAccent3}{HTML}{918B7F}
+	\definecolor{LightAccent4}{HTML}{7C4B3D}
+	\definecolor{LightAccent5}{HTML}{55190E}
+	\definecolor{DarkBackgroundColour}{HTML}{2D2F2C}
+	\definecolor{DarkForegroundColour}{HTML}{DEDDD8}
+	\definecolor{DarkAccent1}{HTML}{30416C}
+	\definecolor{DarkAccent2}{HTML}{7B8EB6}
+	\definecolor{DarkAccent3}{HTML}{918B7F}
+	\definecolor{DarkAccent4}{HTML}{7C4B3D}
+	\definecolor{DarkAccent5}{HTML}{55190E}
+}
+
+\DeclareOption{formal} {
+	\definecolor{LightBackgroundColour}{HTML}{DDDDD1}
+	\definecolor{LightForegroundColour}{HTML}{3F3E46}
+	\definecolor{LightAccent1}{HTML}{90817C}
+	\definecolor{LightAccent2}{HTML}{9F694D}
+	\definecolor{LightAccent3}{HTML}{C69B56}
+	\definecolor{LightAccent4}{HTML}{9A92C3}
+	\definecolor{LightAccent5}{HTML}{7B6594}
+	\definecolor{DarkBackgroundColour}{HTML}{3F3E46}
+	\definecolor{DarkForegroundColour}{HTML}{DDDDD1}
+	\definecolor{DarkAccent1}{HTML}{90817C}
+	\definecolor{DarkAccent2}{HTML}{9F694D}
+	\definecolor{DarkAccent3}{HTML}{C69B56}
+	\definecolor{DarkAccent4}{HTML}{9A92C3}
+	\definecolor{DarkAccent5}{HTML}{7B6594}
+}
+
+\DeclareOption{foundry} {
+	\definecolor{LightBackgroundColour}{HTML}{E9E9E1}
+	\definecolor{LightForegroundColour}{HTML}{676A59}
+	\definecolor{LightAccent1}{HTML}{7BA37E}
+	\definecolor{LightAccent2}{HTML}{B3CBB5}
+	\definecolor{LightAccent3}{HTML}{ADCBD3}
+	\definecolor{LightAccent4}{HTML}{BEBFB1}
+	\definecolor{LightAccent5}{HTML}{CBC6A0}
+	\definecolor{DarkBackgroundColour}{HTML}{676A59}
+	\definecolor{DarkForegroundColour}{HTML}{E9E9E1}
+	\definecolor{DarkAccent1}{HTML}{7BA37E}
+	\definecolor{DarkAccent2}{HTML}{B3CBB5}
+	\definecolor{DarkAccent3}{HTML}{ADCBD3}
+	\definecolor{DarkAccent4}{HTML}{BEBFB1}
+	\definecolor{DarkAccent5}{HTML}{CBC6A0}
+}
+
+\DeclareOption{genesis} {
+	\definecolor{LightBackgroundColour}{HTML}{BDD5F1}
+	\definecolor{LightForegroundColour}{HTML}{495563}
+	\definecolor{LightAccent1}{HTML}{86B80B}
+	\definecolor{LightAccent2}{HTML}{D9A420}
+	\definecolor{LightAccent3}{HTML}{2399D7}
+	\definecolor{LightAccent4}{HTML}{35B09E}
+	\definecolor{LightAccent5}{HTML}{5232B7}
+	\definecolor{DarkBackgroundColour}{HTML}{495563}
+	\definecolor{DarkForegroundColour}{HTML}{BDD5F1}
+	\definecolor{DarkAccent1}{HTML}{86B80B}
+	\definecolor{DarkAccent2}{HTML}{D9A420}
+	\definecolor{DarkAccent3}{HTML}{2399D7}
+	\definecolor{DarkAccent4}{HTML}{35B09E}
+	\definecolor{DarkAccent5}{HTML}{5232B7}
+}
+
+\DeclareOption{grid} {
+	\definecolor{LightBackgroundColour}{HTML}{CFD2BF}
+	\definecolor{LightForegroundColour}{HTML}{52494A}
+	\definecolor{LightAccent1}{HTML}{C26D59}
+	\definecolor{LightAccent2}{HTML}{BB9A55}
+	\definecolor{LightAccent3}{HTML}{938F76}
+	\definecolor{LightAccent4}{HTML}{84706F}
+	\definecolor{LightAccent5}{HTML}{8F7456}
+	\definecolor{DarkBackgroundColour}{HTML}{52494A}
+	\definecolor{DarkForegroundColour}{HTML}{CFD2BF}
+	\definecolor{DarkAccent1}{HTML}{C26D59}
+	\definecolor{DarkAccent2}{HTML}{BB9A55}
+	\definecolor{DarkAccent3}{HTML}{938F76}
+	\definecolor{DarkAccent4}{HTML}{84706F}
+	\definecolor{DarkAccent5}{HTML}{8F7456}
+}
+
+\DeclareOption{habitat} {
+	\definecolor{LightBackgroundColour}{HTML}{EDE3CA}
+	\definecolor{LightForegroundColour}{HTML}{214134}
+	\definecolor{LightAccent1}{HTML}{F0C10F}
+	\definecolor{LightAccent2}{HTML}{FB8509}
+	\definecolor{LightAccent3}{HTML}{FF3602}
+	\definecolor{LightAccent4}{HTML}{887145}
+	\definecolor{LightAccent5}{HTML}{828B4A}
+	\definecolor{DarkBackgroundColour}{HTML}{214134}
+	\definecolor{DarkForegroundColour}{HTML}{EDE3CA}
+	\definecolor{DarkAccent1}{HTML}{F0C10F}
+	\definecolor{DarkAccent2}{HTML}{FB8509}
+	\definecolor{DarkAccent3}{HTML}{FF3602}
+	\definecolor{DarkAccent4}{HTML}{887145}
+	\definecolor{DarkAccent5}{HTML}{828B4A}
+}
+
+\DeclareOption{hardcover} {
+	\definecolor{LightBackgroundColour}{HTML}{EDE9CC}
+	\definecolor{LightForegroundColour}{HTML}{86612C}
+	\definecolor{LightAccent1}{HTML}{7E392A}
+	\definecolor{LightAccent2}{HTML}{CF8B2A}
+	\definecolor{LightAccent3}{HTML}{CDC443}
+	\definecolor{LightAccent4}{HTML}{868070}
+	\definecolor{LightAccent5}{HTML}{982417}
+	\definecolor{DarkBackgroundColour}{HTML}{86612C}
+	\definecolor{DarkForegroundColour}{HTML}{EDE9CC}
+	\definecolor{DarkAccent1}{HTML}{7E392A}
+	\definecolor{DarkAccent2}{HTML}{CF8B2A}
+	\definecolor{DarkAccent3}{HTML}{CDC443}
+	\definecolor{DarkAccent4}{HTML}{868070}
+	\definecolor{DarkAccent5}{HTML}{982417}
+}
+
+\DeclareOption{horizon} {
+	\definecolor{LightBackgroundColour}{HTML}{D29F1F}
+	\definecolor{LightForegroundColour}{HTML}{232426}
+	\definecolor{LightAccent1}{HTML}{8196A7}
+	\definecolor{LightAccent2}{HTML}{C28E69}
+	\definecolor{LightAccent3}{HTML}{7D6F66}
+	\definecolor{LightAccent4}{HTML}{AF9272}
+	\definecolor{LightAccent5}{HTML}{697778}
+	\definecolor{DarkBackgroundColour}{HTML}{232426}
+	\definecolor{DarkForegroundColour}{HTML}{D29F1F}
+	\definecolor{DarkAccent1}{HTML}{8196A7}
+	\definecolor{DarkAccent2}{HTML}{C28E69}
+	\definecolor{DarkAccent3}{HTML}{7D6F66}
+	\definecolor{DarkAccent4}{HTML}{AF9272}
+	\definecolor{DarkAccent5}{HTML}{697778}
+}
+
+\DeclareOption{infusion} {
+	\definecolor{LightBackgroundColour}{HTML}{B9ACDA}
+	\definecolor{LightForegroundColour}{HTML}{2E2554}
+	\definecolor{LightAccent1}{HTML}{8C77C4}
+	\definecolor{LightAccent2}{HTML}{C7E6C7}
+	\definecolor{LightAccent3}{HTML}{C1A8DF}
+	\definecolor{LightAccent4}{HTML}{AF66BF}
+	\definecolor{LightAccent5}{HTML}{A8DAF5}
+	\definecolor{DarkBackgroundColour}{HTML}{2E2554}
+	\definecolor{DarkForegroundColour}{HTML}{B9ACDA}
+	\definecolor{DarkAccent1}{HTML}{8C77C4}
+	\definecolor{DarkAccent2}{HTML}{C7E6C7}
+	\definecolor{DarkAccent3}{HTML}{C1A8DF}
+	\definecolor{DarkAccent4}{HTML}{AF66BF}
+	\definecolor{DarkAccent5}{HTML}{A8DAF5}
+}
+
+\DeclareOption{inkwell} {
+	\definecolor{LightBackgroundColour}{HTML}{EDE4C7}
+	\definecolor{LightForegroundColour}{HTML}{574D34}
+	\definecolor{LightAccent1}{HTML}{89070F}
+	\definecolor{LightAccent2}{HTML}{450B0A}
+	\definecolor{LightAccent3}{HTML}{775319}
+	\definecolor{LightAccent4}{HTML}{BA8215}
+	\definecolor{LightAccent5}{HTML}{80775A}
+	\definecolor{DarkBackgroundColour}{HTML}{574D34}
+	\definecolor{DarkForegroundColour}{HTML}{EDE4C7}
+	\definecolor{DarkAccent1}{HTML}{89070F}
+	\definecolor{DarkAccent2}{HTML}{450B0A}
+	\definecolor{DarkAccent3}{HTML}{775319}
+	\definecolor{DarkAccent4}{HTML}{BA8215}
+	\definecolor{DarkAccent5}{HTML}{80775A}
+}
+
+\DeclareOption{median} {
+	\definecolor{LightBackgroundColour}{HTML}{EBE0CE}
+	\definecolor{LightForegroundColour}{HTML}{746059}
+	\definecolor{LightAccent1}{HTML}{9AB6CB}
+	\definecolor{LightAccent2}{HTML}{D98352}
+	\definecolor{LightAccent3}{HTML}{A6AC88}
+	\definecolor{LightAccent4}{HTML}{D3B85D}
+	\definecolor{LightAccent5}{HTML}{84A59C}
+	\definecolor{DarkBackgroundColour}{HTML}{746059}
+	\definecolor{DarkForegroundColour}{HTML}{EBE0CE}
+	\definecolor{DarkAccent1}{HTML}{9AB6CB}
+	\definecolor{DarkAccent2}{HTML}{D98352}
+	\definecolor{DarkAccent3}{HTML}{A6AC88}
+	\definecolor{DarkAccent4}{HTML}{D3B85D}
+	\definecolor{DarkAccent5}{HTML}{84A59C}
+}
+
+\DeclareOption{kilter} {
+	\definecolor{LightBackgroundColour}{HTML}{B5E6F4}
+	\definecolor{LightForegroundColour}{HTML}{2D94C1}
+	\definecolor{LightAccent1}{HTML}{7BC4E7}
+	\definecolor{LightAccent2}{HTML}{F7A525}
+	\definecolor{LightAccent3}{HTML}{FE6B04}
+	\definecolor{LightAccent4}{HTML}{75A52D}
+	\definecolor{LightAccent5}{HTML}{AAD852}
+	\definecolor{DarkBackgroundColour}{HTML}{2D94C1}
+	\definecolor{DarkForegroundColour}{HTML}{B5E6F4}
+	\definecolor{DarkAccent1}{HTML}{7BC4E7}
+	\definecolor{DarkAccent2}{HTML}{F7A525}
+	\definecolor{DarkAccent3}{HTML}{FE6B04}
+	\definecolor{DarkAccent4}{HTML}{75A52D}
+	\definecolor{DarkAccent5}{HTML}{AAD852}
+}
+
+\DeclareOption{inspiration} {
+	\definecolor{LightBackgroundColour}{HTML}{A0A998}
+	\definecolor{LightForegroundColour}{HTML}{2F2F27}
+	\definecolor{LightAccent1}{HTML}{779803}
+	\definecolor{LightAccent2}{HTML}{BBCB8C}
+	\definecolor{LightAccent3}{HTML}{749DBB}
+	\definecolor{LightAccent4}{HTML}{28499A}
+	\definecolor{LightAccent5}{HTML}{503AC1}
+	\definecolor{DarkBackgroundColour}{HTML}{2F2F27}
+	\definecolor{DarkForegroundColour}{HTML}{A0A998}
+	\definecolor{DarkAccent1}{HTML}{779803}
+	\definecolor{DarkAccent2}{HTML}{BBCB8C}
+	\definecolor{DarkAccent3}{HTML}{749DBB}
+	\definecolor{DarkAccent4}{HTML}{28499A}
+	\definecolor{DarkAccent5}{HTML}{503AC1}
+}
+
+\DeclareOption{module} {
+	\definecolor{LightBackgroundColour}{HTML}{D4D4D6}
+	\definecolor{LightForegroundColour}{HTML}{606676}
+	\definecolor{LightAccent1}{HTML}{EBAF10}
+	\definecolor{LightAccent2}{HTML}{69B0C4}
+	\definecolor{LightAccent3}{HTML}{E47083}
+	\definecolor{LightAccent4}{HTML}{73B376}
+	\definecolor{LightAccent5}{HTML}{E08559}
+	\definecolor{DarkBackgroundColour}{HTML}{606676}
+	\definecolor{DarkForegroundColour}{HTML}{D4D4D6}
+	\definecolor{DarkAccent1}{HTML}{EBAF10}
+	\definecolor{DarkAccent2}{HTML}{69B0C4}
+	\definecolor{DarkAccent3}{HTML}{E47083}
+	\definecolor{DarkAccent4}{HTML}{73B376}
+	\definecolor{DarkAccent5}{HTML}{E08559}
+}
+
+\DeclareOption{newsprint} {
+	\definecolor{LightBackgroundColour}{HTML}{DCDCDE}
+	\definecolor{LightForegroundColour}{HTML}{303030}
+	\definecolor{LightAccent1}{HTML}{A8030A}
+	\definecolor{LightAccent2}{HTML}{74665D}
+	\definecolor{LightAccent3}{HTML}{A79273}
+	\definecolor{LightAccent4}{HTML}{848FA3}
+	\definecolor{LightAccent5}{HTML}{454D58}
+	\definecolor{DarkBackgroundColour}{HTML}{303030}
+	\definecolor{DarkForegroundColour}{HTML}{DCDCDE}
+	\definecolor{DarkAccent1}{HTML}{A8030A}
+	\definecolor{DarkAccent2}{HTML}{74665D}
+	\definecolor{DarkAccent3}{HTML}{A79273}
+	\definecolor{DarkAccent4}{HTML}{848FA3}
+	\definecolor{DarkAccent5}{HTML}{454D58}
+}
+
+\DeclareOption{orbit} {
+	\definecolor{LightBackgroundColour}{HTML}{C5D0CC}
+	\definecolor{LightForegroundColour}{HTML}{829BA2}
+	\definecolor{LightAccent1}{HTML}{EEDE17}
+	\definecolor{LightAccent2}{HTML}{A4E725}
+	\definecolor{LightAccent3}{HTML}{158FE2}
+	\definecolor{LightAccent4}{HTML}{C71922}
+	\definecolor{LightAccent5}{HTML}{E07503}
+	\definecolor{DarkBackgroundColour}{HTML}{829BA2}
+	\definecolor{DarkForegroundColour}{HTML}{C5D0CC}
+	\definecolor{DarkAccent1}{HTML}{EEDE17}
+	\definecolor{DarkAccent2}{HTML}{A4E725}
+	\definecolor{DarkAccent3}{HTML}{158FE2}
+	\definecolor{DarkAccent4}{HTML}{C71922}
+	\definecolor{DarkAccent5}{HTML}{E07503}
+}
+
+\DeclareOption{perspective} {
+	\definecolor{LightBackgroundColour}{HTML}{FF8202}
+	\definecolor{LightForegroundColour}{HTML}{2B3036}
+	\definecolor{LightAccent1}{HTML}{898F9D}
+	\definecolor{LightAccent2}{HTML}{CA6509}
+	\definecolor{LightAccent3}{HTML}{80726F}
+	\definecolor{LightAccent4}{HTML}{9F1575}
+	\definecolor{LightAccent5}{HTML}{625ECF}
+	\definecolor{DarkBackgroundColour}{HTML}{2B3036}
+	\definecolor{DarkForegroundColour}{HTML}{FF8202}
+	\definecolor{DarkAccent1}{HTML}{898F9D}
+	\definecolor{DarkAccent2}{HTML}{CA6509}
+	\definecolor{DarkAccent3}{HTML}{80726F}
+	\definecolor{DarkAccent4}{HTML}{9F1575}
+	\definecolor{DarkAccent5}{HTML}{625ECF}
+}
+
+\DeclareOption{perception} {
+	\definecolor{LightBackgroundColour}{HTML}{BBBFB0}
+	\definecolor{LightForegroundColour}{HTML}{353535}
+	\definecolor{LightAccent1}{HTML}{A5C719}
+	\definecolor{LightAccent2}{HTML}{DA7B05}
+	\definecolor{LightAccent3}{HTML}{DDC70F}
+	\definecolor{LightAccent4}{HTML}{86C2E7}
+	\definecolor{LightAccent5}{HTML}{2A4594}
+	\definecolor{DarkBackgroundColour}{HTML}{353535}
+	\definecolor{DarkForegroundColour}{HTML}{BBBFB0}
+	\definecolor{DarkAccent1}{HTML}{A5C719}
+	\definecolor{DarkAccent2}{HTML}{DA7B05}
+	\definecolor{DarkAccent3}{HTML}{DDC70F}
+	\definecolor{DarkAccent4}{HTML}{86C2E7}
+	\definecolor{DarkAccent5}{HTML}{2A4594}
+}
+
+\DeclareOption{paper} {
+	\definecolor{LightBackgroundColour}{HTML}{FDFBD4}
+	\definecolor{LightForegroundColour}{HTML}{454C2B}
+	\definecolor{LightAccent1}{HTML}{A6B397}
+	\definecolor{LightAccent2}{HTML}{F1A84C}
+	\definecolor{LightAccent3}{HTML}{E2BA36}
+	\definecolor{LightAccent4}{HTML}{CC99AA}
+	\definecolor{LightAccent5}{HTML}{9B89BB}
+	\definecolor{DarkBackgroundColour}{HTML}{454C2B}
+	\definecolor{DarkForegroundColour}{HTML}{FDFBD4}
+	\definecolor{DarkAccent1}{HTML}{A6B397}
+	\definecolor{DarkAccent2}{HTML}{F1A84C}
+	\definecolor{DarkAccent3}{HTML}{E2BA36}
+	\definecolor{DarkAccent4}{HTML}{CC99AA}
+	\definecolor{DarkAccent5}{HTML}{9B89BB}
+}
+
+\DeclareOption{pixel} {
+	\definecolor{LightBackgroundColour}{HTML}{0396FF}
+	\definecolor{LightForegroundColour}{HTML}{05C2BC}
+	\definecolor{LightAccent1}{HTML}{FF7E06}
+	\definecolor{LightAccent2}{HTML}{EBB61C}
+	\definecolor{LightAccent3}{HTML}{F8EC88}
+	\definecolor{LightAccent4}{HTML}{D3C7ED}
+	\definecolor{LightAccent5}{HTML}{D762EE}
+	\definecolor{DarkBackgroundColour}{HTML}{05C2BC}
+	\definecolor{DarkForegroundColour}{HTML}{0396FF}
+	\definecolor{DarkAccent1}{HTML}{FF7E06}
+	\definecolor{DarkAccent2}{HTML}{EBB61C}
+	\definecolor{DarkAccent3}{HTML}{F8EC88}
+	\definecolor{DarkAccent4}{HTML}{D3C7ED}
+	\definecolor{DarkAccent5}{HTML}{D762EE}
+}
+
+\DeclareOption{plaza} {
+	\definecolor{LightBackgroundColour}{HTML}{CECECE}
+	\definecolor{LightForegroundColour}{HTML}{353535}
+	\definecolor{LightAccent1}{HTML}{9C0006}
+	\definecolor{LightAccent2}{HTML}{560808}
+	\definecolor{LightAccent3}{HTML}{E84A01}
+	\definecolor{LightAccent4}{HTML}{E58E03}
+	\definecolor{LightAccent5}{HTML}{A3A3A3}
+	\definecolor{DarkBackgroundColour}{HTML}{353535}
+	\definecolor{DarkForegroundColour}{HTML}{CECECE}
+	\definecolor{DarkAccent1}{HTML}{9C0006}
+	\definecolor{DarkAccent2}{HTML}{560808}
+	\definecolor{DarkAccent3}{HTML}{E84A01}
+	\definecolor{DarkAccent4}{HTML}{E58E03}
+	\definecolor{DarkAccent5}{HTML}{A3A3A3}
+}
+
+\DeclareOption{precedent} {
+	\definecolor{LightBackgroundColour}{HTML}{E0E4D5}
+	\definecolor{LightForegroundColour}{HTML}{353535}
+	\definecolor{LightAccent1}{HTML}{923637}
+	\definecolor{LightAccent2}{HTML}{946E3F}
+	\definecolor{LightAccent3}{HTML}{726C60}
+	\definecolor{LightAccent4}{HTML}{C49C2B}
+	\definecolor{LightAccent5}{HTML}{C16236}
+	\definecolor{DarkBackgroundColour}{HTML}{353535}
+	\definecolor{DarkForegroundColour}{HTML}{E0E4D5}
+	\definecolor{DarkAccent1}{HTML}{923637}
+	\definecolor{DarkAccent2}{HTML}{946E3F}
+	\definecolor{DarkAccent3}{HTML}{726C60}
+	\definecolor{DarkAccent4}{HTML}{C49C2B}
+	\definecolor{DarkAccent5}{HTML}{C16236}
+}
+
+\DeclareOption{saddle} {
+	\definecolor{LightBackgroundColour}{HTML}{E7E2DC}
+	\definecolor{LightForegroundColour}{HTML}{AC641A}
+	\definecolor{LightAccent1}{HTML}{C6B482}
+	\definecolor{LightAccent2}{HTML}{966020}
+	\definecolor{LightAccent3}{HTML}{79ADB8}
+	\definecolor{LightAccent4}{HTML}{80A869}
+	\definecolor{LightAccent5}{HTML}{867297}
+	\definecolor{DarkBackgroundColour}{HTML}{AC641A}
+	\definecolor{DarkForegroundColour}{HTML}{E7E2DC}
+	\definecolor{DarkAccent1}{HTML}{C6B482}
+	\definecolor{DarkAccent2}{HTML}{966020}
+	\definecolor{DarkAccent3}{HTML}{79ADB8}
+	\definecolor{DarkAccent4}{HTML}{80A869}
+	\definecolor{DarkAccent5}{HTML}{867297}
+}
+
+\DeclareOption{revolution} {
+	\definecolor{LightBackgroundColour}{HTML}{44ADE7}
+	\definecolor{LightForegroundColour}{HTML}{20365B}
+	\definecolor{LightAccent1}{HTML}{175880}
+	\definecolor{LightAccent2}{HTML}{DAF641}
+	\definecolor{LightAccent3}{HTML}{568616}
+	\definecolor{LightAccent4}{HTML}{B96503}
+	\definecolor{LightAccent5}{HTML}{9E000C}
+	\definecolor{DarkBackgroundColour}{HTML}{20365B}
+	\definecolor{DarkForegroundColour}{HTML}{44ADE7}
+	\definecolor{DarkAccent1}{HTML}{175880}
+	\definecolor{DarkAccent2}{HTML}{DAF641}
+	\definecolor{DarkAccent3}{HTML}{568616}
+	\definecolor{DarkAccent4}{HTML}{B96503}
+	\definecolor{DarkAccent5}{HTML}{9E000C}
+}
+
+\DeclareOption{pushpin} {
+	\definecolor{LightBackgroundColour}{HTML}{CFDDE6}
+	\definecolor{LightForegroundColour}{HTML}{4E5F95}
+	\definecolor{LightAccent1}{HTML}{F9A427}
+	\definecolor{LightAccent2}{HTML}{A02D26}
+	\definecolor{LightAccent3}{HTML}{726C60}
+	\definecolor{LightAccent4}{HTML}{6CA449}
+	\definecolor{LightAccent5}{HTML}{E6590A}
+	\definecolor{DarkBackgroundColour}{HTML}{4E5F95}
+	\definecolor{DarkForegroundColour}{HTML}{CFDDE6}
+	\definecolor{DarkAccent1}{HTML}{F9A427}
+	\definecolor{DarkAccent2}{HTML}{A02D26}
+	\definecolor{DarkAccent3}{HTML}{726C60}
+	\definecolor{DarkAccent4}{HTML}{6CA449}
+	\definecolor{DarkAccent5}{HTML}{E6590A}
+}
+
+\DeclareOption{sketchbook} {
+	\definecolor{LightBackgroundColour}{HTML}{FFFFED}
+	\definecolor{LightForegroundColour}{HTML}{4B1912}
+	\definecolor{LightAccent1}{HTML}{AC2F1B}
+	\definecolor{LightAccent2}{HTML}{E1882E}
+	\definecolor{LightAccent3}{HTML}{9AAE69}
+	\definecolor{LightAccent4}{HTML}{759DC1}
+	\definecolor{LightAccent5}{HTML}{5264AE}
+	\definecolor{DarkBackgroundColour}{HTML}{4B1912}
+	\definecolor{DarkForegroundColour}{HTML}{FFFFED}
+	\definecolor{DarkAccent1}{HTML}{AC2F1B}
+	\definecolor{DarkAccent2}{HTML}{E1882E}
+	\definecolor{DarkAccent3}{HTML}{9AAE69}
+	\definecolor{DarkAccent4}{HTML}{759DC1}
+	\definecolor{DarkAccent5}{HTML}{5264AE}
+}
+
+\DeclareOption{sky} {
+	\definecolor{LightBackgroundColour}{HTML}{67BBDF}
+	\definecolor{LightForegroundColour}{HTML}{1B87B6}
+	\definecolor{LightAccent1}{HTML}{10346E}
+	\definecolor{LightAccent2}{HTML}{97D7F3}
+	\definecolor{LightAccent3}{HTML}{F6CE0C}
+	\definecolor{LightAccent4}{HTML}{EF6914}
+	\definecolor{LightAccent5}{HTML}{BE6708}
+	\definecolor{DarkBackgroundColour}{HTML}{1B87B6}
+	\definecolor{DarkForegroundColour}{HTML}{67BBDF}
+	\definecolor{DarkAccent1}{HTML}{10346E}
+	\definecolor{DarkAccent2}{HTML}{97D7F3}
+	\definecolor{DarkAccent3}{HTML}{F6CE0C}
+	\definecolor{DarkAccent4}{HTML}{EF6914}
+	\definecolor{DarkAccent5}{HTML}{BE6708}
+}
+
+\DeclareOption{slipstream} {
+	\definecolor{LightBackgroundColour}{HTML}{BDDDF4}
+	\definecolor{LightForegroundColour}{HTML}{1F243A}
+	\definecolor{LightAccent1}{HTML}{5468BF}
+	\definecolor{LightAccent2}{HTML}{61CCEC}
+	\definecolor{LightAccent3}{HTML}{AEE65D}
+	\definecolor{LightAccent4}{HTML}{63CEB0}
+	\definecolor{LightAccent5}{HTML}{F48432}
+	\definecolor{DarkBackgroundColour}{HTML}{1F243A}
+	\definecolor{DarkForegroundColour}{HTML}{BDDDF4}
+	\definecolor{DarkAccent1}{HTML}{5468BF}
+	\definecolor{DarkAccent2}{HTML}{61CCEC}
+	\definecolor{DarkAccent3}{HTML}{AEE65D}
+	\definecolor{DarkAccent4}{HTML}{63CEB0}
+	\definecolor{DarkAccent5}{HTML}{F48432}
+}
+
+\DeclareOption{spectrum} {
+	\definecolor{LightBackgroundColour}{HTML}{E9E8E6}
+	\definecolor{LightForegroundColour}{HTML}{282830}
+	\definecolor{LightAccent1}{HTML}{9C0006}
+	\definecolor{LightAccent2}{HTML}{FE6905}
+	\definecolor{LightAccent3}{HTML}{F8BF0D}
+	\definecolor{LightAccent4}{HTML}{9DCB09}
+	\definecolor{LightAccent5}{HTML}{598A00}
+	\definecolor{DarkBackgroundColour}{HTML}{282830}
+	\definecolor{DarkForegroundColour}{HTML}{E9E8E6}
+	\definecolor{DarkAccent1}{HTML}{9C0006}
+	\definecolor{DarkAccent2}{HTML}{FE6905}
+	\definecolor{DarkAccent3}{HTML}{F8BF0D}
+	\definecolor{DarkAccent4}{HTML}{9DCB09}
+	\definecolor{DarkAccent5}{HTML}{598A00}
+}
+
+\DeclareOption{solstice} {
+	\definecolor{LightBackgroundColour}{HTML}{E2DDCA}
+	\definecolor{LightForegroundColour}{HTML}{492B23}
+	\definecolor{LightAccent1}{HTML}{428FA3}
+	\definecolor{LightAccent2}{HTML}{FCBB15}
+	\definecolor{LightAccent3}{HTML}{C42E37}
+	\definecolor{LightAccent4}{HTML}{8AAB38}
+	\definecolor{LightAccent5}{HTML}{93460E}
+	\definecolor{DarkBackgroundColour}{HTML}{492B23}
+	\definecolor{DarkForegroundColour}{HTML}{E2DDCA}
+	\definecolor{DarkAccent1}{HTML}{428FA3}
+	\definecolor{DarkAccent2}{HTML}{FCBB15}
+	\definecolor{DarkAccent3}{HTML}{C42E37}
+	\definecolor{DarkAccent4}{HTML}{8AAB38}
+	\definecolor{DarkAccent5}{HTML}{93460E}
+}
+
+\DeclareOption{soho} {
+	\definecolor{LightBackgroundColour}{HTML}{CDD8DC}
+	\definecolor{LightForegroundColour}{HTML}{442723}
+	\definecolor{LightAccent1}{HTML}{656661}
+	\definecolor{LightAccent2}{HTML}{8F5138}
+	\definecolor{LightAccent3}{HTML}{635643}
+	\definecolor{LightAccent4}{HTML}{848160}
+	\definecolor{LightAccent5}{HTML}{ADA252}
+	\definecolor{DarkBackgroundColour}{HTML}{442723}
+	\definecolor{DarkForegroundColour}{HTML}{CDD8DC}
+	\definecolor{DarkAccent1}{HTML}{656661}
+	\definecolor{DarkAccent2}{HTML}{8F5138}
+	\definecolor{DarkAccent3}{HTML}{635643}
+	\definecolor{DarkAccent4}{HTML}{848160}
+	\definecolor{DarkAccent5}{HTML}{ADA252}
+}
+
+\DeclareOption{story} {
+	\definecolor{LightBackgroundColour}{HTML}{CCD4D7}
+	\definecolor{LightForegroundColour}{HTML}{242424}
+	\definecolor{LightAccent1}{HTML}{1985C3}
+	\definecolor{LightAccent2}{HTML}{6D328E}
+	\definecolor{LightAccent3}{HTML}{B70E25}
+	\definecolor{LightAccent4}{HTML}{E1950C}
+	\definecolor{LightAccent5}{HTML}{5D9436}
+	\definecolor{DarkBackgroundColour}{HTML}{242424}
+	\definecolor{DarkForegroundColour}{HTML}{CCD4D7}
+	\definecolor{DarkAccent1}{HTML}{1985C3}
+	\definecolor{DarkAccent2}{HTML}{6D328E}
+	\definecolor{DarkAccent3}{HTML}{B70E25}
+	\definecolor{DarkAccent4}{HTML}{E1950C}
+	\definecolor{DarkAccent5}{HTML}{5D9436}
+}
+
+\DeclareOption{summer} {
+	\definecolor{LightBackgroundColour}{HTML}{E9BB1F}
+	\definecolor{LightForegroundColour}{HTML}{C8660B}
+	\definecolor{LightAccent1}{HTML}{5DA8BF}
+	\definecolor{LightAccent2}{HTML}{59BDA5}
+	\definecolor{LightAccent3}{HTML}{81BD5D}
+	\definecolor{LightAccent4}{HTML}{E1E054}
+	\definecolor{LightAccent5}{HTML}{B44C27}
+	\definecolor{DarkBackgroundColour}{HTML}{C8660B}
+	\definecolor{DarkForegroundColour}{HTML}{E9BB1F}
+	\definecolor{DarkAccent1}{HTML}{5DA8BF}
+	\definecolor{DarkAccent2}{HTML}{59BDA5}
+	\definecolor{DarkAccent3}{HTML}{81BD5D}
+	\definecolor{DarkAccent4}{HTML}{E1E054}
+	\definecolor{DarkAccent5}{HTML}{B44C27}
+}
+
+\DeclareOption{technic} {
+	\definecolor{LightBackgroundColour}{HTML}{D3D2D0}
+	\definecolor{LightForegroundColour}{HTML}{3D3D3D}
+	\definecolor{LightAccent1}{HTML}{729EA9}
+	\definecolor{LightAccent2}{HTML}{C4B011}
+	\definecolor{LightAccent3}{HTML}{8F8BA2}
+	\definecolor{LightAccent4}{HTML}{768463}
+	\definecolor{LightAccent5}{HTML}{9F957A}
+	\definecolor{DarkBackgroundColour}{HTML}{3D3D3D}
+	\definecolor{DarkForegroundColour}{HTML}{D3D2D0}
+	\definecolor{DarkAccent1}{HTML}{729EA9}
+	\definecolor{DarkAccent2}{HTML}{C4B011}
+	\definecolor{DarkAccent3}{HTML}{8F8BA2}
+	\definecolor{DarkAccent4}{HTML}{768463}
+	\definecolor{DarkAccent5}{HTML}{9F957A}
+}
+
+\DeclareOption{twilight} {
+	\definecolor{LightBackgroundColour}{HTML}{E7E8ED}
+	\definecolor{LightForegroundColour}{HTML}{25233B}
+	\definecolor{LightAccent1}{HTML}{E2BF49}
+	\definecolor{LightAccent2}{HTML}{8EC1C5}
+	\definecolor{LightAccent3}{HTML}{E09031}
+	\definecolor{LightAccent4}{HTML}{919BD8}
+	\definecolor{LightAccent5}{HTML}{869B4E}
+	\definecolor{DarkBackgroundColour}{HTML}{25233B}
+	\definecolor{DarkForegroundColour}{HTML}{E7E8ED}
+	\definecolor{DarkAccent1}{HTML}{E2BF49}
+	\definecolor{DarkAccent2}{HTML}{8EC1C5}
+	\definecolor{DarkAccent3}{HTML}{E09031}
+	\definecolor{DarkAccent4}{HTML}{919BD8}
+	\definecolor{DarkAccent5}{HTML}{869B4E}
+}
+
+\DeclareOption{travelouge} {
+	\definecolor{LightBackgroundColour}{HTML}{816B39}
+	\definecolor{LightForegroundColour}{HTML}{2E271F}
+	\definecolor{LightAccent1}{HTML}{BC4B21}
+	\definecolor{LightAccent2}{HTML}{A3262C}
+	\definecolor{LightAccent3}{HTML}{49759A}
+	\definecolor{LightAccent4}{HTML}{665F95}
+	\definecolor{LightAccent5}{HTML}{689155}
+	\definecolor{DarkBackgroundColour}{HTML}{2E271F}
+	\definecolor{DarkForegroundColour}{HTML}{816B39}
+	\definecolor{DarkAccent1}{HTML}{BC4B21}
+	\definecolor{DarkAccent2}{HTML}{A3262C}
+	\definecolor{DarkAccent3}{HTML}{49759A}
+	\definecolor{DarkAccent4}{HTML}{665F95}
+	\definecolor{DarkAccent5}{HTML}{689155}
+}
+
+\DeclareOption{tradition} {
+	\definecolor{LightBackgroundColour}{HTML}{CB9113}
+	\definecolor{LightForegroundColour}{HTML}{5A491B}
+	\definecolor{LightAccent1}{HTML}{694B17}
+	\definecolor{LightAccent2}{HTML}{73121B}
+	\definecolor{LightAccent3}{HTML}{8F824B}
+	\definecolor{LightAccent4}{HTML}{46425B}
+	\definecolor{LightAccent5}{HTML}{601742}
+	\definecolor{DarkBackgroundColour}{HTML}{5A491B}
+	\definecolor{DarkForegroundColour}{HTML}{CB9113}
+	\definecolor{DarkAccent1}{HTML}{694B17}
+	\definecolor{DarkAccent2}{HTML}{73121B}
+	\definecolor{DarkAccent3}{HTML}{8F824B}
+	\definecolor{DarkAccent4}{HTML}{46425B}
+	\definecolor{DarkAccent5}{HTML}{601742}
+}
+
+\DeclareOption{urbanpop} {
+	\definecolor{LightBackgroundColour}{HTML}{D4D4D4}
+	\definecolor{LightForegroundColour}{HTML}{292929}
+	\definecolor{LightAccent1}{HTML}{8CCB24}
+	\definecolor{LightAccent2}{HTML}{06A2DB}
+	\definecolor{LightAccent3}{HTML}{F3CC19}
+	\definecolor{LightAccent4}{HTML}{81908D}
+	\definecolor{LightAccent5}{HTML}{CB7029}
+	\definecolor{DarkBackgroundColour}{HTML}{292929}
+	\definecolor{DarkForegroundColour}{HTML}{D4D4D4}
+	\definecolor{DarkAccent1}{HTML}{8CCB24}
+	\definecolor{DarkAccent2}{HTML}{06A2DB}
+	\definecolor{DarkAccent3}{HTML}{F3CC19}
+	\definecolor{DarkAccent4}{HTML}{81908D}
+	\definecolor{DarkAccent5}{HTML}{CB7029}
+}
+
+\DeclareOption{venture} {
+	\definecolor{LightBackgroundColour}{HTML}{E8EAD5}
+	\definecolor{LightForegroundColour}{HTML}{758257}
+	\definecolor{LightAccent1}{HTML}{9FAB69}
+	\definecolor{LightAccent2}{HTML}{C89B0A}
+	\definecolor{LightAccent3}{HTML}{ECE793}
+	\definecolor{LightAccent4}{HTML}{7D5227}
+	\definecolor{LightAccent5}{HTML}{4C1C1C}
+	\definecolor{DarkBackgroundColour}{HTML}{758257}
+	\definecolor{DarkForegroundColour}{HTML}{E8EAD5}
+	\definecolor{DarkAccent1}{HTML}{9FAB69}
+	\definecolor{DarkAccent2}{HTML}{C89B0A}
+	\definecolor{DarkAccent3}{HTML}{ECE793}
+	\definecolor{DarkAccent4}{HTML}{7D5227}
+	\definecolor{DarkAccent5}{HTML}{4C1C1C}
+}
+
+\DeclareOption{waveform} {
+	\definecolor{LightBackgroundColour}{HTML}{C9E4F7}
+	\definecolor{LightForegroundColour}{HTML}{103D80}
+	\definecolor{LightAccent1}{HTML}{34BAF7}
+	\definecolor{LightAccent2}{HTML}{4E82CE}
+	\definecolor{LightAccent3}{HTML}{66CB7F}
+	\definecolor{LightAccent4}{HTML}{A9D22B}
+	\definecolor{LightAccent5}{HTML}{F2C23C}
+	\definecolor{DarkBackgroundColour}{HTML}{103D80}
+	\definecolor{DarkForegroundColour}{HTML}{C9E4F7}
+	\definecolor{DarkAccent1}{HTML}{34BAF7}
+	\definecolor{DarkAccent2}{HTML}{4E82CE}
+	\definecolor{DarkAccent3}{HTML}{66CB7F}
+	\definecolor{DarkAccent4}{HTML}{A9D22B}
+	\definecolor{DarkAccent5}{HTML}{F2C23C}
+}
+
+\DeclareOption{blue} {
+	\definecolor{LightBackgroundColour}{HTML}{DFEDF6}
+	\definecolor{LightForegroundColour}{HTML}{193C66}
+	\definecolor{LightAccent1}{HTML}{166AC4}
+	\definecolor{LightAccent2}{HTML}{0C96D7}
+	\definecolor{LightAccent3}{HTML}{13D0D6}
+	\definecolor{LightAccent4}{HTML}{1BC998}
+	\definecolor{LightAccent5}{HTML}{83C967}
+	\definecolor{DarkBackgroundColour}{HTML}{193C66}
+	\definecolor{DarkForegroundColour}{HTML}{DFEDF6}
+	\definecolor{DarkAccent1}{HTML}{166AC4}
+	\definecolor{DarkAccent2}{HTML}{0C96D7}
+	\definecolor{DarkAccent3}{HTML}{13D0D6}
+	\definecolor{DarkAccent4}{HTML}{1BC998}
+	\definecolor{DarkAccent5}{HTML}{83C967}
+}
+
+\DeclareOption{bluewarm} {
+	\definecolor{LightBackgroundColour}{HTML}{B2CAF0}
+	\definecolor{LightForegroundColour}{HTML}{242748}
+	\definecolor{LightAccent1}{HTML}{5065A6}
+	\definecolor{LightAccent2}{HTML}{659BC9}
+	\definecolor{LightAccent3}{HTML}{317DD1}
+	\definecolor{LightAccent4}{HTML}{818DA3}
+	\definecolor{LightAccent5}{HTML}{629CA7}
+	\definecolor{DarkBackgroundColour}{HTML}{242748}
+	\definecolor{DarkForegroundColour}{HTML}{B2CAF0}
+	\definecolor{DarkAccent1}{HTML}{5065A6}
+	\definecolor{DarkAccent2}{HTML}{659BC9}
+	\definecolor{DarkAccent3}{HTML}{317DD1}
+	\definecolor{DarkAccent4}{HTML}{818DA3}
+	\definecolor{DarkAccent5}{HTML}{629CA7}
+}
+
+\DeclareOption{blueii} {
+	\definecolor{LightBackgroundColour}{HTML}{E3E4E6}
+	\definecolor{LightForegroundColour}{HTML}{34576A}
+	\definecolor{LightAccent1}{HTML}{1AADD9}
+	\definecolor{LightAccent2}{HTML}{3082BE}
+	\definecolor{LightAccent3}{HTML}{30CDD4}
+	\definecolor{LightAccent4}{HTML}{45B796}
+	\definecolor{LightAccent5}{HTML}{438459}
+	\definecolor{DarkBackgroundColour}{HTML}{34576A}
+	\definecolor{DarkForegroundColour}{HTML}{E3E4E6}
+	\definecolor{DarkAccent1}{HTML}{1AADD9}
+	\definecolor{DarkAccent2}{HTML}{3082BE}
+	\definecolor{DarkAccent3}{HTML}{30CDD4}
+	\definecolor{DarkAccent4}{HTML}{45B796}
+	\definecolor{DarkAccent5}{HTML}{438459}
+}
+
+\DeclareOption{bluegreen} {
+	\definecolor{LightBackgroundColour}{HTML}{D5DDE8}
+	\definecolor{LightForegroundColour}{HTML}{373543}
+	\definecolor{LightAccent1}{HTML}{3D91B5}
+	\definecolor{LightAccent2}{HTML}{5EB6BA}
+	\definecolor{LightAccent3}{HTML}{7CBDA9}
+	\definecolor{LightAccent4}{HTML}{7A888B}
+	\definecolor{LightAccent5}{HTML}{8DABB5}
+	\definecolor{DarkBackgroundColour}{HTML}{373543}
+	\definecolor{DarkForegroundColour}{HTML}{D5DDE8}
+	\definecolor{DarkAccent1}{HTML}{3D91B5}
+	\definecolor{DarkAccent2}{HTML}{5EB6BA}
+	\definecolor{DarkAccent3}{HTML}{7CBDA9}
+	\definecolor{DarkAccent4}{HTML}{7A888B}
+	\definecolor{DarkAccent5}{HTML}{8DABB5}
+}
+
+\DeclareOption{green} {
+	\definecolor{LightBackgroundColour}{HTML}{E7E0D8}
+	\definecolor{LightForegroundColour}{HTML}{47594D}
+	\definecolor{LightAccent1}{HTML}{5B9943}
+	\definecolor{LightAccent2}{HTML}{8EB737}
+	\definecolor{LightAccent3}{HTML}{C0CE45}
+	\definecolor{LightAccent4}{HTML}{089372}
+	\definecolor{LightAccent5}{HTML}{50B5BF}
+	\definecolor{DarkBackgroundColour}{HTML}{47594D}
+	\definecolor{DarkForegroundColour}{HTML}{E7E0D8}
+	\definecolor{DarkAccent1}{HTML}{5B9943}
+	\definecolor{DarkAccent2}{HTML}{8EB737}
+	\definecolor{DarkAccent3}{HTML}{C0CE45}
+	\definecolor{DarkAccent4}{HTML}{089372}
+	\definecolor{DarkAccent5}{HTML}{50B5BF}
+}
+
+\DeclareOption{greenyellow} {
+	\definecolor{LightBackgroundColour}{HTML}{E5E2D3}
+	\definecolor{LightForegroundColour}{HTML}{47594D}
+	\definecolor{LightAccent1}{HTML}{9CC93A}
+	\definecolor{LightAccent2}{HTML}{67A03F}
+	\definecolor{LightAccent3}{HTML}{38A975}
+	\definecolor{LightAccent4}{HTML}{4AC0A0}
+	\definecolor{LightAccent5}{HTML}{53B3C9}
+	\definecolor{DarkBackgroundColour}{HTML}{47594D}
+	\definecolor{DarkForegroundColour}{HTML}{E5E2D3}
+	\definecolor{DarkAccent1}{HTML}{9CC93A}
+	\definecolor{DarkAccent2}{HTML}{67A03F}
+	\definecolor{DarkAccent3}{HTML}{38A975}
+	\definecolor{DarkAccent4}{HTML}{4AC0A0}
+	\definecolor{DarkAccent5}{HTML}{53B3C9}
+}
+
+\DeclareOption{yellow} {
+	\definecolor{LightBackgroundColour}{HTML}{EAE2DF}
+	\definecolor{LightForegroundColour}{HTML}{35302A}
+	\definecolor{LightAccent1}{HTML}{F7C91B}
+	\definecolor{LightAccent2}{HTML}{F99428}
+	\definecolor{LightAccent3}{HTML}{CA9140}
+	\definecolor{LightAccent4}{HTML}{E37119}
+	\definecolor{LightAccent5}{HTML}{D34F29}
+	\definecolor{DarkBackgroundColour}{HTML}{35302A}
+	\definecolor{DarkForegroundColour}{HTML}{EAE2DF}
+	\definecolor{DarkAccent1}{HTML}{F7C91B}
+	\definecolor{DarkAccent2}{HTML}{F99428}
+	\definecolor{DarkAccent3}{HTML}{CA9140}
+	\definecolor{DarkAccent4}{HTML}{E37119}
+	\definecolor{DarkAccent5}{HTML}{D34F29}
+}
+
+\DeclareOption{yelloworange} {
+	\definecolor{LightBackgroundColour}{HTML}{F9F0D3}
+	\definecolor{LightForegroundColour}{HTML}{473930}
+	\definecolor{LightAccent1}{HTML}{E6A52F}
+	\definecolor{LightAccent2}{HTML}{9F6456}
+	\definecolor{LightAccent3}{HTML}{B08F86}
+	\definecolor{LightAccent4}{HTML}{BE9C77}
+	\definecolor{LightAccent5}{HTML}{9F957A}
+	\definecolor{DarkBackgroundColour}{HTML}{473930}
+	\definecolor{DarkForegroundColour}{HTML}{F9F0D3}
+	\definecolor{DarkAccent1}{HTML}{E6A52F}
+	\definecolor{DarkAccent2}{HTML}{9F6456}
+	\definecolor{DarkAccent3}{HTML}{B08F86}
+	\definecolor{DarkAccent4}{HTML}{BE9C77}
+	\definecolor{DarkAccent5}{HTML}{9F957A}
+}
+
+\DeclareOption{orange} {
+	\definecolor{LightBackgroundColour}{HTML}{D1DFE8}
+	\definecolor{LightForegroundColour}{HTML}{636F59}
+	\definecolor{LightAccent1}{HTML}{E28214}
+	\definecolor{LightAccent2}{HTML}{BC5A35}
+	\definecolor{LightAccent3}{HTML}{7F5847}
+	\definecolor{LightAccent4}{HTML}{96825F}
+	\definecolor{LightAccent5}{HTML}{C0BB84}
+	\definecolor{DarkBackgroundColour}{HTML}{636F59}
+	\definecolor{DarkForegroundColour}{HTML}{D1DFE8}
+	\definecolor{DarkAccent1}{HTML}{E28214}
+	\definecolor{DarkAccent2}{HTML}{BC5A35}
+	\definecolor{DarkAccent3}{HTML}{7F5847}
+	\definecolor{DarkAccent4}{HTML}{96825F}
+	\definecolor{DarkAccent5}{HTML}{C0BB84}
+}
+
+\DeclareOption{orangered} {
+	\definecolor{LightBackgroundColour}{HTML}{EDE8E2}
+	\definecolor{LightForegroundColour}{HTML}{666563}
+	\definecolor{LightAccent1}{HTML}{D54721}
+	\definecolor{LightAccent2}{HTML}{9B2B27}
+	\definecolor{LightAccent3}{HTML}{9D8E71}
+	\definecolor{LightAccent4}{HTML}{8F6557}
+	\definecolor{LightAccent5}{HTML}{8D8485}
+	\definecolor{DarkBackgroundColour}{HTML}{666563}
+	\definecolor{DarkForegroundColour}{HTML}{EDE8E2}
+	\definecolor{DarkAccent1}{HTML}{D54721}
+	\definecolor{DarkAccent2}{HTML}{9B2B27}
+	\definecolor{DarkAccent3}{HTML}{9D8E71}
+	\definecolor{DarkAccent4}{HTML}{8F6557}
+	\definecolor{DarkAccent5}{HTML}{8D8485}
+}
+
+\DeclareOption{redorange} {
+	\definecolor{LightBackgroundColour}{HTML}{EDEDE5}
+	\definecolor{LightForegroundColour}{HTML}{4D4D45}
+	\definecolor{LightAccent1}{HTML}{E54A2C}
+	\definecolor{LightAccent2}{HTML}{F8BF4E}
+	\definecolor{LightAccent3}{HTML}{B3492F}
+	\definecolor{LightAccent4}{HTML}{FA8830}
+	\definecolor{LightAccent5}{HTML}{C29A20}
+	\definecolor{DarkBackgroundColour}{HTML}{4D4D45}
+	\definecolor{DarkForegroundColour}{HTML}{EDEDE5}
+	\definecolor{DarkAccent1}{HTML}{E54A2C}
+	\definecolor{DarkAccent2}{HTML}{F8BF4E}
+	\definecolor{DarkAccent3}{HTML}{B3492F}
+	\definecolor{DarkAccent4}{HTML}{FA8830}
+	\definecolor{DarkAccent5}{HTML}{C29A20}
+}
+
+\DeclareOption{red} {
+	\definecolor{LightBackgroundColour}{HTML}{DDC44D}
+	\definecolor{LightForegroundColour}{HTML}{313131}
+	\definecolor{LightAccent1}{HTML}{A22C12}
+	\definecolor{LightAccent2}{HTML}{D25815}
+	\definecolor{LightAccent3}{HTML}{DE9B33}
+	\definecolor{LightAccent4}{HTML}{B09F85}
+	\definecolor{LightAccent5}{HTML}{7B6059}
+	\definecolor{DarkBackgroundColour}{HTML}{313131}
+	\definecolor{DarkForegroundColour}{HTML}{DDC44D}
+	\definecolor{DarkAccent1}{HTML}{A22C12}
+	\definecolor{DarkAccent2}{HTML}{D25815}
+	\definecolor{DarkAccent3}{HTML}{DE9B33}
+	\definecolor{DarkAccent4}{HTML}{B09F85}
+	\definecolor{DarkAccent5}{HTML}{7B6059}
+}
+
+\DeclareOption{redviolet} {
+	\definecolor{LightBackgroundColour}{HTML}{DBDCDE}
+	\definecolor{LightForegroundColour}{HTML}{45454D}
+	\definecolor{LightAccent1}{HTML}{E2318B}
+	\definecolor{LightAccent2}{HTML}{C634C3}
+	\definecolor{LightAccent3}{HTML}{4CA7D6}
+	\definecolor{LightAccent4}{HTML}{4D71E1}
+	\definecolor{LightAccent5}{HTML}{8871D9}
+	\definecolor{DarkBackgroundColour}{HTML}{45454D}
+	\definecolor{DarkForegroundColour}{HTML}{DBDCDE}
+	\definecolor{DarkAccent1}{HTML}{E2318B}
+	\definecolor{DarkAccent2}{HTML}{C634C3}
+	\definecolor{DarkAccent3}{HTML}{4CA7D6}
+	\definecolor{DarkAccent4}{HTML}{4D71E1}
+	\definecolor{DarkAccent5}{HTML}{8871D9}
+}
+
+\DeclareOption{violet} {
+	\definecolor{LightBackgroundColour}{HTML}{DEDCDF}
+	\definecolor{LightForegroundColour}{HTML}{373543}
+	\definecolor{LightAccent1}{HTML}{AA89C0}
+	\definecolor{LightAccent2}{HTML}{8583C2}
+	\definecolor{LightAccent3}{HTML}{60718F}
+	\definecolor{LightAccent4}{HTML}{6F93A9}
+	\definecolor{LightAccent5}{HTML}{8DABB5}
+	\definecolor{DarkBackgroundColour}{HTML}{373543}
+	\definecolor{DarkForegroundColour}{HTML}{DEDCDF}
+	\definecolor{DarkAccent1}{HTML}{AA89C0}
+	\definecolor{DarkAccent2}{HTML}{8583C2}
+	\definecolor{DarkAccent3}{HTML}{60718F}
+	\definecolor{DarkAccent4}{HTML}{6F93A9}
+	\definecolor{DarkAccent5}{HTML}{8DABB5}
+}
+
+\DeclareOption{violetii} {
+	\definecolor{LightBackgroundColour}{HTML}{EBE9EC}
+	\definecolor{LightForegroundColour}{HTML}{5B3358}
+	\definecolor{LightAccent1}{HTML}{882889}
+	\definecolor{LightAccent2}{HTML}{955DCC}
+	\definecolor{LightAccent3}{HTML}{725ED1}
+	\definecolor{LightAccent4}{HTML}{6862AC}
+	\definecolor{LightAccent5}{HTML}{4DA2E5}
+	\definecolor{DarkBackgroundColour}{HTML}{5B3358}
+	\definecolor{DarkForegroundColour}{HTML}{EBE9EC}
+	\definecolor{DarkAccent1}{HTML}{882889}
+	\definecolor{DarkAccent2}{HTML}{955DCC}
+	\definecolor{DarkAccent3}{HTML}{725ED1}
+	\definecolor{DarkAccent4}{HTML}{6862AC}
+	\definecolor{DarkAccent5}{HTML}{4DA2E5}
+}
+
+\DeclareOption{marquee} {
+	\definecolor{LightBackgroundColour}{HTML}{E1E1E1}
+	\definecolor{LightForegroundColour}{HTML}{5D5D5D}
+	\definecolor{LightAccent1}{HTML}{4687AD}
+	\definecolor{LightAccent2}{HTML}{A8B831}
+	\definecolor{LightAccent3}{HTML}{F59210}
+	\definecolor{LightAccent4}{HTML}{848484}
+	\definecolor{LightAccent5}{HTML}{F8C21A}
+	\definecolor{DarkBackgroundColour}{HTML}{5D5D5D}
+	\definecolor{DarkForegroundColour}{HTML}{E1E1E1}
+	\definecolor{DarkAccent1}{HTML}{4687AD}
+	\definecolor{DarkAccent2}{HTML}{A8B831}
+	\definecolor{DarkAccent3}{HTML}{F59210}
+	\definecolor{DarkAccent4}{HTML}{848484}
+	\definecolor{DarkAccent5}{HTML}{F8C21A}
+}
+
+\DeclareOption{aspect} {
+	\definecolor{LightBackgroundColour}{HTML}{E7E0D8}
+	\definecolor{LightForegroundColour}{HTML}{313131}
+	\definecolor{LightAccent1}{HTML}{F18008}
+	\definecolor{LightAccent2}{HTML}{992637}
+	\definecolor{LightAccent3}{HTML}{1F5873}
+	\definecolor{LightAccent4}{HTML}{568149}
+	\definecolor{LightAccent5}{HTML}{5C486D}
+	\definecolor{DarkBackgroundColour}{HTML}{313131}
+	\definecolor{DarkForegroundColour}{HTML}{E7E0D8}
+	\definecolor{DarkAccent1}{HTML}{F18008}
+	\definecolor{DarkAccent2}{HTML}{992637}
+	\definecolor{DarkAccent3}{HTML}{1F5873}
+	\definecolor{DarkAccent4}{HTML}{568149}
+	\definecolor{DarkAccent5}{HTML}{5C486D}
+}
+
+\DeclareOption{office2007-2010} {
+	\definecolor{LightBackgroundColour}{HTML}{EDEDE5}
+	\definecolor{LightForegroundColour}{HTML}{234376}
+	\definecolor{LightAccent1}{HTML}{4F81B4}
+	\definecolor{LightAccent2}{HTML}{BE4D51}
+	\definecolor{LightAccent3}{HTML}{9EBA65}
+	\definecolor{LightAccent4}{HTML}{7C6697}
+	\definecolor{LightAccent5}{HTML}{51A9BF}
+	\definecolor{DarkBackgroundColour}{HTML}{234376}
+	\definecolor{DarkForegroundColour}{HTML}{EDEDE5}
+	\definecolor{DarkAccent1}{HTML}{4F81B4}
+	\definecolor{DarkAccent2}{HTML}{BE4D51}
+	\definecolor{DarkAccent3}{HTML}{9EBA65}
+	\definecolor{DarkAccent4}{HTML}{7C6697}
+	\definecolor{DarkAccent5}{HTML}{51A9BF}
+}
+
+\DeclareOption{office2016} {
+	\definecolor{LightBackgroundColour}{HTML}{E9E9E9}
+	\definecolor{LightForegroundColour}{HTML}{445162}
+	\definecolor{LightAccent1}{HTML}{6097CF}
+	\definecolor{LightAccent2}{HTML}{EC8035}
+	\definecolor{LightAccent3}{HTML}{A7A7A7}
+	\definecolor{LightAccent4}{HTML}{F5C30E}
+	\definecolor{LightAccent5}{HTML}{4A71BE}
+	\definecolor{DarkBackgroundColour}{HTML}{445162}
+	\definecolor{DarkForegroundColour}{HTML}{E9E9E9}
+	\definecolor{DarkAccent1}{HTML}{6097CF}
+	\definecolor{DarkAccent2}{HTML}{EC8035}
+	\definecolor{DarkAccent3}{HTML}{A7A7A7}
+	\definecolor{DarkAccent4}{HTML}{F5C30E}
+	\definecolor{DarkAccent5}{HTML}{4A71BE}
+}
+
+% --} End Colour Schemes
+
+% {-- Setting Default Variant
+\colorlet{ForegroundColour}{LightForegroundColour}
+\colorlet{BackgroundColour}{LightBackgroundColour}
+\colorlet{Accent1}{LightAccent1}
+\colorlet{Accent2}{LightAccent2}
+\colorlet{Accent3}{LightAccent3}
+\colorlet{Accent4}{LightAccent4}
+\colorlet{Accent5}{LightAccent5}
+\colorlet{AccentTextColour}{BackgroundColour!50!white}
+\colorlet{DarkTextColour}{ForegroundColour}
+% --} End Setting Default Variant
+
+% {-- Scheme Variants
+
+\DeclareOption{light}{
+	\colorlet{ForegroundColour}{LightForegroundColour}
+	\colorlet{BackgroundColour}{LightBackgroundColour}
+	\colorlet{Accent1}{LightAccent1}
+	\colorlet{Accent2}{LightAccent2}
+	\colorlet{Accent3}{LightAccent3}
+	\colorlet{Accent4}{LightAccent4}
+	\colorlet{Accent5}{LightAccent5}
+    \colorlet{AccentTextColour}{BackgroundColour!50!white}
+    \colorlet{DarkTextColour}{ForegroundColour}
+}
+
+\DeclareOption{dark}{
+	\colorlet{ForegroundColour}{DarkForegroundColour}
+	\colorlet{BackgroundColour}{DarkBackgroundColour}
+	\colorlet{Accent1}{DarkAccent1}
+	\colorlet{Accent2}{DarkAccent2}
+	\colorlet{Accent3}{DarkAccent3}
+	\colorlet{Accent4}{DarkAccent4}
+	\colorlet{Accent5}{DarkAccent5}
+    \colorlet{AccentTextColour}{BackgroundColour!50!black}
+    \colorlet{DarkTextColour}{BackgroundColour!50!black}
+}
+
+% --} End Scheme Variants
+
+% --} End Colour Options
+
+% {-- Process Options
+\DeclareOption*{\PackageWarning{examplepackage}{Unknown ‘\CurrentOption’}}
+\ProcessOptions\relax
+% --} End Process Options
+
+% {-- Time-Saving Commands
+\newcommand{\colvec}[1]{\ensuremath{\left( \begin{array}{c} #1 \end{array} \right)}}
+\newcommand{\rowvec}[2][c c]{\ensuremath{\left( \begin{array}{#1} #2 \end{array} \right)}}
+\renewcommand{\matrix}[2][c c]{\ensuremath{\left( \begin{array}{#1} #2 \end{array} \right)}}
+
+\newcommand{\bigO}[1]{\mathcal{O}\left( #1 \right)}
+\newcommand{\st}{$^\text{st}$}
+\newcommand{\nd}{$^\text{nd}$}
+\newcommand{\rd}{$^\text{rd}$}
+\renewcommand{\th}{$^\text{th}$}
+\newcommand{\e}[1]{\text{e}^{#1}} %For exponentials
+\newcommand{\ee}[1]{\text{e}^{{}^{#1}}} %For exponentials with bulky powers
+\newcommand{\curl}{\vec{ \nabla }\times}
+\renewcommand{\div}{\vec{ \nabla }\cdot}
+\newcommand{\lap}{{\nabla}^2}
+\newcommand{\veclap}{{\vec{\nabla}}^2}
+\newcommand{\p}[3][{}]{\dfrac{\partial^{#1} {#2}}{\partial {#3}^{#1}}} %Optional argument is order of derivative
+\newcommand{\pp}[3]{\dfrac{\partial^2{#1}}{\partial {#2} \partial{#3}}}
+\newcommand{\dv}[3][{}]{\dfrac{\d^{#1} {#2}}{\d {#3}^{#1}}} %optional argument is order of derivative
+\newcommand{\fdv}[3][{}]{\dfrac{\delta^{#1} {#2}}{\delta {#3}^{#1}}} %optional argument is order of derivative
+\newcommand{\Dv}[3][{}]{\dfrac{\text{D}^{#1} {#2}}{\text{D} {#3}^{#1}}}
+\newcommand{\util}{\underaccent{\tilde}}
+\newcommand{\erf}{\text{erf}\,}
+\renewcommand{\d}{\,\text d}
+\newcommand{\lr}[1]{\left({#1}\right)}
+\newcommand{\slr}[1]{\left[{#1}\right]}
+\newcommand{\set}[1]{\left\lbrace{#1}\right\rbrace}
+\newcommand{\alr}[1]{\left\langle{#1}\right\rangle}
+\newcommand{\abs}[1]{\left| {#1} \right|}
+\newcommand{\eval}[2]{\left. {#1} \mathrlap{\Big|}\right| _{#2}}
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\setC}{\mathbb{C}}
+\newcommand{\setZ}{\mathbb{Z}}
+\newcommand{\setN}{\mathbb{N}}
+\newcommand{\pr}{{}^\prime\,}
+\let\oldint\int
+\renewcommand{\int}{\oldint\limits}
+\let\oldiint\iint
+\renewcommand{\iint}{\oldiint\limits}
+\let\oldiiint\iiint
+\renewcommand{\iiint}{\oldiiiint\limits}
+\let\oldoint\oint
+\renewcommand{\oint}{\oldoint\limits}
+\let\oldoiint\oiint
+\renewcommand{\oiint}{\oldoiint\limits}
+\let\oldsum\sum
+\renewcommand{\sum}{\oldsum\limits}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+%\let\oldsec{\section}
+%\renewcommand{\section}[1]{\clearpage\thispagestyle{plain}\leavevmode\\\vspace{0.3\textheight}\leavevmode\\ \oldsec{#1} \clearpage}
+\newcommand{\anti}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\To}{\ \longrightarrow\ }
+
+\newcommand{\pfrac}[2]{{{}^\frac{#1}{#2}}}
+
+
+\newcommand\funderline[1]{%
+  \stackengine{0pt}{\underline{\;\,\vphantom{#1}}}{#1}{O}{c}{F}{F}{L}}
+\newcommand{\mat}[1]{\ensuremath{\funderline{\smash{#1}}}}
+\newcommand{\newdate}[1]{\clearpage
+  \vspace{2cm}\hrule\hrule\hrule\leavevmode\\\vspace{-0.4cm}\hrule\leavevmode\\\vspace{-0.4cm}\hrule\hrule\hrule
+  \begin{center}
+    {#1}
+  \end{center}
+  \hrule\hrule\hrule\leavevmode\\\vspace{-0.4cm}\hrule\leavevmode\\\vspace{-0.4cm}\hrule\hrule\hrule\vspace{2cm}}
+
+\newcommand{\chem}[3]{\ensuremath{\prescript{#2}{#3}{\text{#1}}}}
+% --} End Time Saving Commands
+
+% {-- General Set-up
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\hypersetup{
+  colorlinks=true,
+  citecolor=Accent2,
+  filecolor=Accent3,
+  linkcolor=Accent1,
+  urlcolor=Accent3
+}
+\urlstyle{same}
+\setlength{\columnseprule}{0pt}
+\setlength{\columnsep}{15pt}
+\parskip 1em
+% --} End General Set-Up
+
+% {-- Listings
+\lstdefinestyle{main}{
+    language=[LaTeX]TeX,
+    backgroundcolor=\color{BackgroundColour},
+    commentstyle=\color{Accent3}\textit,
+    keywordstyle=\color{Accent1}\textbf,
+    numberstyle=\tiny\color{Accent1},
+    stringstyle=\color{Accent2},
+    basicstyle=\ttfamily\small\color{ForegroundColour},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+	xleftmargin=1.25cm,
+	xrightmargin=1cm,
+    frame=single
+}
+
+\lstdefinestyle{exampleBox}{
+    language=[LaTeX]TeX,
+    backgroundcolor=\color{BackgroundColour},
+    commentstyle=\color{Accent3}\textit,
+    keywordstyle=\color{Accent1}\textbf,
+    numberstyle=\tiny\color{Accent1},
+    stringstyle=\color{Accent2},
+    basicstyle=\ttfamily\small\color{ForegroundColour},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=0.6cm,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+	xleftmargin=-0.2cm,
+	xrightmargin=-0.2cm,
+    frame=none
+}
+
+\lstset{style = exampleBox}
+
+% --} End Listings
+
+% {-- Boxes
+
+\newcounter{boxExampleCounter}
+\newcounter{boxTheoremCounter}
+
+\newtcblisting{%
+    exampleCompiled%
+} [3] [] {%
+    enhanced,%
+    listing engine = listings,%
+    bicolor,%
+    colframe = Accent3,%
+    colback = BackgroundColour,%
+    colbacklower = white,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent3,%
+            right color = Accent3,%
+            middle color = Accent3!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    collower = DarkTextColour,%
+    step = boxExampleCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    listing options = {style = exampleBox, #1},%
+    title = Example \arabic{boxExampleCounter}:\ {#2},%
+    label = #3%
+}
+
+\newtcblisting{%
+    exampleCode%
+} [3] [] {%
+    enhanced,%
+    listing engine = listings,%
+    bicolor,%
+    colframe = Accent3,%
+    colback = BackgroundColour,%
+    colbacklower = white,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent3,%
+            right color = Accent3,%
+            middle color = Accent3!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    step = boxExampleCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    listing options = {style = exampleBox, #1},%
+    title = Example \arabic{boxExampleCounter}:\ {#2},%
+    label = #3,%
+    listing only
+}
+
+\newtcolorbox
+{example}[3][]{%
+    enhanced,%
+    before skip = 2mm,%
+    after skip = 2mm,%
+    colback = BackgroundColour,%
+    colframe = Accent3,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent3,%
+            right color = Accent3,%
+            middle color = Accent3!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    step = boxExampleCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    title = Example \arabic{boxExampleCounter}:\ {#2},%
+    label = #3,%
+    #1%
+}
+
+
+\newtcblisting{%
+    exampleCompiled*%
+} [2] [] {%
+    enhanced,%
+    listing engine = listings,%
+    bicolor,%
+    colframe = Accent3,%
+    colback = BackgroundColour,%
+    colbacklower = white,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent3,%
+            right color = Accent3,%
+            middle color = Accent3!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    collower = DarkTextColour,%
+    % step = boxExampleCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    listing options = {style = exampleBox, #1},%
+    title = Example:\ {#2}%
+}
+
+\newtcblisting{%
+    exampleCode*%
+} [2] [] {%
+    enhanced,%
+    listing engine = listings,%
+    bicolor,%
+    colframe = Accent3,%
+    colback = BackgroundColour,%
+    colbacklower = white,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent3,%
+            right color = Accent3,%
+            middle color = Accent3!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    % step = boxExampleCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    listing options = {style = exampleBox, #1},%
+    title = Example:\ {#2},%
+    listing only
+}
+
+\newtcolorbox
+{example*}[2][]{%
+    enhanced,%
+    before skip = 2mm,%
+    after skip = 2mm,%
+    colback = BackgroundColour,%
+    colframe = Accent3,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent3,%
+            right color = Accent3,%
+            middle color = Accent3!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    % step = boxExampleCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    title = Example:\ {#2},%
+    #1%
+}
+
+
+\newtcolorbox
+{important}[2][]{%
+    enhanced,%
+    before skip = 2mm,%
+    after skip = 2mm,%
+    colback = BackgroundColour,%
+    colframe = Accent2,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent2!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent2,%
+            right color = Accent2,%
+            middle color = Accent2!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    title = Important:\ {#2},%
+    #1%
+}
+
+\newtcolorbox
+{theorem}[3][]{%
+    enhanced,%
+    before skip = 2mm,%
+    after skip = 2mm,%
+    colback = BackgroundColour,%
+    colframe = Accent5,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent5!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent5,%
+            right color = Accent5,%
+            middle color = Accent5!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    step = boxTheoremCounter,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    title = Theorem \arabic{boxTheoremCounter}:\ {#2},%
+    label = #3,%
+    #1%
+}
+
+\newtcolorbox
+{theorem*}[2][]{%
+    enhanced,%
+    before skip = 2mm,%
+    after skip = 2mm,%
+    colback = BackgroundColour,%
+    colframe = Accent5,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = Accent5!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = Accent5,%
+            right color = Accent5,%
+            middle color = Accent5!85!white,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    title = Theorem:\ {#2},%
+    #1%
+}
+
+\newtcolorbox
+{unnamedBox}[3][]{%
+    enhanced,%
+    before skip = 7.5mm,%
+    after skip = 7.5mm,%
+    colback = BackgroundColour,%
+    colframe = #3,%
+    boxrule = 0.5mm,%
+    attach boxed title to top left = {%
+        xshift=1cm,%
+        yshift*=1mm-\tcboxedtitleheight%
+    },%
+    varwidth boxed title* = -3cm,%
+    boxed title style = {%
+        frame code = {%
+        \path[fill = #3!50!black] ([yshift = -1mm, xshift = -1mm]frame.north west) arc[start angle = 0, end angle = 180, radius = 1mm] ([yshift = -1mm, xshift = 1mm]frame.north east) arc[start angle = 180, end angle = 0, radius = 1mm];%
+        \path[%
+            left color = #3,%
+            right color = #3,%
+            middle color = #3,%!85!BackgroundColour,%
+            blur shadow = {%
+                shadow blur steps=5,%
+                shadow xshift = 0.5mm,%
+                shadow yshift = -1.7mm,%
+                shadow scale = 1.025
+            }%
+        ] ([xshift = -2mm]frame.north west) -- ([xshift = 2mm]frame.north east) [rounded corners = 1mm] -- ([xshift = 1mm, yshift = -1mm]frame.north east) -- (frame.south east) -- (frame.south west) -- ([xshift = -1mm, yshift = -1mm]frame.north west) [sharp corners] -- cycle;%
+        },%
+        interior engine = empty,%
+    },%
+    coltext = ForegroundColour,%
+    fonttitle = \color{AccentTextColour}\bfseries,%
+    title = {#2},%
+	before upper={\parindent28.53525pt\parskip0.75em},
+	left = 0.75cm,
+	right = 0.75cm,
+	top = 0.75cm,
+	bottom = 0.75cm,
+    #1%
+}
+
+% --} End Boxes
+
+% {-- Bra Ket Notation
+% Taken from the Physics package, https://ctan.org/pkg/physics?lang=en
+
+\DeclareDocumentCommand\bra{ s m t\ket s g }
+{ % Bra
+  \IfBooleanTF{#3}
+  { % Contraction
+    \IfBooleanTF{#1}
+    { % Bra has a star: no resize
+      \IfNoValueTF{#5}
+      {\braket*{#2}{} \IfBooleanTF{#4}{*}{}}
+      {\braket*{#2}{#5}}
+    }
+    {
+      \IfBooleanTF{#4}
+      { % Ket has a star: no resize
+        \IfNoValueTF{#5}
+        {\braket{#2}{} *}
+        {\braket*{#2}{#5}}
+      }
+      {\braket{#2}{\IfNoValueTF{#5}{}{#5}}} % Neither term is starred: auto sizing
+    }
+  }
+  { % No contraction
+    \IfBooleanTF{#1}
+    {\vphantom{#2}\left\langle\smash{#2}\right\rvert}
+    {\left\langle{#2}\right\rvert}
+    \IfBooleanTF{#4}{*}{}
+    \IfNoValueTF{#5}{}{#5}
+  }
+}
+
+\DeclareDocumentCommand\ket{ s m }
+{ % Ket
+  \IfBooleanTF{#1}
+  {\vphantom{#2}\left\lvert\smash{#2}\right\rangle} % No resize
+  {\left\lvert{#2}\right\rangle} % Auto sizing
+}
+
+\DeclareDocumentCommand\innerproduct{ s m g }
+{ % Inner product
+  \IfBooleanTF{#1}
+  { % No resize
+    \IfNoValueTF{#3}
+    {\vphantom{#2}\left\langle\smash{#2}\middle\vert\smash{#2}\right\rangle}
+    {\vphantom{#2#3}\left\langle\smash{#2}\middle\vert\smash{#3}\right\rangle}
+  }
+  { % Auto resize
+    \IfNoValueTF{#3}
+    {\left\langle{#2}\middle\vert{#2}\right\rangle}
+    {\left\langle{#2}\middle\vert{#3}\right\rangle}
+  }
+}
+\DeclareDocumentCommand\braket{}{\innerproduct} % Alternative for \innerproduct
+\DeclareDocumentCommand\ip{}{\innerproduct} % Shorthand for \innerproduct
+
+\DeclareDocumentCommand\outerproduct{ s m g }
+{ % Dyad
+  \IfBooleanTF{#1}
+  { % No resize
+    \IfNoValueTF{#3}
+    {\vphantom{#2}\left\lvert\smash{#2}\middle\rangle\!\middle\langle\smash{#2}\right\rvert}
+    {\vphantom{#2#3}\left\lvert\smash{#2}\middle\rangle\!\middle\langle\smash{#3}\right\rvert}
+  }
+  { % Auto resize
+    \IfNoValueTF{#3}
+    {\left\lvert{#2}\middle\rangle\!\middle\langle{#2}\right\rvert}
+    {\left\lvert{#2}\middle\rangle\!\middle\langle{#3}\right\rvert}
+  }
+}
+
+% --} End Bra Ket Notation

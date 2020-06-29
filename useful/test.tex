@@ -1,0 +1,184 @@
+\documentclass{article}
+
+\title{\texttt{useful.sty} $2.0$}
+\author{Peter Brookes Chambers}
+\date{\today{}}
+
+\usepackage[twilight, light, optional packages]{useful}
+\usepackage[margin = 1in]{geometry}
+\usepackage{lipsum}
+\usepackage{multicol}
+\usepackage{xpatch}
+\usepackage{realboxes}
+\usepackage{lipsum}
+\usepackage{indentfirst}
+\usepackage{longtable}
+\makeatletter
+\xpretocmd\lstinline{\Colorbox{BackgroundColour}\bgroup\appto\lst@DeInit{\egroup}}{}{}
+\makeatother
+
+\begin{document}
+% \parskip 1em
+\pagenumbering{roman}
+\maketitle
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+\section{Packages}
+\begin{multicols}{2}
+Required packages are:\texttt{
+\begin{itemize}
+    \item amsmath
+    \item url
+    \item hyperref
+    \item esint
+    \item tcolorbox
+    \begin{itemize}
+        \item skins
+        \item breakable
+    \end{itemize}
+    \item xparse
+    \item listings
+    \item tikz
+    \begin{itemize}
+        \item shadows.blur
+    \end{itemize}
+    \item varwidth
+    \item amssymb
+    \item amsbsy
+    \item colortbl
+    \item accents
+    \item mathtools
+    \item stackengine
+    \item courier
+    \item rotating
+    \item pdflscape
+    \item float
+\end{itemize}
+}
+\end{multicols}
+
+\section{Colour Schemes}
+
+This package provides several colour schemes with light and dark variants. Each scheme defines 9 colours (some of which may be equivalent):
+\begin{itemize}
+    \item \lstinline|ForegroundColour|
+    \item \lstinline|BackgroundColour|
+    \item \lstinline|Accent1|
+    \item \lstinline|Accent2|
+    \item \lstinline|Accent3|
+    \item \lstinline|Accent4|
+    \item \lstinline|Accent5|
+    \item \lstinline|AccentTextColour| (usually a slightly lighter or darker version of \lstinline|BackgroundColour|)
+    \item \lstinline|DarkTextColour| (usually a darker verion of \lstinline|ForegroundColour|
+    or \lstinline|BackgroundColour|)
+\end{itemize}
+
+The list of colour schemes can be found in Appendix \ref{appendix:colourSchemes}.
+
+Each colour scheme can be selected by passing its name and variant \textbf{in lower case} as an option. For example, for the ``Light" variant of the ``Sage" scheme (which is the default), use \lstinline|[sage, light]|. Colours for which only one variant exists will simply swap the foreground and background colours when the missing variant is requested, which is usually sufficient but may cause some comtrast issues with accent colours.
+
+\section{Boxes}
+
+A number of box environments are defined, and two new counters (\lstinline|boxExampleCounter|, and \lstinline|boxTheoremCounter|) are also defined. The boxes are:
+\subsection*{\texttt{exampleCompiled}}
+\begin{exampleCompiled*}{\texttt{exampleCompiled}}
+\begin{exampleCompiled}{An example of the \texttt{exampleCompiled} box}{example:exampleCompiled}
+This is an example of the \texttt{exampleCompiled} box, with a label and title. These can contain any \LaTeX{} commands, including other environments.
+\end{exampleCompiled}
+Example \ref{example:exampleCompiled} can then be referrenced normally.
+\end{exampleCompiled*}
+
+\subsection*{\texttt{exampleCode}}
+\begin{exampleCompiled*}{\texttt{exampleCode}}
+\begin{exampleCode}{An example of the \texttt{exampleCode} box}{example:exampleCode}
+This is an example of the \texttt{exampleCode} box, with a label and title. These can contain any \LaTeX{} commands, including other environments, but only show the listing. This makes them suitable for examples in other languages.
+\end{exampleCode}
+Example \ref{example:exampleCode} can then be referrenced normally.
+\end{exampleCompiled*}
+
+\subsection*{\texttt{example}}
+\begin{exampleCompiled*}{\texttt{example}}
+\begin{example}{An example of the \texttt{example} box}{example:example}
+This is an example of the \texttt{example} box, with a label and title. This box dispays its contents normally, not as a listing.
+\end{example}
+Example \ref{example:example} can then be referrenced normally.
+\end{exampleCompiled*}
+
+\subsection*{\texttt{important}}
+\begin{exampleCompiled*}{\texttt{important}}
+\begin{important}{An example of the \texttt{important} box}
+This is an example of the \texttt{important} box, with a title. This box dispays its contents normally, not as a listing, and has a different border to distinguish it from the examples.
+\end{important}
+The \texttt{important} box does not use a counter, so does not take a label and cannot be referrenced.
+\end{exampleCompiled*}
+
+Each of \lstinline|exampleCompiled|, \lstinline|exampleCode|, and \lstinline|example| have an unnumbered equivalent: \lstinline|exampleCompiled*|, \lstinline|exampleCode*|, and \lstinline|example*|.
+
+
+\subsection*{\texttt{theorem}}
+\begin{exampleCompiled*}{\texttt{theorem}}
+\begin{theorem}{An example of the \texttt{theorem} box}{theorem:theorem}
+This is an example of the \texttt{theorem} box, with a label and title. This box dispays its contents normally, not as a listing.
+\end{theorem}
+Theorem \ref{theorem:theorem} can then be referrenced normally.
+\end{exampleCompiled*}
+
+Again, this has an unnumbered equivalent, \lstinline|theorem*|
+\clearpage
+
+\section{Useful Macros}
+
+\renewcommand*{\arraystretch}{2.25}
+\noindent
+\begin{center}
+\begin{longtable}{r p{0.775\linewidth}}
+\lstinline|\colvec{#1}| & Produces a column vector with elements of \lstinline|#1| separated by \lstinline|\\|\\
+\lstinline|\rowvec[#1]{#2}| & Produces a row vector, with columns described by \lstinline|#1| (default \lstinline|c c|) and elements of \lstinline|#2| separated by \lstinline|&|\\
+\lstinline|\matrix[#1]{#2}| & Produces a matrix, with columns described by \lstinline|#1| (default \lstinline|c c|) and elements of \lstinline|#2|, column separated by \lstinline|&| and rows by \lstinline|\\|. This replaces the \lstinline|\matrix| command supplied by the \texttt{amsmath} package.\\
+\lstinline|\bigO{#1}| & Used for writing big O notation, such as $\bigO{N^2}$. \\
+\lstinline|\st|, \lstinline|\nd|, \lstinline|\rd|, \lstinline|\th| & produce correctly formatted ordinal suffixes (1\st, 2\nd, 3\rd, 4\th etc.)\\
+\lstinline|\e{#1}| & A shorthand for \lstinline|\text{e}^{#1}|, producing $\e{\#1}$\\
+\lstinline|\ee{#1}| & A shorthand for \lstinline|\text{e}^{{}^{#1}}|, producing $\ee{\#1}$ (this is designed for large exponents such as fractions)\\
+\lstinline|\curl| & A shorthand for the curl operator, $\curl$\\
+\lstinline|\div| & A shorthand for the divergence operator, $\div$\\
+\lstinline|\lap| & A shorthand for the laplacian operator, $\lap$\\
+\lstinline|\veclap| & A shorthand for the vector laplacian operator, $\veclap$\\
+\lstinline|\p[#1]{#2}{#3}| & A shorthand for a partial derivative of order \lstinline|#3| (default is empty, or first order) of \lstinline|#2| with respect to \lstinline|#3|, such as \lstinline|\p[2]{y}{x}|, $\p[2]{y}{x}$\\
+\lstinline|\pp{#1}{#2}{#3}| & A shorthand for a second order partial derivative of \lstinline|#1| with respect to \lstinline|#2| and \lstinline|#3|, such as \lstinline|\pp{f}{y}{x}|, $\pp{f}{y}{x}$\\
+\lstinline|\dv[#1]{#2}{#3}| & A shorthand for a full derivative of \lstinline|#2| with respect to \lstinline|#3| of order \lstinline|#1| (default is empty, or first order), such as \lstinline|\dv[2]{y}{x}|, $\dv[2]{y}{x}$\\
+\lstinline|\fdv[#1]{#2}{#3}| & A shorthand for a finite derivative of \lstinline|#2| with respect to \lstinline|#3| of order \lstinline|#1| (default is empty, or first order), such as \lstinline|\fdv{y}{x}|, $\fdv{y}{x}$\\
+\lstinline|\Dv[#1]{#2}{#3}| & A shorthand for a Lagrangian derivative of \lstinline|#2| with respect to \lstinline|#3| of order \lstinline|#1| (default is empty, or first order), such as \lstinline|\Dv[2]{y}{x}|, $\Dv[2]{y}{x}$\\
+\lstinline|\util{#1}| & Places a tilde accent below \lstinline|#1|, \lstinline|\util{a}| $\To$ $\util{a}$\\
+\lstinline|\erf| & A shorthand for the error fucntion, $\erf$\\
+\lstinline|\d| & A shorthand for \lstinline|\,\text{d}|, $\d$\\
+\lstinline|\lr| & A shorthand for \lstinline|\left({#1}\right)|\\
+\lstinline|\slr| & A shorthand for \lstinline|\left[{#1}\right]|\\
+\lstinline|\set| & A shorthand for \lstinline|\left\lbrace{#1}\right\rbrace|\\
+\lstinline|\alr| & A shorthand for \lstinline|\left\langle{#1}\right\rangle|\\
+\lstinline|\abs| & A shorthand for \lstinline"\left|{#1}\right|"\\
+\lstinline|\eval| & A shorthand for \lstinline"\left.{#1}\right|_{#2}"\\
+\lstinline|\setR| & A shorthand for the real set, $\setR$\\
+\lstinline|\setC| & A shorthand for the complex set, $\setC$\\
+\lstinline|\setZ| & A shorthand for the integer set, $\setZ$\\
+\lstinline|\setN| & A shorthand for the natural set, $\setN$\\
+\lstinline|\pr| & A shorthand for \lstinline|{}^\prime\,|\\
+\lstinline|\anti{#1}| & A shorthand to add an overline to \lstinline|#1|\\
+\lstinline|\To| & A shorthand for \lstinline|\ \longrightarrow\ |, $a\To b$\\
+\lstinline|\pfrac{#1}{#2}| & A shorthand for smaller fractions for use in exponents, \lstinline|a^\pfrac{1}{2}|, $a^\pfrac{1}{2}$.\\
+\lstinline|\chem{#1}{#2}{#3}| & A shorthand for formatting elements \lstinline|#1| with atomic masses and atomic numbers \lstinline|#2| and \lstinline|#3|, for example \lstinline|\chem{He}{2}{4.003}|, \chem{He}{2}{4.003}\\
+\end{longtable}
+\end{center}
+
+
+\clearpage
+\appendix
+
+\section{Colour Schemes \label{appendix:colourSchemes}}
+
+
+\input{cols.tex}
+
+
+\end{document}

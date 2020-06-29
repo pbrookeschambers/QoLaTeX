@@ -1,0 +1,4 @@
+\begin{theorem}{An example of the \texttt{theorem} box}{theorem:theorem}
+This is an example of the \texttt{theorem} box, with a label and title. This box dispays its contents normally, not as a listing.
+\end{theorem}
+Theorem \ref{theorem:theorem} can then be referrenced normally.

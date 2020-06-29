@@ -1,0 +1,666 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{useful}
+
+%===================================================================================================
+% Packages
+%===================================================================================================
+
+\usepackage{amsmath,amssymb,amsbsy}
+\usepackage{colortbl}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{accents,esint,mathtools}
+\usepackage[thicklines]{cancel}
+\usepackage{tcolorbox}
+\usepackage{xparse}
+\tcbuselibrary{skins,breakable}
+\usepackage{stackengine}
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{rotating,pdflscape}
+\usepackage{float}
+
+
+%===================================================================================================
+% Tikz Things
+%===================================================================================================
+
+
+\usepackage{tikz}
+\usetikzlibrary{fadings,arrows.meta, arrows, calc, decorations.pathreplacing,decorations.markings,decorations.pathmorphing}
+\tikzset{every picture/.style=remember picture} % Remembers nodes from previous tikzpictures, necessary for the links.
+
+
+% Fadings - These allow path fading to transparent, rather than between opaque colours
+%===================================================================================================
+\tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
+\tikzfading[name=fade up, bottom color=transparent!0, top color=transparent!100]
+\tikzfading[name=fade down, top color=transparent!0, bottom color=transparent!100]
+\tikzfading[name=fade left, right color=transparent!0, left color=transparent!100]
+\tikzfading[name=fade right, left color=transparent!0, right color=transparent!100]
+%===================================================================================================
+
+\def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
+
+\newcommand{\gettikzxy}[3]{%
+  \tikz@scan@one@point\pgfutil@firstofone(#1)\relax
+  \edef#2{\convertto{cm}{\the\pgf@x}}%
+  \edef#3{\convertto{cm}{\the\pgf@y}}%
+} % Retirieves the (x,y) coordinates of a node named #1, and stores (x,y) as (#2,#3)
+
+\newcommand{\mathnode}[2]{\mathord{\tikz[baseline=(#1.base), inner sep = 0pt]{\node (#1) {$#2$};}}}
+%allows the creation of a node in math mode whose name is the contents of the node.
+\newcommand{\textnode}[2]{\tikz[baseline=(#1.base), inner sep = 0pt]{\node (#1) {#2};}}
+%allows creation of a node anywhere with name #1 and contents #2
+
+%Flowchart
+%===================================================================================================
+\newcommand{\flowto}[3][black, semithick]{
+  \gettikzxy{#2}{\ax}{\ay}
+  \gettikzxy{#3}{\bx}{\by}
+  \draw[#1] (\ax,{\ay}) -- (\ax,{(\ay+\by)/2}) -- (\bx,{{(\ay+\by)/2}}) -- (\bx,{\by});
+}
+
+
+
+
+
+% Links
+%===================================================================================================
+\newcommand{\linkabove}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.north}{\ax}{\ay}
+    \gettikzxy{#3.north}{\bx}{\by}
+    \gettikzxy{#2.north east}{\arx}{\ary}
+    \gettikzxy{#3.north east}{\brx}{\bry}
+    \gettikzxy{#2.north west}{\alx}{\aly}
+    \gettikzxy{#3.north west}{\blx}{\bly}
+    \draw[#1, solid] ({\arx+0.05},\ary) -- ({\arx+0.05},{\ary+0.1}) -- ({\alx-0.05},{\aly+0.1}) -- ({\alx-0.05},\aly);
+    \draw[#1, solid] ({\brx+0.05},\bry) -- ({\brx+0.05},{\bry+0.1}) -- ({\blx-0.05},{\bly+0.1}) -- ({\blx-0.05},\bly);
+    \draw[#1] (\ax,{\ay+0.1}) -- (\ax,{max(\ay,\by)+0.4}) -- node[midway, above] {#4} (\bx,{max(\ay,\by)+0.4}) -- (\bx,{\by+0.1});
+  \end{tikzpicture}
+}% Creates a link from node #2 to node #3 above the line of #2 or #3, with optional arguments to be passed to the tikz lines, and a node above the centre of the link with text #4
+
+\newcommand{\linkbelow}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.south}{\ax}{\ay}
+    \gettikzxy{#3.south}{\bx}{\by}
+    \gettikzxy{#2.south east}{\arx}{\ary}
+    \gettikzxy{#3.south east}{\brx}{\bry}
+    \gettikzxy{#2.south west}{\alx}{\aly}
+    \gettikzxy{#3.south west}{\blx}{\bly}
+    \draw[#1, solid] ({\arx+0.05},\ary) -- ({\arx+0.05},{\ary-0.1}) -- ({\alx-0.05},{\aly-0.1}) -- ({\alx-0.05},\aly);
+    \draw[#1, solid] ({\brx+0.05},\bry) -- ({\brx+0.05},{\bry-0.1}) -- ({\blx-0.05},{\bly-0.1}) -- ({\blx-0.05},\bly);
+    \draw[#1] (\ax,{\ay-0.1}) -- (\ax,{min(\ay,\by)-0.4}) -- node[midway, below] {#4} (\bx,{min(\ay,\by)-0.4}) -- (\bx,{\by-0.1});
+  \end{tikzpicture}
+}% Creates a link from node #2 to node #3 below the line of #2 or #3, with optional arguments to be passed to the tikz lines, and a node below the centre of the link with text #4
+
+\newcommand{\linkba}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.south}{\ax}{\ay}
+    \gettikzxy{#3.north}{\bx}{\by}
+    \gettikzxy{#2.south east}{\arx}{\ary}
+    \gettikzxy{#3.north east}{\brx}{\bry}
+    \gettikzxy{#2.south west}{\alx}{\aly}
+    \gettikzxy{#3.north west}{\blx}{\bly}
+    \draw[#1, solid] ({\arx+0.05},\ary) -- ({\arx+0.05},{\ary-0.1}) -- ({\alx-0.05},{\aly-0.1}) -- ({\alx-0.05},\aly);
+    \draw[#1, solid] ({\brx+0.05},\bry) -- ({\brx+0.05},{\bry+0.1}) -- ({\blx-0.05},{\bly+0.1}) -- ({\blx-0.05},\bly);
+    \node[#1] (text) at ({(\ax+\bx)/2},{(\ay+\by)/2}) {#4};
+    \draw[#1] (\ax,{\ay-0.1}) -- (\ax,{(\ay+\by)/2}) -- (text) -- (\bx,{{(\ay+\by)/2}}) -- (\bx,{\by+0.1});
+  \end{tikzpicture}
+}% Creates a link from node #2 to node #3 between the lines of #2 and #3, with optional arguments to be passed to the tikz lines, and a node in the centre of the link with text #4
+
+\newcommand{\linkright}[5][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.east}{\ax}{\ay}
+    \gettikzxy{#3.east}{\bx}{\by}
+    \gettikzxy{#2.north east}{\atx}{\aty}
+    \gettikzxy{#3.north east}{\btx}{\bty}
+    \gettikzxy{#2.south east}{\abx}{\aby}
+    \gettikzxy{#3.south east}{\bbx}{\bby}
+    \draw[#1, solid] (\atx,{\aty+0.05}) -- ({\atx+0.1},{\aty+0.05}) -- ({\abx+0.1},{\aby-0.05}) -- (\abx,{\aby-0.05});
+    \draw[#1, solid] (\btx,{\bty+0.05}) -- ({\btx+0.1},{\bty+0.05}) -- ({\bbx+0.1},{\bby-0.05}) -- (\bbx,{\bby-0.05});
+    \node[#1] (text) at ({max(\ax,\bx)+#5},{(\ay+\by)/2}) {#4};
+    \draw[#1] ({\ax+0.1},\ay) -- ({max(\ax,\bx)+#5},\ay) --(text) -- ({max(\ax,\bx)+#5},\by) -- ({\bx+0.1},{\by});
+  \end{tikzpicture}
+}% Creates a link from the right of node #2 to the right of node #3 between the lines of #2 and #3, with optional arguments to be passed to the tikz lines, and a node in the centre of the link with text #4
+
+\newcommand{\linkra}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.east}{\ax}{\ay}
+    \gettikzxy{#3.north}{\bx}{\by}
+    \gettikzxy{#2.north east}{\atx}{\aty}
+    \gettikzxy{#3.north east}{\brx}{\bry}
+    \gettikzxy{#2.south east}{\abx}{\aby}
+    \gettikzxy{#3.north west}{\blx}{\bly}
+    \draw[#1, solid] (\atx,{\aty+0.05}) -- ({\atx+0.1},{\aty+0.05}) -- ({\abx+0.1},{\aby-0.05}) -- (\abx,{\aby-0.05});
+    \draw[#1, solid] ({\brx+0.05},\bry) -- ({\brx+0.05},{\bry+0.1}) -- ({\blx-0.05},{\bly+0.1}) -- ({\blx-0.05},\bly);
+    \node[#1] (text) at ({max(\ax,\bx)},{max(\ay,\by)}) {#4};
+    \draw[#1] ({\ax+0.1},\ay) -- (text) -- ({\bx},{\by+0.1});
+  \end{tikzpicture}
+}% Creates a link from the right of node #2 to the right of node #3 between the lines of #2 and #3, with optional arguments to be passed to the tikz lines, and a node in the centre of the link with text #4
+
+% With arrows
+%===================================================================================================
+
+
+\newcommand{\linkabovearrow}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.north}{\ax}{\ay}
+    \gettikzxy{#3.north}{\bx}{\by}
+    \gettikzxy{#2.north east}{\arx}{\ary}
+    \gettikzxy{#3.north east}{\brx}{\bry}
+    \gettikzxy{#2.north west}{\alx}{\aly}
+    \gettikzxy{#3.north west}{\blx}{\bly}
+    \draw[#1, solid] ({\arx+0.05},\ary) -- ({\arx+0.05},{\ary+0.1}) -- ({\alx-0.05},{\aly+0.1}) -- ({\alx-0.05},\aly);
+    \draw[#1, solid] ({\brx+0.05},\bry) -- ({\brx+0.05},{\bry+0.1}) -- ({\blx-0.05},{\bly+0.1}) -- ({\blx-0.05},\bly);
+    \draw[#1, -{latex}] (\ax,{\ay+0.1}) -- (\ax,{max(\ay,\by)+0.4}) -- node[midway, above] {#4} (\bx,{max(\ay,\by)+0.4}) -- (\bx,{\by+0.1});
+  \end{tikzpicture}
+}% Creates a link from node #2 to node #3 above the line of #2 or #3, with optional arguments to be passed to the tikz lines, and a node above the centre of the link with text #4
+
+\newcommand{\linkbelowarrow}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.south}{\ax}{\ay}
+    \gettikzxy{#3.south}{\bx}{\by}
+    \gettikzxy{#2.south east}{\arx}{\ary}
+    \gettikzxy{#3.south east}{\brx}{\bry}
+    \gettikzxy{#2.south west}{\alx}{\aly}
+    \gettikzxy{#3.south west}{\blx}{\bly}
+    \draw[#1, solid] ({\arx+0.05cm},\ary) -- ({\arx+0.05cm},{\ary-0.1cm}) -- ({\alx-0.05cm},{\aly-0.1cm}) -- ({\alx-0.05cm},\aly);
+    \draw[#1, solid] ({\brx+0.05cm},\bry) -- ({\brx+0.05cm},{\bry-0.1cm}) -- ({\blx-0.05cm},{\bly-0.1cm}) -- ({\blx-0.05cm},\bly);
+    \draw[#1, -{latex}] (\ax,{\ay-0.1cm}) -- (\ax,{min(\ay,\by)-0.4cm}) -- node[midway, below] {#4} (\bx,{min(\ay,\by)-0.4cm}) -- (\bx,{\by-0.1cm});
+  \end{tikzpicture}
+}% Creates a link from node #2 to node #3 below the line of #2 or #3, with optional arguments to be passed to the tikz lines, and a node below the centre of the link with text #4
+
+\newcommand{\linkbaarrow}[4][black, semithick]{
+  \begin{tikzpicture}[overlay]
+    \gettikzxy{#2.south}{\ax}{\ay}
+    \gettikzxy{#3.north}{\bx}{\by}
+    \gettikzxy{#2.south east}{\arx}{\ary}
+    \gettikzxy{#3.north east}{\brx}{\bry}
+    \gettikzxy{#2.south west}{\alx}{\aly}
+    \gettikzxy{#3.north west}{\blx}{\bly}
+    \draw[#1, solid] ({\arx+0.05},\ary) -- ({\arx+0.05},{\ary-0.1}) -- ({\alx-0.05},{\aly-0.1}) -- ({\alx-0.05},\aly);
+    \draw[#1, solid] ({\brx+0.05},\bry) -- ({\brx+0.05},{\bry+0.1}) -- ({\blx-0.05},{\bly+0.1}) -- ({\blx-0.05},\bly);
+    \node[#1] (text) at ({(\ax+\bx)/2},{(\ay+\by)/2}) {#4};
+    \draw[#1, -{latex}] (\ax,{\ay-0.1}) -- (\ax,{(\ay+\by)/2}) -- (text) -- (\bx,{{(\ay+\by)/2}}) -- (\bx,{\by+0.1});
+  \end{tikzpicture}
+}% Creates a link from node #2 to node #3 between the lines of #2 and #3, with optional arguments to be passed to the tikz lines, and a node in the centre of the link with text #4
+%===================================================================================================
+
+\tikzset{
+  % style to apply some styles to each segment of a path
+  on each segment/.style={
+      decorate,
+      decoration={
+          show path construction,
+          moveto code={},
+          lineto code={
+              \path [#1]
+              (\tikzinputsegmentfirst) -- (\tikzinputsegmentlast);
+            },
+          curveto code={
+              \path [#1] (\tikzinputsegmentfirst)
+              .. controls
+              (\tikzinputsegmentsupporta) and (\tikzinputsegmentsupportb)
+              ..
+              (\tikzinputsegmentlast);
+            },
+          closepath code={
+              \path [#1]
+              (\tikzinputsegmentfirst) -- (\tikzinputsegmentlast);
+            },
+        },
+    },
+  % style to add an arrow in the middle of a path
+  mid arrow/.style={postaction={decorate,decoration={
+              markings,
+              mark=at position .5 with {\arrow[#1]{stealth}}
+            }}},
+}
+% Example
+%===================================================================================================
+%\begin{tikzpicture}
+%\path [draw=blue,postaction={on each segment={mid arrow=red}}]
+%(.2,0) -- (3,1) arc (0:180:1.4 and 1) -- cycle
+%(4,1) circle(.8)
+%(6,1) ellipse(.5 and 1)
+%(0,3) to [bend left] (3,4)
+%(4,3) rectangle (6,4)
+%;
+%\end{tikzpicture}
+%===================================================================================================
+
+
+
+%===================================================================================================
+% Time-Saving Commands
+%===================================================================================================
+
+\newcommand{\colvec}[1]{\left( \begin{array}{c} #1 \end{array} \right)}
+\newcommand{\rowvec}[2][c c]{\left( \begin{array}{#1} #2 \end{array} \right)}
+\renewcommand{\matrix}[2][c c]{\left( \begin{array}{#1} #2 \end{array} \right)}
+
+\newcommand{\bigO}[1]{\mathcal{O}\left( #1 \right)}
+\newcommand{\st}{$^\text{st}\ $}
+\newcommand{\nd}{$^\text{nd}\ $}
+\newcommand{\rd}{$^\text{rd}\ $}
+\renewcommand{\th}{$^\text{th}\ $}
+\newcommand{\e}[1]{\text{e}^{#1}} %For exponentials
+\newcommand{\ee}[1]{\text{e}^{{}^{#1}}} %For exponentials with bulky powers
+\newcommand{\curl}{\vec{ \nabla }\times}
+\renewcommand{\div}{\vec{ \nabla }\cdot}
+\newcommand{\lap}{{\nabla}^2}
+\newcommand{\veclap}{{\vec{\nabla}}^2}
+\newcommand{\p}[3][{}]{\dfrac{\partial^{#1} {#2}}{\partial {#3}^{#1}}} %Optional argument is order of derivative
+\newcommand{\pp}[3]{\dfrac{\partial^2{#1}}{\partial {#2} \partial{#3}}}
+\newcommand{\dv}[3][{}]{\dfrac{\d^{#1} {#2}}{\d {#3}^{#1}}} %optional argument is order of derivative
+\newcommand{\fdv}[3][{}]{\dfrac{\delta^{#1} {#2}}{\delta {#3}^{#1}}} %optional argument is order of derivative
+\newcommand{\Dv}[3][{}]{\dfrac{\text{D}^{#1} {#2}}{\text{D} {#3}^{#1}}}
+\newcommand{\util}{\underaccent{\tilde}}
+\newcommand{\ogamma}{\left(1-\frac{v^2}{c^2} \right)^\frac{1}{2}}
+\newcommand{\gammav}[1]{\frac{1}{\sqrt{1-\frac{\left({#1}\right)^2}{c^2} }}}
+\newcommand{\erf}{\text{erf}\,}
+\renewcommand{\d}{\,\text d}
+\newcommand{\lr}[1]{\left({#1}\right)}
+\newcommand{\slr}[1]{\left[{#1}\right]}
+\newcommand{\set}[1]{\left\lbrace{#1}\right\rbrace}
+\newcommand{\alr}[1]{\left\langle{#1}\right\rangle}
+\newcommand{\abs}[1]{\left| {#1} \right|}
+\newcommand{\eval}[2]{\left. {#1} \mathrlap{\Big|}\right| _{#2}}
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\setC}{\mathbb{C}}
+\newcommand{\setZ}{\mathbb{Z}}
+\newcommand{\setN}{\mathbb{N}}
+\newcommand{\pr}{{}^\prime\,}
+\let\oldint\int
+\renewcommand{\int}{\oldint\limits}
+\let\oldiint\iint
+\renewcommand{\iint}{\oldiint\limits}
+\let\oldiiint\iiint
+\renewcommand{\iiint}{\oldiiiint\limits}
+\let\oldoint\oint
+\renewcommand{\oint}{\oldoint\limits}
+\let\oldoiint\oiint
+\renewcommand{\oiint}{\oldoiint\limits}
+\let\oldsum\sum
+\renewcommand{\sum}{\oldsum\limits}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+%\let\oldsec{\section}
+%\renewcommand{\section}[1]{\clearpage\thispagestyle{plain}\leavevmode\\\vspace{0.3\textheight}\leavevmode\\ \oldsec{#1} \clearpage}
+\newcommand{\anti}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\To}{\ \longrightarrow\ }
+
+\newcommand{\pfrac}[2]{{{}^\frac{#1}{#2}}}
+%===================================================================================================
+% New Commands
+%===================================================================================================
+
+
+\newcommand\funderline[1]{%
+  \stackengine{0pt}{\underline{\;\,\vphantom{#1}}}{#1}{O}{c}{F}{F}{L}}
+\newcommand{\mat}[1]{\ensuremath{\funderline{\smash{#1}}}}
+\newcommand{\newdate}[1]{\clearpage
+  \vspace{2cm}\hrule\hrule\hrule\leavevmode\\\vspace{-0.4cm}\hrule\leavevmode\\\vspace{-0.4cm}\hrule\hrule\hrule
+  \begin{center}
+    {#1}
+  \end{center}
+  \hrule\hrule\hrule\leavevmode\\\vspace{-0.4cm}\hrule\leavevmode\\\vspace{-0.4cm}\hrule\hrule\hrule\vspace{2cm}}
+
+\newcommand{\chem}[3]{\ensuremath{\prescript{#2}{#3}{\text{#1}}}}
+
+%===================================================================================================
+% Colours
+%===================================================================================================
+
+
+\definecolor{blue0}{rgb}{0.15,0.15,0.35}
+\definecolor{blue1}{rgb}{0.3,0.3,0.7}
+\definecolor{blue2}{rgb}{0.5,0.5,0.8}
+\definecolor{blue3}{rgb}{0.9,0.9,1}
+\definecolor{dblue}{rgb}{0.1,0.1,0.3}
+\definecolor{ddblue}{rgb}{0,0,0.15}
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+\definecolor{dgrey}{rgb}{0.05,0.05,0.05}
+
+\definecolor{green0}{rgb}{0.15,0.35,0.15}
+\definecolor{green1}{rgb}{0.3,0.7,0.3}
+\definecolor{green2}{rgb}{0.5,0.8,0.5}
+\definecolor{green3}{rgb}{0.9,1,0.9}
+\definecolor{red0}{rgb}{0.35,0.15,0.15}
+\definecolor{red1}{rgb}{0.7,0.3,0.3}
+\definecolor{red2}{rgb}{0.8,0.5,0.5}
+\definecolor{red3}{rgb}{1,0.9,0.9}
+
+\definecolor{comment}{rgb}{0,0,1}
+\definecolor{keyword}{rgb}{0.6,0.05,0.7}
+\definecolor{string}{rgb}{0,0.4,0.2}
+
+%===================================================================================================
+% Environments
+%===================================================================================================
+
+
+\newenvironment{block}[1]{%
+  \tcolorbox[beamer,%
+    noparskip,breakable,arc=0mm,no shadow,
+    width=0.925\linewidth,
+    colback=blue3,colframe=blue1,%
+    colbacklower=blue2,%
+    title={#1},before upper={\parindent15pt}]}%
+{\endtcolorbox}
+
+\newenvironment{remarks}[1][Remarks]{%
+  \tcolorbox[beamer,%
+    noparskip,breakable,arc=0mm,no shadow,
+    width=0.925\linewidth,
+    colback=red3,colframe=red1,%
+    colbacklower=red2,%
+    title={#1},before upper={\parindent15pt}]}%
+{\endtcolorbox}
+
+\newenvironment{example}[1][Example]{%
+  \tcolorbox[beamer,%
+    noparskip,breakable,arc=0mm,no shadow,
+    width=0.925\linewidth,
+    colback=green3,colframe=green1,%
+    colbacklower=green2,%
+    title={#1},before upper={\parindent15pt}]}%
+{\endtcolorbox}
+
+
+%===================================================================================================
+% Set-up/General
+%===================================================================================================
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+\urlstyle{same}
+\setlength{\columnseprule}{0.5pt}
+\setlength{\columnsep}{15pt}
+
+\definecolor{BoldLightBackground}{HTML}{F3F2DD}
+\definecolor{BoldLightForeground}{HTML}{292935}
+\definecolor{BoldLightAccent1}{HTML}{808DA0}
+\definecolor{BoldLightAccent2}{HTML}{D3523C}
+\definecolor{BoldLightAccent3}{HTML}{92A298}
+\definecolor{BoldLightAccent4}{HTML}{CB7257}
+\definecolor{BoldLightAccent5}{HTML}{CB5164}
+\lstdefinestyle{BoldLight}{
+    backgroundcolor=\color{BoldLightBackground},
+    commentstyle=\color{BoldLightAccent3}\textit,
+    keywordstyle=\color{BoldLightAccent1}\textbf,
+    numberstyle=\tiny\color{BoldLightAccent1},
+    stringstyle=\color{BoldLightAccent2},
+    basicstyle=\ttfamily\small\color{BoldLightForeground},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single
+}
+
+
+\definecolor{BoldDarkBackground}{HTML}{4A4A4A}
+\definecolor{BoldDarkForeground}{HTML}{B3B6BA}
+\definecolor{BoldDarkAccent1}{HTML}{94B8CE}
+\definecolor{BoldDarkAccent2}{HTML}{CB7257}
+\definecolor{BoldDarkAccent3}{HTML}{CB5164}
+\definecolor{BoldDarkAccent4}{HTML}{DBC25C}
+\definecolor{BoldDarkAccent5}{HTML}{86D178}
+\lstdefinestyle{BoldDark}{
+    backgroundcolor=\color{BoldDarkBackground},
+    commentstyle=\color{BoldDarkAccent3}\textit,
+    keywordstyle=\color{BoldDarkAccent1}\textbf,
+    numberstyle=\tiny\color{BoldDarkAccent1},
+    stringstyle=\color{BoldDarkAccent2},
+    basicstyle=\ttfamily\small\color{BoldDarkForeground},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single
+}
+
+
+\definecolor{SageLightBackground}{HTML}{E1DBCE}
+\definecolor{SageLightForeground}{HTML}{47474B}
+\definecolor{SageLightAccent1}{HTML}{AAB58B}
+\definecolor{SageLightAccent2}{HTML}{97A7B7}
+\definecolor{SageLightAccent3}{HTML}{836972}
+\definecolor{SageLightAccent4}{HTML}{B8AC97}
+\definecolor{SageLightAccent5}{HTML}{938165}
+\lstdefinestyle{SageLight}{
+    backgroundcolor=\color{SageLightBackground},
+    commentstyle=\color{SageLightAccent3}\textit,
+    keywordstyle=\color{SageLightAccent1}\textbf,
+    numberstyle=\tiny\color{SageLightAccent1},
+    stringstyle=\color{SageLightAccent2},
+    basicstyle=\ttfamily\small\color{SageLightForeground},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single
+}
+
+
+\definecolor{SageDarkBackground}{HTML}{786C70}
+\definecolor{SageDarkForeground}{HTML}{DDDDDD}
+\definecolor{SageDarkAccent1}{HTML}{B7AE53}
+\definecolor{SageDarkAccent2}{HTML}{CE543F}
+\definecolor{SageDarkAccent3}{HTML}{E8B54C}
+\definecolor{SageDarkAccent4}{HTML}{97A7B7}
+\definecolor{SageDarkAccent5}{HTML}{836972}
+\lstdefinestyle{SageDark}{
+    backgroundcolor=\color{SageDarkBackground},
+    commentstyle=\color{SageDarkAccent3}\textit,
+    keywordstyle=\color{SageDarkAccent1}\textbf,
+    numberstyle=\tiny\color{SageDarkAccent1},
+    stringstyle=\color{SageDarkAccent2},
+    basicstyle=\ttfamily\small\color{SageDarkForeground},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single
+}
+
+
+\definecolor{SucculentDarkBackground}{HTML}{3B3347}
+\definecolor{SucculentDarkForeground}{HTML}{D0DAC0}
+\definecolor{SucculentDarkAccent1}{HTML}{B3ACBD}
+\definecolor{SucculentDarkAccent2}{HTML}{99B8A4}
+\definecolor{SucculentDarkAccent3}{HTML}{5A7477}
+\definecolor{SucculentDarkAccent4}{HTML}{D0DAC0}
+\definecolor{SucculentDarkAccent5}{HTML}{99B8A4}
+\lstdefinestyle{SucculentDark}{
+    backgroundcolor=\color{SucculentDarkBackground},
+    commentstyle=\color{SucculentDarkAccent3}\textit,
+    keywordstyle=\color{SucculentDarkAccent1}\textbf,
+    numberstyle=\tiny\color{SucculentDarkAccent1},
+    stringstyle=\color{SucculentDarkAccent2},
+    basicstyle=\ttfamily\small\color{SucculentDarkForeground},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single
+}
+
+
+\definecolor{MutedLightBackground}{HTML}{E4DCCF}
+\definecolor{MutedLightForeground}{HTML}{46454A}
+\definecolor{MutedLightAccent1}{HTML}{A7B78A}
+\definecolor{MutedLightAccent2}{HTML}{8D6972}
+\definecolor{MutedLightAccent3}{HTML}{92A9B9}
+\definecolor{MutedLightAccent4}{HTML}{9A8264}
+\definecolor{MutedLightAccent5}{HTML}{706F73}
+\lstdefinestyle{MutedLight}{
+    backgroundcolor=\color{MutedLightBackground},
+    commentstyle=\color{MutedLightAccent3}\textit,
+    keywordstyle=\color{MutedLightAccent1}\textbf,
+    numberstyle=\tiny\color{MutedLightAccent1},
+    stringstyle=\color{MutedLightAccent2},
+    basicstyle=\ttfamily\small\color{MutedLightForeground},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single
+}
+
+
+
+
+
+
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{white},
+  commentstyle=\color{comment}\textit,
+  keywordstyle=\color{keyword}\textbf,
+  numberstyle=\tiny\color{gray},
+  stringstyle=\color{string},
+  basicstyle=\ttfamily\small,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=10pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=4,
+  frame=single
+}
+
+
+
+
+\lstset{style=SageLight}
+
+\newcommand{\Appendix}{\newpage\pagenumbering{Roman}\appendix}
+
+\let\Subsectionmark\subsectionmark
+\def\subsectionmark#1{\def\Subsectionname{#1}\Subsectionmark{#1}}
+
+%===================================================================================================
+% Taken from the Physics package, https://ctan.org/pkg/physics?lang=en
+%===================================================================================================
+
+
+
+\DeclareDocumentCommand\bra{ s m t\ket s g }
+{ % Bra
+  \IfBooleanTF{#3}
+  { % Contraction
+    \IfBooleanTF{#1}
+    { % Bra has a star: no resize
+      \IfNoValueTF{#5}
+      {\braket*{#2}{} \IfBooleanTF{#4}{*}{}}
+      {\braket*{#2}{#5}}
+    }
+    {
+      \IfBooleanTF{#4}
+      { % Ket has a star: no resize
+        \IfNoValueTF{#5}
+        {\braket{#2}{} *}
+        {\braket*{#2}{#5}}
+      }
+      {\braket{#2}{\IfNoValueTF{#5}{}{#5}}} % Neither term is starred: auto sizing
+    }
+  }
+  { % No contraction
+    \IfBooleanTF{#1}
+    {\vphantom{#2}\left\langle\smash{#2}\right\rvert}
+    {\left\langle{#2}\right\rvert}
+    \IfBooleanTF{#4}{*}{}
+    \IfNoValueTF{#5}{}{#5}
+  }
+}
+
+\DeclareDocumentCommand\ket{ s m }
+{ % Ket
+  \IfBooleanTF{#1}
+  {\vphantom{#2}\left\lvert\smash{#2}\right\rangle} % No resize
+  {\left\lvert{#2}\right\rangle} % Auto sizing
+}
+
+\DeclareDocumentCommand\innerproduct{ s m g }
+{ % Inner product
+  \IfBooleanTF{#1}
+  { % No resize
+    \IfNoValueTF{#3}
+    {\vphantom{#2}\left\langle\smash{#2}\middle\vert\smash{#2}\right\rangle}
+    {\vphantom{#2#3}\left\langle\smash{#2}\middle\vert\smash{#3}\right\rangle}
+  }
+  { % Auto resize
+    \IfNoValueTF{#3}
+    {\left\langle{#2}\middle\vert{#2}\right\rangle}
+    {\left\langle{#2}\middle\vert{#3}\right\rangle}
+  }
+}
+\DeclareDocumentCommand\braket{}{\innerproduct} % Alternative for \innerproduct
+\DeclareDocumentCommand\ip{}{\innerproduct} % Shorthand for \innerproduct
+
+\DeclareDocumentCommand\outerproduct{ s m g }
+{ % Dyad
+  \IfBooleanTF{#1}
+  { % No resize
+    \IfNoValueTF{#3}
+    {\vphantom{#2}\left\lvert\smash{#2}\middle\rangle\!\middle\langle\smash{#2}\right\rvert}
+    {\vphantom{#2#3}\left\lvert\smash{#2}\middle\rangle\!\middle\langle\smash{#3}\right\rvert}
+  }
+  { % Auto resize
+    \IfNoValueTF{#3}
+    {\left\lvert{#2}\middle\rangle\!\middle\langle{#2}\right\rvert}
+    {\left\lvert{#2}\middle\rangle\!\middle\langle{#3}\right\rvert}
+  }
+}
