@@ -29,92 +29,94 @@
   {#1}%
   {@}%
   {,}%
-  {BackgroundColour,ForegroundColour,Accent1,Accent2,Accent3,Accent4,Accent5}%
+  {ForegroundColour,BackgroundColour,Accent1,Accent2,Accent3,Accent4,Accent5,Accent6,Hyperlink,FollowedHyperlink}%
   {,}%
   {#2}
 }
 
 %{-- Schemes ===================================================================
-\DefineColourScheme{bold}{F3F2DD, 292935, 808DA0, D3523C, 92A298, CB7257, CB5164}
-\DefineColourScheme{sage}{E1DBCE, 47474B, AAB58B, 97A7B7, 836972, B8AC97, 938165}
-\DefineColourScheme{muted}{E4DCCF, 46454A, A7B78A, 8D6972, 92A9B9, 9A8264, 706F73}
-\DefineColourScheme{office_2011}{ECECE4, 264B77, 5882B4, BA5253, 9CB864, 7D669A, 50ACBB}
-\DefineColourScheme{grayscale}{FAFAFA, 000000, DFDFDF, B2B2B2, 979797, 818181, 5D5D5D}
-\DefineColourScheme{adjacency}{DFDCBD, 66614D, A8A586, A1BFBD, CFCA79, 92A19C, C1A365}
-\DefineColourScheme{advantage}{C4B2C8, 2C1B2E, 643966, 34153E, 676894, 9C9A73, F0931A}
-\DefineColourScheme{angeles}{CED6D9, 464646, 7B7C7E, FB6D1B, 0BA4D0, 809958, C2B197}
-\DefineColourScheme{apothecary}{E9EBD3, 5A4D44, 96A199, C6564A, B3AD5F, 848160, E5BA52}
-\DefineColourScheme{austin}{CDEF81, 3E3F31, 95C205, 6F695D, FE6B04, 90956D, 8F6D4A}
-\DefineColourScheme{black_tie}{E3DDD1, 49494B, 737278, A9B793, BDB09D, 94A7B5, 99856D}
-\DefineColourScheme{breeze}{D8EDF2, 0F233B, 367B9A, 2D4B56, DE7D1F, FAB80A, 83B806}
-\DefineColourScheme{capital}{819095, 6D6E60, 4D5B5E, 945543, 4F493D, C1B084, 69755F}
-\DefineColourScheme{civic}{CAD1D7, 686D83, CD6653, C7B509, 8DABA9, 8C7E75, 90AD8F}
-\DefineColourScheme{clarity}{F0F1DF, C65744, 96A199, AB9371, 74665D, 505C68, 8490A0}
-\DefineColourScheme{couture}{D1CEBF, 36312D, 9E9063, 9E9985, 85786F, B0B1AB, 8F898D}
-\DefineColourScheme{elemental}{B2CCF1, 292B52, 6B9EC9, 347BCD, 8490A8, 5369A5, 66A2AA}
-\DefineColourScheme{essential}{C8C9B7, D42836, 7B7B7B, EFC20D, 596FA9, 9998A6, D85B2D}
-\DefineColourScheme{executive}{E5E5ED, 365A8E, 6574AD, 955758, E28B24, 836952, 678726}
-\DefineColourScheme{expo}{7CB4E7, 2B3D7D, F8C222, EADFA9, F28914, BD030E, 621215}
-\DefineColourScheme{folio}{DEDDD8, 2D2F2C, 30416C, 7B8EB6, 918B7F, 7C4B3D, 55190E}
-\DefineColourScheme{formal}{DDDDD1, 3F3E46, 90817C, 9F694D, C69B56, 9A92C3, 7B6594}
-\DefineColourScheme{foundry}{E9E9E1, 676A59, 7BA37E, B3CBB5, ADCBD3, BEBFB1, CBC6A0}
-\DefineColourScheme{genesis}{BDD5F1, 495563, 86B80B, D9A420, 2399D7, 35B09E, 5232B7}
-\DefineColourScheme{grid}{CFD2BF, 52494A, C26D59, BB9A55, 938F76, 84706F, 8F7456}
-\DefineColourScheme{habitat}{EDE3CA, 214134, F0C10F, FB8509, FF3602, 887145, 828B4A}
-\DefineColourScheme{hardcover}{EDE9CC, 86612C, 7E392A, CF8B2A, CDC443, 868070, 982417}
-\DefineColourScheme{horizon}{D29F1F, 232426, 8196A7, C28E69, 7D6F66, AF9272, 697778}
-\DefineColourScheme{infusion}{B9ACDA, 2E2554, 8C77C4, C7E6C7, C1A8DF, AF66BF, A8DAF5}
-\DefineColourScheme{inkwell}{EDE4C7, 574D34, 89070F, 450B0A, 775319, BA8215, 80775A}
-\DefineColourScheme{median}{EBE0CE, 746059, 9AB6CB, D98352, A6AC88, D3B85D, 84A59C}
-\DefineColourScheme{kilter}{B5E6F4, 2D94C1, 7BC4E7, F7A525, FE6B04, 75A52D, AAD852}
-\DefineColourScheme{inspiration}{A0A998, 2F2F27, 779803, BBCB8C, 749DBB, 28499A, 503AC1}
-\DefineColourScheme{module}{D4D4D6, 606676, EBAF10, 69B0C4, E47083, 73B376, E08559}
-\DefineColourScheme{newsprint}{DCDCDE, 303030, A8030A, 74665D, A79273, 848FA3, 454D58}
-\DefineColourScheme{orbit}{C5D0CC, 829BA2, EEDE17, A4E725, 158FE2, C71922, E07503}
-\DefineColourScheme{perspective}{FF8202, 2B3036, 898F9D, CA6509, 80726F, 9F1575, 625ECF}
-\DefineColourScheme{perception}{BBBFB0, 353535, A5C719, DA7B05, DDC70F, 86C2E7, 2A4594}
-\DefineColourScheme{paper}{FDFBD4, 454C2B, A6B397, F1A84C, E2BA36, CC99AA, 9B89BB}
-\DefineColourScheme{pixel}{0396FF, 05C2BC, FF7E06, EBB61C, F8EC88, D3C7ED, D762EE}
-\DefineColourScheme{plaza}{CECECE, 353535, 9C0006, 560808, E84A01, E58E03, A3A3A3}
-\DefineColourScheme{precedent}{E0E4D5, 353535, 923637, 946E3F, 726C60, C49C2B, C16236}
-\DefineColourScheme{saddle}{E7E2DC, AC641A, C6B482, 966020, 79ADB8, 80A869, 867297}
-\DefineColourScheme{revolution}{44ADE7, 20365B, 175880, DAF641, 568616, B96503, 9E000C}
-\DefineColourScheme{pushpin}{CFDDE6, 4E5F95, F9A427, A02D26, 726C60, 6CA449, E6590A}
-\DefineColourScheme{sketchbook}{FFFFED, 4B1912, AC2F1B, E1882E, 9AAE69, 759DC1, 5264AE}
-\DefineColourScheme{sky}{67BBDF, 1B87B6, 10346E, 97D7F3, F6CE0C, EF6914, BE6708}
-\DefineColourScheme{slipstream}{BDDDF4, 1F243A, 5468BF, 61CCEC, AEE65D, 63CEB0, F48432}
-\DefineColourScheme{spectrum}{E9E8E6, 282830, 9C0006, FE6905, F8BF0D, 9DCB09, 598A00}
-\DefineColourScheme{solstice}{E2DDCA, 492B23, 428FA3, FCBB15, C42E37, 8AAB38, 93460E}
-\DefineColourScheme{soho}{CDD8DC, 442723, 656661, 8F5138, 635643, 848160, ADA252}
-\DefineColourScheme{story}{CCD4D7, 242424, 1985C3, 6D328E, B70E25, E1950C, 5D9436}
-\DefineColourScheme{summer}{E9BB1F, C8660B, 5DA8BF, 59BDA5, 81BD5D, E1E054, B44C27}
-\DefineColourScheme{technic}{D3D2D0, 3D3D3D, 729EA9, C4B011, 8F8BA2, 768463, 9F957A}
-\DefineColourScheme{twilight}{E7E8ED, 25233B, E2BF49, 8EC1C5, E09031, 919BD8, 869B4E}
-\DefineColourScheme{travelouge}{816B39, 2E271F, BC4B21, A3262C, 49759A, 665F95, 689155}
-\DefineColourScheme{tradition}{CB9113, 5A491B, 694B17, 73121B, 8F824B, 46425B, 601742}
-\DefineColourScheme{urban_pop}{D4D4D4, 292929, 8CCB24, 06A2DB, F3CC19, 81908D, CB7029}
-\DefineColourScheme{venture}{E8EAD5, 758257, 9FAB69, C89B0A, ECE793, 7D5227, 4C1C1C}
-\DefineColourScheme{waveform}{C9E4F7, 103D80, 34BAF7, 4E82CE, 66CB7F, A9D22B, F2C23C}
-\DefineColourScheme{blue}{DFEDF6, 193C66, 166AC4, 0C96D7, 13D0D6, 1BC998, 83C967}
-\DefineColourScheme{blue_warm}{B2CAF0, 242748, 5065A6, 659BC9, 317DD1, 818DA3, 629CA7}
-\DefineColourScheme{blue_ii}{E3E4E6, 34576A, 1AADD9, 3082BE, 30CDD4, 45B796, 438459}
-\DefineColourScheme{blue_green}{D5DDE8, 373543, 3D91B5, 5EB6BA, 7CBDA9, 7A888B, 8DABB5}
-\DefineColourScheme{green}{E7E0D8, 47594D, 5B9943, 8EB737, C0CE45, 089372, 50B5BF}
-\DefineColourScheme{green_yellow}{E5E2D3, 47594D, 9CC93A, 67A03F, 38A975, 4AC0A0, 53B3C9}
-\DefineColourScheme{yellow}{EAE2DF, 35302A, F7C91B, F99428, CA9140, E37119, D34F29}
-\DefineColourScheme{yellow_orange}{F9F0D3, 473930, E6A52F, 9F6456, B08F86, BE9C77, 9F957A}
-\DefineColourScheme{orange}{D1DFE8, 636F59, E28214, BC5A35, 7F5847, 96825F, C0BB84}
-\DefineColourScheme{orange_red}{EDE8E2, 666563, D54721, 9B2B27, 9D8E71, 8F6557, 8D8485}
-\DefineColourScheme{red_orange}{EDEDE5, 4D4D45, E54A2C, F8BF4E, B3492F, FA8830, C29A20}
-\DefineColourScheme{red}{DDC44D, 313131, A22C12, D25815, DE9B33, B09F85, 7B6059}
-\DefineColourScheme{red_violet}{DBDCDE, 45454D, E2318B, C634C3, 4CA7D6, 4D71E1, 8871D9}
-\DefineColourScheme{violet}{DEDCDF, 373543, AA89C0, 8583C2, 60718F, 6F93A9, 8DABB5}
-\DefineColourScheme{violet_ii}{EBE9EC, 5B3358, 882889, 955DCC, 725ED1, 6862AC, 4DA2E5}
-\DefineColourScheme{marquee}{E1E1E1, 5D5D5D, 4687AD, A8B831, F59210, 848484, F8C21A}
-\DefineColourScheme{aspect}{E7E0D8, 313131, F18008, 992637, 1F5873, 568149, 5C486D}
-\DefineColourScheme{office_2007_2010}{EDEDE5, 234376, 4F81B4, BE4D51, 9EBA65, 7C6697, 51A9BF}
-\DefineColourScheme{office_2016}{E9E9E9, 445162, 6097CF, EC8035, A7A7A7, F5C30E, 4A71BE}
 
+
+\DefineColourScheme{waveform}{073E87, C6E7FC, 30B6FD, 4584D3, 5CCF78, A6D02B, F4C146, 0FE0DC, 0000FF, 0000AA}
+\DefineColourScheme{verve}{666666, D2D2D2, FF378B, E40059, 9C017F, 6A0480, 0860D4, 0B3CA1, 0000FF, 0000AA}
+\DefineColourScheme{urban}{424456, DEDEDE, 525389, 438086, A04EA3, C46730, 8E6243, 6296B7, 0000FF, 0000AA}
+\DefineColourScheme{trek}{4E3B30, FBEEC9, F0A22E, A5634D, B58B80, C3986D, A29676, C2782F, 0000FF, 0000AA}
+\DefineColourScheme{thatch}{1D3641, DFE6D0, 7499A4, CFC60D, 99987F, 91AD98, FEAF23, BBAE75, 0000FF, 0000AA}
+\DefineColourScheme{technic}{3B3B3B, D4D2D0, 6D9FAF, CCAF0A, 8D89A4, 768662, A09577, 838991, 0000FF, 0000AA}
+\DefineColourScheme{solsctice}{4F271C, E7DEC9, 3790A6, FEB80A, C32E2F, 85AB36, 99490D, 4E6191, 0000FF, 0000AA}
+\DefineColourScheme{pushpin}{465E9C, CCDDEA, FD9F22, AA2B1E, 71685D, 66A83E, EB5B0D, BBCB23, 0000FF, 0000AA}
+\DefineColourScheme{perspective}{283138, FF8600, 828C9A, D2610C, 80716A, 95177D, 625FD3, 757282, 0000FF, 0000AA}
+\DefineColourScheme{origin}{464653, DDE9EC, 717BA2, 9FB8CD, D1D97A, F9DA7C, BA8776, 927870, 0000FF, 0000AA}
+\DefineColourScheme{oriel}{565E6C, FFF39D, FD8637, 7699D9, B4301A, F4CE33, B1BCD6, 7E838A, 0000FF, 0000AA}
+\DefineColourScheme{opulent}{B13F9A, F4E7ED, B83C67, AC66BB, DD6C37, F8B63C, D071A6, F99145, 0000FF, 0000AA}
+\DefineColourScheme{newsprint}{303030, DEDEE0, AC0000, 726056, AC956E, 818EAA, 485360, 78180B, 0000FF, 0000AA}
+\DefineColourScheme{module}{5A6378, D4D4D6, F0AC00, 60B5CC, E56C7D, 6DB76F, E88956, C84F4E, 0000FF, 0000AA}
+\DefineColourScheme{equity}{696464, E9E5DC, D34716, 9B2D1F, A28E6A, 966453, 948788, 8A6363, 0000FF, 0000AA}
+\DefineColourScheme{elemental}{242852, ACCBF9, 619CD1, 297FD5, 7F8FA9, 4C68AD, 5FA4B0, A094A3, 0000FF, 0000AA}
+\DefineColourScheme{couture}{37302A, D0CCB9, 9D8D5B, A09781, 85776D, AFB0AA, 908A8E, 716750, 0000FF, 0000AA}
+\DefineColourScheme{concourse}{464646, DEF5FA, 2CA1BF, DA1F28, EA641C, 3C659E, 4D507C, 824451, 0000FF, 0000AA}
+\DefineColourScheme{composite}{5B6973, E7ECED, 97C722, 59B0B9, DDAE01, B77DB4, E07B42, AC9169, 0000FF, 0000AA}
+\DefineColourScheme{clarity}{D2533C, F3F2DC, 93A299, AD8E66, 715F55, 4C5A6A, 828EA1, 7C4B42, 0000FF, 0000AA}
+\DefineColourScheme{civic}{646B86, C5D1D7, D16248, CCB400, 8CADAE, 8D7D72, 92B28F, D29450, 0000FF, 0000AA}
+\DefineColourScheme{black_tie}{46464A, E3DCCF, 6E6E73, A7B789, BEAE98, 93AAB9, 9F856A, 916F79, 0000FF, 0000AA}
+\DefineColourScheme{austin}{3E3D2D, CAF278, 93C600, 71685A, FE6701, 919567, 986F49, FDA32B, 0000FF, 0000AA}
+\DefineColourScheme{apothecary}{564B3C, ECEDD1, 92A198, CF543F, B5AE54, 85815A, E8B752, 7D7276, 0000FF, 0000AA}
+\DefineColourScheme{apex}{69676D, C9C2D1, CEB965, 9CB084, 6BB1C9, 6786CF, 826FCA, A67EBD, 0000FF, 0000AA}
+\DefineColourScheme{angeles}{434342, CDD7D9, 787A7D, F96A1B, 09A1D8, 7D994C, C3AF90, 577498, 0000FF, 0000AA}
+\DefineColourScheme{adjacency}{675E47, DFDCB7, A9A57C, 9CBEBD, D2CB6D, 96A49E, C9A262, B4A38D, 0000FF, 0000AA}
+\DefineColourScheme{greyscale}{000000, F8F8F8, DDDDDD, B2B2B2, 969696, 818181, 646464, 545454, 0000FF, 0000AA}
+\DefineColourScheme{office_default}{1F497D, EEECE1, 4F81BD, C04F4C, 9BBB58, 8064A2, 4EADC6, F6984B, 0000FF, 0000AA}
+\DefineColourScheme{office_2011}{1F487B, EEECE0, 5181B9, BD5152, 9CBB5A, 836AA2, 53B0C7, F49B54, 0000FF, 0000AA}
+\DefineColourScheme{advantage}{2C1330, C3AECC, 633363, 321141, 6A6897, 9C9C6B, F49529, A5A712, 0000FF, 0000AA}
+\DefineColourScheme{breeze}{09213A, D5EEF5, 2E7A9C, 274957, E07724, FAB70C, 83B812, BE1111, 0000FF, 0000AA}
+\DefineColourScheme{capital}{6F6E5C, 7B8F96, 4B595F, 9B523B, 50483C, C1B07E, 6D7A60, BDD8B2, 0000FF, 0000AA}
+\DefineColourScheme{essential}{D2272D, C8C7B0, 7A7A7A, F3C10B, 576EB1, 9B9DAC, DB5F2C, B9B899, 0000FF, 0000AA}
+\DefineColourScheme{executive}{2F5895, E4E9EF, 6175B0, 985455, E48527, 876B50, 6A8E29, 7A878B, 0000FF, 0000AA}
+\DefineColourScheme{infusion}{2E1F57, B7A8DE, 8B74CC, C4E7C5, C4A7E8, B663C6, A4DBF9, 99C7B3, 0000FF, 0000AA}
+\DefineColourScheme{inkwell}{584D2F, EFE6C4, 800B09, 480808, 7A530D, C37C18, 877D5A, BABF89, 0000FF, 0000AA}
+\DefineColourScheme{inspiration}{2F2E29, 9FA895, 74960C, BACA86, 719EC3, 284BA5, 5842C4, 7A1FCE, 0000FF, 0000AA}
+\DefineColourScheme{kilter}{308FC4, AEE7FA, 78C4EA, F9A128, F9690A, 76A72B, A9D84F, 2E7C93, 0000FF, 0000AA}
+\DefineColourScheme{median}{775F53, EBDDC3, 95B5D0, DC8149, A5AB85, D7B563, 82ABA1, 9D9291, 0000FF, 0000AA}
+\DefineColourScheme{orbit}{7D9BA5, C1D0CB, EEDB09, 9FE324, 138BE7, C62124, E07614, 9241D2, 0000FF, 0000AA}
+\DefineColourScheme{perception}{333333, BBC0AA, A2C61D, DB7708, E3C308, 80C4EB, 2A4C9C, A7B47B, 0000FF, 0000AA}
+\DefineColourScheme{pixel}{03C0C2, 0396FC, F6810A, EFB01E, FCEB87, D3C3F0, DB61F1, A017CF, 0000FF, 0000AA}
+\DefineColourScheme{plaza}{333333, CCCCCC, 950404, 580304, E84B08, E9910D, A8A8A8, 6F6F6F, 0000FF, 0000AA}
+\DefineColourScheme{precedent}{333333, E4E5D4, 953234, 9A6D3A, 746E5F, CA9A33, C96634, 948216, 0000FF, 0000AA}
+\DefineColourScheme{revolution}{1B3760, 37ABEA, 0E5782, DDF345, 54870C, C0620B, 9D0E0E, 720E81, 0000FF, 0000AA}
+\DefineColourScheme{saddle}{AC6415, E8E4DB, C4B17A, 9A5A1B, 72B3BA, 7EAB62, 8C759D, 57777E, 0000FF, 0000AA}
+\DefineColourScheme{sketchbook}{4D1104, FFFFE6, A13212, E48334, 9DAF60, 719EC7, 566BB4, 8F7EB2, 0000FF, 0000AA}
+\DefineColourScheme{sky}{1880C1, 61BCE7, 0A3675, 94D7FA, FCCC08, E96B1D, C76B0D, B531B6, 0000FF, 0000AA}
+\DefineColourScheme{soho}{47241C, CBD9DC, 61625D, 954D30, 655642, 868460, B2A453, B28358, 0000FF, 0000AA}
+\DefineColourScheme{solstice}{4F261C, E6DEC8, 3C8FA4, FBB714, BF3133, 89AC38, 9A4B11, 516395, 0000FF, 0000AA}
+\DefineColourScheme{spectrum}{25282F, EBE7E4, 950405, F76709, FABB06, 9DCC0F, 5A900F, 3F3F3F, 0000FF, 0000AA}
+\DefineColourScheme{story}{212121, CED3D7, 2284C6, 722F99, B50E20, E49916, 5C9D33, 3A9F90, 0000FF, 0000AA}
+\DefineColourScheme{summer}{D16107, EEB31D, 53A5BE, 54C0A8, 82C154, E1DE59, B75029, A574B6, 0000FF, 0000AA}
+\DefineColourScheme{tradition}{58470D, D08E11, 684A0E, 770B16, 918443, 49455F, 6A1E4E, 7B903A, 0000FF, 0000AA}
+\DefineColourScheme{travelouge}{292515, 83672D, B64E1E, A3241E, 47779D, 655F96, 6C9448, BF7F1D, 0000FF, 0000AA}
+\DefineColourScheme{twilight}{24213E, E9EAEF, E4BC50, 86C0C4, E68E3A, 949FDE, 89A049, CE5D45, 0000FF, 0000AA}
+\DefineColourScheme{venture}{75834E, E7E9D0, 9EAF63, D19910, F0EC89, 845522, 592321, 60437E, 0000FF, 0000AA}
+\DefineColourScheme{aspect}{323232, E3DED1, F07F09, 9F2936, 1B587C, 4E8542, 604878, C19859, 6B9F25, B26B02}
+\DefineColourScheme{blue_green}{373545, CEDBE6, 3494BA, 58B6C0, 75BDA7, 7A8C8E, 84ACB6, 2683C6, 6B9F25, 9F6715}
+\DefineColourScheme{blue_ii}{335B74, DFE3E5, 1CADE4, 2683C6, 27CED7, 42BA97, 3E8853, 62A39F, 6EAC1C, B26B02}
+\DefineColourScheme{blue_warm}{242852, ACCBF9, 4A66AC, 629DD1, 297FD5, 7F8FA9, 5AA2AE, 9D90A0, 9454C3, 3EBBF0}
+\DefineColourScheme{blue}{17406D, DBEFF9, 0F6FC6, 009DD9, 0BD0D9, 10CF9B, 7CCA62, A5C249, F49100, 85DFD0}
+\DefineColourScheme{grayscale}{000000, F8F8F8, DDDDDD, B2B2B2, 969696, 808080, 5F5F5F, 4D4D4D, 5F5F5F, 919191}
+\DefineColourScheme{green_yellow}{455F51, E2DFCC, 99CB38, 63A537, 37A76F, 44C1A3, 4EB3CF, 51C3F9, EE7B08, 977B2D}
+\DefineColourScheme{green}{455F51, E3DED1, 549E39, 8AB833, C0CF3A, 029676, 4AB5C4, 0989B1, 6B9F25, BA6906}
+\DefineColourScheme{marquee}{5E5E5E, DDDDDD, 418AB3, A6B727, F69200, 838383, FEC306, DF5327, F59E00, B2B2B2}
+\DefineColourScheme{median}{775F55, EBDDC3, 94B6D2, DD8047, A5AB81, D8B25C, 7BA79D, 968C8C, F7B615, 704404}
+\DefineColourScheme{office_2007_2010}{1F497D, EEECE1, 4F81BD, C0504D, 9BBB59, 8064A2, 4BACC6, F79646, 0000FF, 800080}
+\DefineColourScheme{orange_red}{696464, E9E5DC, D34817, 9B2D1F, A28E6A, 956251, 918485, 855D5D, CC9900, 96A9A9}
+\DefineColourScheme{orange}{637052, CCDDEA, E48312, BD582C, 865640, 9B8357, C2BC80, 94A088, 2998E3, 8C8C8C}
+\DefineColourScheme{paper}{444D26, FEFAC9, A5B592, F3A447, E7BC29, D092A7, 9C85C0, 809EC2, 8E58B6, 7F6F6F}
+\DefineColourScheme{red_orange}{505046, EEECE1, E84C22, FFBD47, B64926, FF8427, CC9900, B22600, CC9900, 666699}
+\DefineColourScheme{red_violet}{454551, D8D9DC, E32D91, C830CC, 4EA6DC, 4775E7, 8971E1, D54773, 6B9F25, 8C8C8C}
+\DefineColourScheme{red}{323232, E5C243, A5300F, D55816, E19825, B19C7D, 7F5F52, B27D49, 6B9F25, B26B02}
+\DefineColourScheme{slipstream}{212745, B4DCFA, 4E67C8, 5ECCF3, A7EA52, 5DCEAF, FF8021, F14124, 56C7AA, 59A8D1}
+\DefineColourScheme{violet_ii}{632E62, EAE5EB, 92278F, 9B57D3, 755DD9, 665EB8, 45A5ED, 5982DB, 0066FF, 666699}
+\DefineColourScheme{violet}{373545, DCD8DC, AD84C6, 8784C7, 5D739A, 6997AF, 84ACB6, 6F8183, 69A020, 8C8C8C}
+\DefineColourScheme{yellow_orange}{4E3B30, FBEEC9, F0A22E, A5644E, B58B80, C3986D, A19574, C17529, AD1F1F, FFC42F}
+\DefineColourScheme{yellow}{39302A, E5DEDB, FFCA08, F8931D, CE8D3E, EC7016, E64823, 9C6A6A, 2998E3, 7F723D}
 % --} ==========================================================================
 
 %{-- Light/Dark Variants =======================================================
@@ -132,7 +134,13 @@
     \colorlet{\thislevelitem_4}{\thislevelitem!40!white}
     \colorlet{\thislevelitem_5}{\thislevelitem!20!white}
   }
-  {ForegroundColour,BackgroundColour,Accent1,Accent2,Accent3,Accent4,Accent5}
+  {ForegroundColour,Accent1,Accent2,Accent3,Accent4,Accent5,Accent6,Hyperlink,FollowedHyperlink}
+  \definecolor{BackgroundColour}{HTML}{\csname #1@BackgroundColour\endcsname}%
+  \colorlet{BackgroundColour_5}{BackgroundColour!90!black}
+  \colorlet{BackgroundColour_4}{BackgroundColour!75!black}
+  \colorlet{BackgroundColour_3}{BackgroundColour!50!black}
+  \colorlet{BackgroundColour_2}{BackgroundColour!25!black}
+  \colorlet{BackgroundColour_1}{BackgroundColour!10!black}
 \else
 \ForEach%
   {,}%
@@ -144,15 +152,15 @@
     \colorlet{\thislevelitem_4}{\thislevelitem!40!white}
     \colorlet{\thislevelitem_5}{\thislevelitem!20!white}
   }
-  {Accent1,Accent2,Accent3,Accent4,Accent5}
+  {Accent1,Accent2,Accent3,Accent4,Accent5,Accent6,Hyperlink,FollowedHyperlink}
   % Probably a nicer way to handle this, but does it really matter?
   \definecolor{ForegroundColour}{HTML}{\csname #1@BackgroundColour\endcsname}%
   \definecolor{BackgroundColour}{HTML}{\csname #1@ForegroundColour\endcsname}%
-  \colorlet{ForegroundColour_1}{ForegroundColour!50!black}
-  \colorlet{ForegroundColour_2}{ForegroundColour!75!black}
-  \colorlet{ForegroundColour_3}{ForegroundColour!60!white}
-  \colorlet{ForegroundColour_4}{ForegroundColour!40!white}
-  \colorlet{ForegroundColour_5}{ForegroundColour!20!white}
+  \colorlet{ForegroundColour_5}{ForegroundColour!90!white}
+  \colorlet{ForegroundColour_4}{ForegroundColour!75!white}
+  \colorlet{ForegroundColour_3}{ForegroundColour!50!white}
+  \colorlet{ForegroundColour_2}{ForegroundColour!25!white}
+  \colorlet{ForegroundColour_1}{ForegroundColour!10!white}
   \colorlet{BackgroundColour_1}{BackgroundColour!50!black}
   \colorlet{BackgroundColour_2}{BackgroundColour!75!black}
   \colorlet{BackgroundColour_3}{BackgroundColour!60!white}
