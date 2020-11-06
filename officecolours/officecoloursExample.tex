@@ -1,0 +1,361 @@
+\documentclass[]{article}
+
+\usepackage[scheme=office_2007_2010]{./officecolours}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath, amssymb}
+\usetikzlibrary{positioning}
+\usepackage[margin = 2cm, landscape]{geometry}
+\newcommand{\ColourChart}[1]{%
+  \UseColourScheme{#1}
+  \begin{tikzpicture}[every node/.style = {rectangle, inner sep = 0pt, minimum width = 1.25cm, minimum height = 1.25cm, align = center}]
+    \node[fill = BackgroundColour] (BackgroundColour) at (0,0) {};
+    \node[above = 0.5cm of BackgroundColour, scale = 1] {Background\\Colour};
+    \node[fill = ForegroundColour] (ForegroundColour) [right = 1cm of BackgroundColour] {};
+    \node[above = 0.5cm of ForegroundColour, scale = 1] {Foreground\\Colour};
+    \node[fill = Accent1] (Accent1) [right = 1cm of ForegroundColour] {};
+    \node[above = 0.5cm of Accent1, scale = 1] {Accent1};
+    \node[fill = Accent2] (Accent2) [right = 1cm of Accent1] {};
+    \node[above = 0.5cm of Accent2, scale = 1] {Accent2};
+    \node[fill = Accent3] (Accent3) [right = 1cm of Accent2] {};
+    \node[above = 0.5cm of Accent3, scale = 1] {Accent3};
+    \node[fill = Accent4] (Accent4) [right = 1cm of Accent3] {};
+    \node[above = 0.5cm of Accent4, scale = 1] {Accent4};
+    \node[fill = Accent5] (Accent5) [right = 1cm of Accent4] {};
+    \node[above = 0.5cm of Accent5, scale = 1] {Accent5};
+    \node[fill = Accent6] (Accent6) [right = 1cm of Accent5] {};
+    \node[above = 0.5cm of Accent6, scale = 1] {Accent6};
+    \node[fill = Hyperlink] (Hyperlink) [right = 1cm of Accent6] {};
+    \node[above = 0.5cm of Hyperlink, scale = 1] {Hyperlink};
+    \node[fill = FollowedHyperlink] (FollowedHyperlink) [right = 1cm of Hyperlink] {};
+    \node[above = 0.5cm of FollowedHyperlink, scale = 1] {Followed\\Hyperlink};
+    \foreach \n in {1,2,3,4,5} {
+      \foreach \b in {ForegroundColour, BackgroundColour, Accent1, Accent2, Accent3, Accent4, Accent5, Accent6, Hyperlink, FollowedHyperlink}{
+        \node[fill = \b_\n] (\b\n) [below = {(6-\n)*1.25cm} of \b] {\color{-\b_\n}\n};
+      }
+    }
+  \end{tikzpicture}%
+  }
+
+  \def\numberline#1{}
+
+  \title{\texttt{officecolours.sty} Package}
+  \author{Peter Brookes Chambers}
+  \date{\today{}}
+\newcommand{\qo}{Qo\LaTeX}
+\begin{document}
+\setlength\parskip{1.5em}
+\newif\ifcols
+\colstrue
+% \colsfalse
+\setlength\columnsep{2cm}
+\setlength{\columnseprule}{0.4pt}
+
+\maketitle
+\clearpage
+
+\begin{multicols}{3}
+  \pagenumbering{gobble}
+\tableofcontents
+\clearpage
+\end{multicols}
+
+  \pagenumbering{arabic}
+
+  \section{Introduction}
+  This package defines a set of colour schemes which resemble many of those provided by the Microsoft Office suite of software. Each scheme defines 10 base colours, as well as 5 variations of each. These are then used by some of other packages within the \qo{} family of packages. The colours defined by each scheme are as follows, with a short description of their general usage in the \qo{} family of packages.
+
+  \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
+    \item [\texttt{ForegroundColour}] The default text colour for all non-paragraph text (i.e., in diagrams, box titles and similar).
+    \item [\texttt{BackgroundColour}] The default background or page colour for all non-paragraph text (i.e., in diagrams, box titles and similar).
+    \item [\texttt{Accent1}] The primary accent colour
+    \item [\texttt{Accent2}] The secondary accent colour. Also used for hyperlinks in the \color{red}\_\_\_\normalcolor{} package by default.
+    \item [\texttt{Accent3}] Further accent colours.
+    \item [\texttt{Accent4}] Further accent colours.
+    \item [\texttt{Accent5}] Further accent colours.
+    \item [\texttt{Accent6}] Further accent colours.
+    \item[\texttt{Hyperlink}] An alternative colour for external links. This is not always provided uniquely for all schemes; for schemes without a unique \texttt{Hyperlink} colour, a \textcolor[HTML]{0000FF}{blue} colour is used as default.
+    \item[\texttt{FollowedHyperlink}] An alternative colour for external links. In MS Office, this would be used for links which have already been clicked. This is not always provided uniquely for all schemes; for schemes without a unique \texttt{Hyperlink} colour, a \textcolor[HTML]{0000AA}{dark blue} colour is used as default.
+  \end{itemize}
+
+  Each colour then has 5 variants, indicated by a ``\_1" to ``\_5" suffix. \textbf{These do not match those defined in Microsoft Office.} Microsof Office derives each colour variant from the base colour by applying a multiplication factor to the lightness of the colour when expressed in the HSL (hue, saturation, lightness) colour model. The \texttt{xcolor} package, upon which this package is built, does not currently support the HSL colour model. It does support the HSB (hue, saturation, brightness, also called HSV; hue, saturation, value) colour model, which is related but defined slightly differently. Changing only the lightness in the HSL model is equivalent to changing both the brightness and the saturation in the HSB model. This means that only using the simple colour transformations allowed in the HSB model (or rgb models) supported by \texttt{xcolor} is not sufficient to accurately replicate the MS Office themes. It would be possible to transform the colours separately from the \texttt{xcolor} package, or to define the full theme outright rather than deriving the variants from the base colour. However, the purpose of this package is to define colours schemes as easily and simply as possible, so for now the schemes will not be completely accurate to MS Office themes.
+
+  Considering this, these variations are defined as follows.
+
+  \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
+    \item[\texttt{[name]\_1}] 50\% base colour, 50\% black.
+    \item[\texttt{[name]\_2}] 75\% base colour, 25\% black.
+    \item[\texttt{[name]\_3}] 60\% base colour, 40\% white.
+    \item[\texttt{[name]\_4}] 40\% base colour, 60\% white.
+    \item[\texttt{[name]\_5}] 20\% base colour, 80\% white.
+  \end{itemize}
+
+  The exception to this is the \texttt{BackgroundColour}, which has variants defined as follows in the light variant of the colour scheme (for the dark variant, simply replace ``black" with ``white").
+
+  \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
+    \item[\texttt{BackgroundColour\_1}] 90\% base colour, 10\% black.
+    \item[\texttt{BackgroundColour\_2}] 75\% base colour, 25\% black.
+    \item[\texttt{BackgroundColour\_3}] 50\% base colour, 50\% black.
+    \item[\texttt{BackgroundColour\_4}] 25\% base colour, 75\% black.
+    \item[\texttt{BackgroundColour\_5}] 10\% base colour, 90\% black.
+  \end{itemize}
+
+  Each scheme then has two variants: light, and dark. For now, the dark variant simply switches the \texttt{ForegroundColour} and \texttt{BackgroundColour}, though this may change in the future.
+
+  \section{Useage}
+
+  The package can be loaded with \verb|\usepackage{officecolours}|. By default, this will load the \texttt{light} variant of the \hyperref[section:default]{\texttt{twilight}} scheme. To load a different scheme, one can use the keyword \texttt{scheme}. For the light and dark variants, two flags are provided; \texttt{light} and \texttt{dark}. So, to load the scheme which closely resembles the MS Office theme \textit{aspect} in its dark variant, one can use \verb|\usepackage[scheme = aspect, dark]{officecolours}|. The flags \texttt{light} and \texttt{dark} can also take boolean values, so one can also use \verb|light = false| or similar.
+
+  In addition, the scheme can be changed part way through a document using the command \verb|\UseColourScheme|, which takes one required argument; the name of the new scheme. For example, the scheme can be changed to resemble the MS Office theme \textit{Black Tie} using \verb|\UseColourScheme{black_tie}|.
+
+\if\ifcols
+\leavevmode
+\centering
+
+\section{Colour Schemes}
+
+\subsection{\ttfamily adjacency}
+\ColourChart{adjacency}
+\newpage
+\subsection{\ttfamily advantage}
+\ColourChart{advantage}
+\newpage
+\subsection{\ttfamily angeles}
+\ColourChart{angeles}
+\newpage
+\subsection{\ttfamily apex}
+\ColourChart{apex}
+\newpage
+\subsection{\ttfamily apothecary}
+\ColourChart{apothecary}
+\newpage
+\subsection{\ttfamily aspect}
+\ColourChart{aspect}
+\newpage
+\subsection{\ttfamily austin}
+\ColourChart{austin}
+\newpage
+\subsection{\ttfamily black\_tie}
+\ColourChart{black_tie}
+\newpage
+\subsection{\ttfamily blue}
+\ColourChart{blue}
+\newpage
+\subsection{\ttfamily blue\_green}
+\ColourChart{blue_green}
+\newpage
+\subsection{\ttfamily blue\_ii}
+\ColourChart{blue_ii}
+\newpage
+\subsection{\ttfamily blue\_warm}
+\ColourChart{blue_warm}
+\newpage
+\subsection{\ttfamily breeze}
+\ColourChart{breeze}
+\newpage
+\subsection{\ttfamily capital}
+\ColourChart{capital}
+\newpage
+\subsection{\ttfamily civic}
+\ColourChart{civic}
+\newpage
+\subsection{\ttfamily clarity}
+\ColourChart{clarity}
+\newpage
+\subsection{\ttfamily composite}
+\ColourChart{composite}
+\newpage
+\subsection{\ttfamily concourse}
+\ColourChart{concourse}
+\newpage
+\subsection{\ttfamily couture}
+\ColourChart{couture}
+\newpage
+\subsection{\ttfamily elemental}
+\ColourChart{elemental}
+\newpage
+\subsection{\ttfamily equity}
+\ColourChart{equity}
+\newpage
+\subsection{\ttfamily essential}
+\ColourChart{essential}
+\newpage
+\subsection{\ttfamily executive}
+\ColourChart{executive}
+\newpage
+\subsection{\ttfamily grayscale}
+\ColourChart{grayscale}
+\newpage
+\subsection{\ttfamily green}
+\ColourChart{green}
+\newpage
+\subsection{\ttfamily green\_yellow}
+\ColourChart{green_yellow}
+\newpage
+\subsection{\ttfamily greyscale}
+\ColourChart{greyscale}
+\newpage
+\subsection{\ttfamily infusion}
+\ColourChart{infusion}
+\newpage
+\subsection{\ttfamily inkwell}
+\ColourChart{inkwell}
+\newpage
+\subsection{\ttfamily inspiration}
+\ColourChart{inspiration}
+\newpage
+\subsection{\ttfamily kilter}
+\ColourChart{kilter}
+\newpage
+\subsection{\ttfamily marquee}
+\ColourChart{marquee}
+\newpage
+\subsection{\ttfamily median}
+\ColourChart{median}
+\newpage
+\subsection{\ttfamily median}
+\ColourChart{median}
+\newpage
+\subsection{\ttfamily module}
+\ColourChart{module}
+\newpage
+\subsection{\ttfamily newsprint}
+\ColourChart{newsprint}
+\newpage
+\subsection{\ttfamily office\_2007\_2010}
+\ColourChart{office_2007_2010}
+\newpage
+\subsection{\ttfamily office\_2011}
+\ColourChart{office_2011}
+\newpage
+\subsection{\ttfamily office\_default}
+\ColourChart{office_default}
+\newpage
+\subsection{\ttfamily opulent}
+\ColourChart{opulent}
+\newpage
+\subsection{\ttfamily orange}
+\ColourChart{orange}
+\newpage
+\subsection{\ttfamily orange\_red}
+\ColourChart{orange_red}
+\newpage
+\subsection{\ttfamily orbit}
+\ColourChart{orbit}
+\newpage
+\subsection{\ttfamily oriel}
+\ColourChart{oriel}
+\newpage
+\subsection{\ttfamily origin}
+\ColourChart{origin}
+\newpage
+\subsection{\ttfamily paper}
+\ColourChart{paper}
+\newpage
+\subsection{\ttfamily perception}
+\ColourChart{perception}
+\newpage
+\subsection{\ttfamily perspective}
+\ColourChart{perspective}
+\newpage
+\subsection{\ttfamily pixel}
+\ColourChart{pixel}
+\newpage
+\subsection{\ttfamily plaza}
+\ColourChart{plaza}
+\newpage
+\subsection{\ttfamily precedent}
+\ColourChart{precedent}
+\newpage
+\subsection{\ttfamily pushpin}
+\ColourChart{pushpin}
+\newpage
+\subsection{\ttfamily red}
+\ColourChart{red}
+\newpage
+\subsection{\ttfamily red\_orange}
+\ColourChart{red_orange}
+\newpage
+\subsection{\ttfamily red\_violet}
+\ColourChart{red_violet}
+\newpage
+\subsection{\ttfamily revolution}
+\ColourChart{revolution}
+\newpage
+\subsection{\ttfamily saddle}
+\ColourChart{saddle}
+\newpage
+\subsection{\ttfamily sketchbook}
+\ColourChart{sketchbook}
+\newpage
+\subsection{\ttfamily sky}
+\ColourChart{sky}
+\newpage
+\subsection{\ttfamily slipstream}
+\ColourChart{slipstream}
+\newpage
+\subsection{\ttfamily soho}
+\ColourChart{soho}
+\newpage
+\subsection{\ttfamily solsctice}
+\ColourChart{solsctice}
+\newpage
+\subsection{\ttfamily solstice}
+\ColourChart{solstice}
+\newpage
+\subsection{\ttfamily spectrum}
+\ColourChart{spectrum}
+\newpage
+\subsection{\ttfamily story}
+\ColourChart{story}
+\newpage
+\subsection{\ttfamily summer}
+\ColourChart{summer}
+\newpage
+\subsection{\ttfamily technic}
+\ColourChart{technic}
+\newpage
+\subsection{\ttfamily thatch}
+\ColourChart{thatch}
+\newpage
+\subsection{\ttfamily tradition}
+\ColourChart{tradition}
+\newpage
+\subsection{\ttfamily travelouge}
+\ColourChart{travelouge}
+\newpage
+\subsection{\ttfamily trek}
+\ColourChart{trek}
+\newpage
+\subsection{\ttfamily twilight\label{section:default}}
+\ColourChart{twilight}
+\newpage
+\subsection{\ttfamily urban}
+\ColourChart{urban}
+\newpage
+\subsection{\ttfamily venture}
+\ColourChart{venture}
+\newpage
+\subsection{\ttfamily verve}
+\ColourChart{verve}
+\newpage
+\subsection{\ttfamily violet}
+\ColourChart{violet}
+\newpage
+\subsection{\ttfamily violet\_ii}
+\ColourChart{violet_ii}
+\newpage
+\subsection{\ttfamily waveform}
+\ColourChart{waveform}
+\newpage
+\subsection{\ttfamily yellow}
+\ColourChart{yellow}
+\newpage
+\subsection{\ttfamily yellow\_orange}
+\ColourChart{yellow_orange}
+\newpage
+\fi
+
+\end{document}
