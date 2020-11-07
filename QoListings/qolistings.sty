@@ -61,6 +61,31 @@
     breakindent         = 1.5em
 }
 
+\lstdefinestyle{mathcomments}{
+    language            = [LaTeX]TeX,                           % (*Default language is \LaTeX*)
+    commentstyle        = \color{ForegroundColour_3},
+    keywordstyle        = \color{Accent1}\scshape,
+    numberstyle         = \tiny\color{ForegroundColour},
+    stringstyle         = \color{Accent2},
+    basicstyle          = \ttfamily\small\color{ForegroundColour},
+    breakatwhitespace   = false,
+    breaklines          = true,
+    captionpos          = b,
+    keepspaces          = true,
+    numbers             = left,
+    numbersep           = 0.2cm,
+    showspaces          = false,
+    showstringspaces    = false,
+    showtabs            = false,
+    tab                 = {\color{ForegroundColour_5}|\ \ \ \ },% (*Define the tab behaviour anyway so that it's already defined if \texttt{showtabs} is overridden*)
+    tabsize             = 4,
+  	xleftmargin         = 0pt,
+  	xrightmargin        = 0cm,
+    breakindent         = 1.5em,
+    mathescape          = true,
+    escapebegin         = {\normalfont\color{ForegroundColour_3}}
+}
+
 \lstdefinestyle{latexcomments}{
     language            = [LaTeX]TeX,                           % (*Default language is \LaTeX*)
     commentstyle        = \color{ForegroundColour_3},
@@ -89,6 +114,7 @@
 \lstset{style = main}
 
 \newcommand{\framedinputlisting}[2][]{                         % (*\texttt{mdframed} handles background colours and frames much more consistently than lstlistings, especially when line heights are variable or line-wrapped comments are possible*)
+    {\setlength\parskip{0pt}%
     \begin{mdframed}[%
             backgroundcolor = BackgroundColour,%
             linecolor       = ForegroundColour,%
@@ -96,10 +122,10 @@
             rightline       = false,%
             leftline        = false%
         ]%
-        \lstinputlisting[%
+        \lstinputlisting[%,
+            #1,
             xleftmargin = -0.2cm,%
-            numbersep = 0.4cm,
-            #1
+            numbersep = 0.4cm
         ]{#2}%
-    \end{mdframed}%
+    \end{mdframed}}%
 }

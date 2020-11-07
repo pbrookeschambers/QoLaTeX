@@ -1,0 +1,40 @@
+\documentclass{article}
+
+\usepackage[margin = 0.7in]{geometry}
+
+\usepackage{../officecolours/officecolours}
+\usepackage{./qolistings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath, amssymb}
+\usepackage{lipsum}
+\setlength\parskip{1.5em}
+
+\title{\texttt{qolistings.sty} Package}
+\author{Peter Brookes Chambers}
+\date{\today{}}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+\clearpage
+\tableofcontents{}
+\clearpage
+\pagenumbering{arabic}
+\section{Introduction}
+
+This package defines and sets up several styles for the \texttt{listings} package, as well as a few useful supplimentary commands. This package requires four other packages: \texttt{listings}, \texttt{mdframed}, \texttt{xcolor}, and \texttt{forarray}. This package does not provide much functionality, and mostly exists for convenience. Each style uses specifically named colours, namely \texttt{ForegroundColour}, \texttt{ForegroundColour\_3}, \texttt{ForegroundColour\_5}, \texttt{BackgroundColour}, \texttt{Accent1}, and \texttt{Accent2}. As such, loading the \texttt{officecolours} package (or changing the scheme used by the \texttt{officecolours} package) will change the colours used in these styles. Thus, code listings should always fit in with the rest of a document.
+
+However, the \texttt{officecolours} package is not necessary for the \texttt{qolistings} package, and so some default colours are defined and used \textbf{if and only if} no colour already has the names listed above. To this end, a new command is also defined; \verb|\colorprovide|. This acts identically to the \verb|\colorlet| command provided in the \texttt{xcolor} package, except that it will not overwrite an existing color. For example, \verb|\colorlet{blue}{red}| will overwrite the colour \texttt{blue} with the value of \texttt{red}. However, \verb|\colorprovide{blue}{red}| will change nothing, since a colour with the name \texttt{blue} already exists. In other words, \verb|\colorprovide| is to \verb|colorlet| as \verb|\providecolor| is to \verb|\definecolor|.
+
+\section{Styles}
+
+\subsection{\texttt{main}}
+The first style defined is \texttt{main}, on which the subsequent styles are mostly based.
+
+\lstinputlisting[style=latexcomments, language = python]{./exampleCode.py}
+\framedinputlisting[style=mathcomments, language = python]{./exampleCode.py}
+
+\lipsum[1-2]
+\end{document}
