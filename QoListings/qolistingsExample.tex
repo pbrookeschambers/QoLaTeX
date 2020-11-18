@@ -2,17 +2,28 @@
 
 \usepackage[margin = 0.7in]{geometry}
 
-\usepackage{../officecolours/officecolours}
-\usepackage{./qolistings}
+\usepackage[scheme = twilight, light]{../QoColours/qocolours}
+\usepackage[frame = tlr, background]{./qolistings}
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{amsmath, amssymb}
 \usepackage{lipsum}
+\usepackage{multicol}
+\usetikzlibrary{positioning}
 \setlength\parskip{1.5em}
 
 \title{\texttt{qolistings.sty} Package}
 \author{Peter Brookes Chambers}
 \date{\today{}}
+% \newcommand{\option}[3]{\begin{multicols}{3}\noindent\texttt{\color{Accent1}#1}\leavevmode\\\textit{#2}\leavevmode\\\textit{#3}\end{multicols}\leavevmode}
+\newcommand{\option}[4][]{\noindent\begin{tikzpicture}
+\node[right] (option) at (0, 0) {\texttt{\color{Accent1}#2}};
+\node[] at (\linewidth * 0.5, 0) {\normalcolor\textit{#3}};
+\node[left] at (\linewidth, 0) {\normalcolor\textit{#4}};
+\node[below = 0.0em of option.south west, anchor = north west] {\color{Accent2}\texttt{#1}\normalcolor};
+\end{tikzpicture}
+}
+% \newcommand{\option}[3]{\noindent\texttt{\color{Accent1}#1}\hfill\textit{#2}\hfill\textit{#3}}
 
 \begin{document}
 
@@ -24,17 +35,59 @@
 \pagenumbering{arabic}
 \section{Introduction}
 
-This package defines and sets up several styles for the \texttt{listings} package, as well as a few useful supplimentary commands. This package requires four other packages: \texttt{listings}, \texttt{mdframed}, \texttt{xcolor}, and \texttt{forarray}. This package does not provide much functionality, and mostly exists for convenience. Each style uses specifically named colours, namely \texttt{ForegroundColour}, \texttt{ForegroundColour\_3}, \texttt{ForegroundColour\_5}, \texttt{BackgroundColour}, \texttt{Accent1}, and \texttt{Accent2}. As such, loading the \texttt{officecolours} package (or changing the scheme used by the \texttt{officecolours} package) will change the colours used in these styles. Thus, code listings should always fit in with the rest of a document.
+This package builds on the \href{https://ctan.math.illinois.edu/macros/latex/contrib/listings/listings.pdf}{\texttt{listings}} package to provide apealing and professional default styles with an easy interface for common options.
 
-However, the \texttt{officecolours} package is not necessary for the \texttt{qolistings} package, and so some default colours are defined and used \textbf{if and only if} no colour already has the names listed above. To this end, a new command is also defined; \verb|\colorprovide|. This acts identically to the \verb|\colorlet| command provided in the \texttt{xcolor} package, except that it will not overwrite an existing color. For example, \verb|\colorlet{blue}{red}| will overwrite the colour \texttt{blue} with the value of \texttt{red}. However, \verb|\colorprovide{blue}{red}| will change nothing, since a colour with the name \texttt{blue} already exists. In other words, \verb|\colorprovide| is to \verb|colorlet| as \verb|\providecolor| is to \verb|\definecolor|.
+\section{Useage}
 
-\section{Styles}
+\subsection{The \texttt{\textbackslash{}qoinputlisting} Command}
 
-\subsection{\texttt{main}}
-The first style defined is \texttt{main}, on which the subsequent styles are mostly based.
+This command is analogous to the \verb|\lstinputlisting| command provided by the \texttt{listings} package. It takes one mandatory argument, which should be the name of the file to include, and one optional argument which should be a series of comma separated key-value pairs (parsed by the \texttt{keyval} package). These key-value pairs are as follows, where the option is given on the left, the possible values in the centre (a ``-" indicates that the option will default to ``true" if no value is given), and the default value is given on the right.
 
-\lstinputlisting[style=latexcomments, language = python]{./exampleCode.py}
-\framedinputlisting[style=mathcomments, language = python]{./exampleCode.py}
+\subsection{Optional Arguments}
 
-\lipsum[1-2]
+The optional arguments for the commands in the \verb|\qolistings| package are listed here in \color{Accent1}yellow\normalcolor{}, followed by the allowable values, then the default value. A value of ``-" indicates that the key can be given with no values, in which case it is given a value of ``true". The corresponding global options, where appropriate, are given in \color{Accent2}blue\normalcolor{}.
+
+\option{lst options}{any}{\{\}}
+
+This option takes as its argument a list of key-value pairs to be passed to the \texttt{listings} package, which should be encased in single braces only (for example, \verb|lst options = {stringstyle = \color{red}, commentstyle = \tiny}|). Encasing these in double braces will cause errors as this will not be correctly expanded before being passed to the \texttt{keyval} package by \texttt{listings}.
+
+These key-value pairs must also be valid options for a style in the \texttt{listings} package. These are applied \textbf{after} the default style (and any other options), and so if a key is given a value in both \texttt{lst options} and the default style, the value given in \texttt{lst options} is used.
+
+\option{lst early options}{any}{\{\}}
+
+This option is almost identical to the \texttt{lst options} option, except that it is applied \textbf{before} the default style (and subsequently before \texttt{lst options}), and so key-value pairs given in \texttt{lst early options} have the lowest priority. This doesn't currently have many direct applications, but should allow for more compatability should this package be expanded.
+
+\option[latexcomments]{latex comments}{-, true, false}{false}
+
+If true, then comments encased by the \texttt{escapeinside} tokens are rendered as normal \LaTeX{} code rather than printed verbatim. By default, the escape tokens are ``\verb|(*|" and ``\verb|*)|", though these can of course be changed by passing \verb|{escapeinside = {<token1>}{<token2>}}| to the \texttt{lst options} key.
+
+\option[latexmaths]{latex maths}{-, true, false}{false}\\
+\option[latexmath]{latex math}{-, true, false}{false}
+
+If true (either with the U.S. or U.K. spelling), anything encased in dollar signs will be rendered as \LaTeX{} maths rather than printed verbatim. Note that this applies to the entire file, not just to comments, and is independent of the \texttt{latex comments} option. This means that any \$ anywhere in the file must be accompanied by a corresponding closing \$, and the contents \textbf{must} be valid input for a \LaTeX{} maths environment. (Be especially careful of escape sequences! Even strings written to be valid \LaTeX{} when printed or passed to plotting tools may not be if backslashes need to be escaped.)
+
+\option[latex]{latex}{-, true, false}{}
+
+This flag simply sets both \texttt{latex comments} and \texttt{latex maths} to its own value. This is processed before the \texttt{latex comments} and \texttt{latex maths} options, so their values will overridde the \texttt{latex} flag.
+
+
+\option{mdframed options}{any}{\{\}}
+
+For better frame and background handling, all listings are encased in an \texttt{mdframed} environment. This option takes as its argument a list of key-value pairs to be passed to the \texttt{mdframed} package. Again, these should be encased in a single brace only.
+
+These key-value pairs must also be valid options for a style in the \texttt{mdframed} package. These are applied last, after any other key-value pairs are handled for the \texttt{mdframed} environment.
+
+\option[background]{background}{-, true, false}{false}
+
+If true, the listing is given a background colour of \texttt{BackgroundColour}.
+
+
+\option[roundedcorners]{rounded corners}{-, true, false}{false}
+
+If true, the listing is given rounded corners with radius 0.5\,em. This has no effect if both \texttt{background} and \texttt{frame} are false.
+
+\option[frame]{frame}{-, true, false, ltrb}{false}
+
+This option handles the frame of the listing. If true, then the listing is given a frame on all four sides. This option can also take any combination of ``\texttt{l}", ``\texttt{t}", ``\texttt{r}", and ``\texttt{b}", which correspond to a left, top, right, and bottom edge frame. Any combination of these (in any order) will draw a frame on each edge given. For example, \texttt{frame = blr} will draw a frame on all but the top edge.
+
 \end{document}
