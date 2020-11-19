@@ -111,8 +111,8 @@
     frame = \qolstglobalop@frame,
     background = \ifqolstglobalop@background true\else false\fi,
     rounded corners = \ifqolstglobalop@roundedcorners true\else false\fi,
-    latex comments = \ifqolstglobalop@latexcomments true\else false\fi,
-    latex maths = \ifqolstglobalop@latexmaths true\else false\fi, % TODO -- Include US spelling as well, without overriding UK spelling
+    latex comments = \ifqolstglobalop@latexcomments true\else \ifqolstglobalop@latex true\else false\fi\fi,
+    latex maths = \ifqolstglobalop@latexmaths true\else \ifqolstglobalop@latex true\else false\fi\fi, % TODO -- Include US spelling as well, without overriding UK spelling
     mdframed options = {}
 }
 
@@ -263,6 +263,111 @@
             \leavevmode\lstinputlisting{#2}% Leavevmode to avoid issues with paragraph breaks changing top margins for some reason.
         \end{mdframed}%
     \endgroup%
+}
+
+
+\lstnewenvironment{qolisting}[1][]{
+    % Process key-value pairs
+    \setkeydefaults%
+    \setkeys{qo}{#1}
+%
+    \begingroup     % (* We only wish to set these locally, but cannot pass them as optional arguments to \verb|\lstinputlisting| without much more complicated expansions. This is a terrible solution.*)
+    %
+        \expandafter\lstset\expandafter{\qoGlobal@lstearlyoptions} % Apply the global early options before local options
+        \expandafter\lstset\expandafter{\qo@lstearlyoptions} % Apply the early options before setting the main style
+        \lstset{style = main}
+        % LaTeX Comments:
+        \ifthenelse{
+            \boolean{qoLatexComments}
+        }{
+            \lstset{escapeinside = {(*}{*)}}
+        }{
+            % --Nothing to see here--
+        }
+        % LaTeX Maths:
+        \ifthenelse{
+            \boolean{qoLatexMaths}
+        }{
+            \lstset{mathescape = true}
+        }{
+            % --Nothing to see here--
+        }
+        %
+        \expandafter\lstset\expandafter{\qoGlobal@lstoptions} % Apply remaining global lst options before local options
+        \expandafter\lstset\expandafter{\qo@lstoptions} % Apply remaining lst options to override any in the main style
+        %
+        \mdfsetup{ % Prepare the default margins for mdframed
+            innerleftmargin = 5pt,
+            innerrightmargin = 5pt,
+            leftmargin = 0pt,
+            rightmargin = 0pt
+        }
+        %
+        % Apply background
+        \ifthenelse{
+            \boolean{qoBackground}
+        }{
+            \mdfsetup{backgroundcolor = BackgroundColour}
+        }{
+            % --Nothing to see here--
+        }
+        %
+        % Start processing frame options
+        \mdfsetup{leftline = false, rightline = false, topline = false, bottomline = false} % Start with no frame, turn on frames if needed
+        \ifthenelse{    % Outer if/then/else to not get a false positive for leftline when \qo@frame is false (due to the "l" in "false")
+            \equal{\qo@frame}{false}
+        }
+        {
+            \ifthenelse{ % If there is no border or background, then horizontally align the listing with the rest of the text.
+                \boolean{qoBackground}
+            }{
+                % --Nothing to see here--
+            }{
+                \mdfsetup{
+                    innerleftmargin = 0pt,
+                    innerrightmargin = 0pt
+                }
+                \lstset{
+                    xleftmargin = -1.25pt,          % Remove linewidth of mdframed to realign to the left.
+                    numbersep = 11.15pt             % Realign numbers to the same point
+                }
+            }
+        }{ % If there is a frame of some kind (\qo@frame =/= false)
+            \mdfsetup{linecolor = ForegroundColour, linewidth = 1.25pt}
+            \ifthenelse{    % If there is a full frame:
+                \equal{\qo@frame}{true}
+            }{
+                \mdfsetup{leftline = true, rightline = true, topline = true, bottomline = true}
+            }{  % Else work out which frame sections are wanted. Doesn't currently accept capitals
+                \if\instring{l}{\qo@frame}
+                    \mdfsetup{leftline = true}
+                \fi
+                \if\instring{r}{\qo@frame}
+                    \mdfsetup{rightline = true}
+                \fi
+                \if\instring{t}{\qo@frame}
+                    \mdfsetup{topline = true}
+                \fi
+                \if\instring{b}{\qo@frame}
+                    \mdfsetup{bottomline = true}
+                \fi
+            }
+        }
+        % Deal with rounded corners. Not included in frame options since it also affects the background.
+        \ifthenelse{\boolean{qoRoundedCorners}}{
+            \mdfsetup{roundcorner = 0.5em}
+        }{
+            % --Nothing to see here--
+        }
+        %
+        % Now apply the mdframed options supplied by the user, to override any previously defined options.
+        \expandafter\mdfsetup\expandafter{\qo@mdframedoptions}% Apply the global options first, before the local options.
+        \expandafter\mdfsetup\expandafter{\qo@mdframedoptions}%
+        % Now create the actual listing.
+        \mdframed
+}{
+        \endmdframed%
+    \endgroup\ignorespaces%
 }
 
 

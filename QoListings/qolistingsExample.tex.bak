@@ -35,9 +35,9 @@
 \pagenumbering{arabic}
 \section{Introduction}
 
-This package builds on the \href{https://ctan.math.illinois.edu/macros/latex/contrib/listings/listings.pdf}{\texttt{listings}} package to provide appealing and professional default styles with an easy interface for common options.
+This package builds on the \href{https://ctan.math.illinois.edu/macros/latex/contrib/listings/listings.pdf}{\texttt{listings}} package to provide apealing and professional default styles with an easy interface for common options.
 
-\section{Usage}
+\section{Useage}
 
 \subsection{The \texttt{\textbackslash{}qoinputlisting} Command}
 
@@ -55,7 +55,7 @@ These key-value pairs must also be valid options for a style in the \texttt{list
 
 \option{lst early options}{any}{\{\}}
 
-This option is almost identical to the \texttt{lst options} option, except that it is applied \textbf{before} the default style (and subsequently before \texttt{lst options}), and so key-value pairs given in \texttt{lst early options} have the lowest priority. This doesn't currently have many direct applications, but should allow for more compatibility should this package be expanded.
+This option is almost identical to the \texttt{lst options} option, except that it is applied \textbf{before} the default style (and subsequently before \texttt{lst options}), and so key-value pairs given in \texttt{lst early options} have the lowest priority. This doesn't currently have many direct applications, but should allow for more compatability should this package be expanded.
 
 \option[latexcomments]{latex comments}{-, true, false}{false}
 
@@ -68,7 +68,7 @@ If true (either with the U.S. or U.K. spelling), anything encased in dollar sign
 
 \option[latex]{latex}{-, true, false}{}
 
-This flag simply sets both \texttt{latex comments} and \texttt{latex maths} to its own value. This is processed before the \texttt{latex comments} and \texttt{latex maths} options, so their values will override the \texttt{latex} flag.
+This flag simply sets both \texttt{latex comments} and \texttt{latex maths} to its own value. This is processed before the \texttt{latex comments} and \texttt{latex maths} options, so their values will overridde the \texttt{latex} flag.
 
 
 \option{mdframed options}{any}{\{\}}
