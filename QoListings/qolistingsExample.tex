@@ -3,7 +3,7 @@
 \usepackage[margin = 0.7in]{geometry}
 
 \usepackage[scheme = twilight, light]{../QoColours/qocolours}
-\usepackage[frame = tlr, background]{./qolistings}
+\usepackage{./qolistings}
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{amsmath, amssymb}
@@ -25,6 +25,43 @@
 }
 % \newcommand{\option}[3]{\noindent\texttt{\color{Accent1}#1}\hfill\textit{#2}\hfill\textit{#3}}
 
+\newcommand{\ttt}[1]{\texttt{#1}}
+
+\lstdefinestyle{foo}{
+    commentstyle        = \color{Accent2},
+    keywordstyle        = \color{Accent4}\scshape,
+    numberstyle         = \tiny\color{BackgroundColour},
+    stringstyle         = \color{ForegroundColour},
+    basicstyle          = \ttfamily\small\color{Accent1},
+    breakatwhitespace   = false,
+    breaklines          = true,
+    captionpos          = b,
+    keepspaces          = true,
+    numbers             = left,
+    numbersep           = 18pt,
+    showspaces          = true,
+    showstringspaces    = false,
+    showtabs            = false,
+    tab                 = {\color{ForegroundColour_5}|\ \ \ \ },% (*Define the tab behaviour anyway so that it's already defined if \texttt{showtabs} is overridden*)
+    tabsize             = 4,
+  	xleftmargin         = 0pt,
+  	xrightmargin        = 0cm,
+    breakindent         = 1.5em,
+    escapebegin = \normalfont\color{ForegroundColour_3},
+    escapeend = \normalcolor
+}
+
+\hypersetup{
+    colorlinks,
+    citecolor = black,
+    filecolor = black,
+    linkcolor = black,
+    urlcolor = black,
+    pdftitle = {QoListings Package Documentation},
+    pdfauthor = {Peter Brookes Chambers}
+}
+\urlstyle{same}
+
 \begin{document}
 
 \pagenumbering{gobble}
@@ -35,17 +72,45 @@
 \pagenumbering{arabic}
 \section{Introduction}
 
-This package builds on the \href{https://ctan.math.illinois.edu/macros/latex/contrib/listings/listings.pdf}{\texttt{listings}} package to provide appealing and professional default styles with an easy interface for common options.
+This package builds on the \href{https://ctan.math.illinois.edu/macros/latex/contrib/listings/listings.pdf}{\texttt{listings}} package to provide appealing and professional default styles with an easy interface for common options. It also encorporates the colour schemes defined in the \texttt{qocolours} package. However, the \texttt{qolistings} package can be used independently of \texttt{qocolours}; if \texttt{qocolours} is not used, then the default theme of \texttt{twilight} is also defined in the \ttt{qolistings} package.
+
+If, however, \ttt{qocolours} is loaded before \ttt{qolistings} the scheme selected from \ttt{qocolours} is not overwritten; to allow for this functionallity, a new command \verb|\colourprovide| (note that this uses the U.K. spelling) is defined. This has the same syntax and behaviour as the  \verb|colorlet| command from the \ttt{xcolor} package, except that if the colour name is already in use it will not be changed. In other words, \verb|\colourprovide| is to \verb|\colorlet| as \verb|\providecolor| is to \verb|\definecolor|. Although this command is not really related to the rest of the \ttt{qolistings} package, it is public-facing and so included in this documentation.
+
+All listings are encased in an \texttt{mdframed} environment. Then, \ttt{mdframed} handles the rendering of backgrounds and frames (if present), which produces much more consistent results than the frame and background handling in the \ttt{listings} package, especially for wrapped lines and vairable line heights. By default, tikz rendering is used for the \ttt{mdframed} frames.
+
+\subsection{Package Requirements}
+
+In addition to \ttt{listings} and \ttt{mdframed}, the \ttt{qolistings} package requires several other packages to be present. These (in full) are as follows:
+\begin{itemize}
+    \item \href{https://www.ctan.org/pkg/listings}{\texttt{listings}}
+    \item \href{https://ctan.org/pkg/mdframed}{\ttt{mdframed}}
+    \begin{itemize}
+        \item \href{https://www.ctan.org/pkg/pgf}{\ttt{tikz}}
+    \end{itemize}
+    \item \href{https://www.ctan.org/pkg/xcolor}{\ttt{xcolor}}
+    \item \href{https://www.ctan.org/pkg/forarray}{\ttt{forarray}}
+    \item \href{https://www.ctan.org/pkg/keyval}{\ttt{keyval}}
+    \item \href{https://www.ctan.org/pkg/ifthen}{\ttt{ifthen}}
+    \item \href{https://www.ctan.org/pkg/kvoptions}{\ttt{kvoptions}}
+\end{itemize}
 
 \section{Usage}
 
+The package can be loaded with \verb|\usepackage{qolistings}|. Optional arguments can be given in a comma-separated key-value format. See section \ref{section:Optional Arguments} for a list of optional arguments; those given in \color{Accent2}blue\normalcolor{} can be passed as optional arguments when loading the package. Unfortunately, \texttt{lst options}, \ttt{lst early options}, and \ttt{mdframed options} cannot be passed as arguments when loading the package. In addition, the \ttt{frame} option, which normally can be passed without a value, \textbf{must} be given a value when being passed to \verb|\usepackage|. Any option given when loading the package will be used as the default value throughout the document, but can be overwritten for each listing individually, or globally using \verb|\qolstset|.
+
+The macro \verb|\qolstset| takes one mandatory argument, which should be a comma-separated series of key-value pairs. These can again be found in section \ref{section:Optional Arguments}, this time in \color{Accent1}yellow\normalcolor{}. If \texttt{lst options}, \ttt{lst early options}, or \ttt{mdframed options} are to be set globally, this should be done using the \verb|\qolstset| macro.
+
 \subsection{The \texttt{\textbackslash{}qoinputlisting} Command}
 
-This command is analogous to the \verb|\lstinputlisting| command provided by the \texttt{listings} package. It takes one mandatory argument, which should be the name of the file to include, and one optional argument which should be a series of comma separated key-value pairs (parsed by the \texttt{keyval} package). These key-value pairs are as follows, where the option is given on the left, the possible values in the centre (a ``-" indicates that the option will default to ``true" if no value is given), and the default value is given on the right.
+This command is analogous to the \verb|\lstinputlisting| command provided by the \texttt{listings} package. It takes one mandatory argument, which should be the name of the file to include, and one optional argument which should be a series of comma-separated key-value pairs (parsed by the \texttt{keyval} package). The list of optional arguments can be found in section \ref{section:Optional Arguments}.
 
-\subsection{Optional Arguments}
+\subsection{The \ttt{qolisting} Environment}
 
-The optional arguments for the commands in the \verb|\qolistings| package are listed here in \color{Accent1}yellow\normalcolor{}, followed by the allowable values, then the default value. A value of ``-" indicates that the key can be given with no values, in which case it is given a value of ``true". The corresponding global options, where appropriate, are given in \color{Accent2}blue\normalcolor{}.
+This environment is analogous to the \ttt{listing} environment provided by the \ttt{listings} package. It takes one optional argument, which should be a series of comma-separated key-value pairs. The list of optional arguments can be found in section \ref{section:Optional Arguments}.
+
+\subsection{Optional Arguments\label{section:Optional Arguments}}
+
+The optional arguments for the commands in the \verb|\qolistings| package are listed here in \color{Accent1}yellow\normalcolor{}, followed by the allowable values, then the default value. A value of ``-" indicates that the key can be given with no values, in which case it is given a value of ``true". The corresponding package options, where appropriate, are given in \color{Accent2}blue\normalcolor{}.
 
 \option{lst options}{any}{\{\}}
 
@@ -56,6 +121,10 @@ These key-value pairs must also be valid options for a style in the \texttt{list
 \option{lst early options}{any}{\{\}}
 
 This option is almost identical to the \texttt{lst options} option, except that it is applied \textbf{before} the default style (and subsequently before \texttt{lst options}), and so key-value pairs given in \texttt{lst early options} have the lowest priority. This doesn't currently have many direct applications, but should allow for more compatibility should this package be expanded.
+
+\option[style]{style}{any}{qolistingsmain}
+
+The style to be used for listings. This must be a valid name for a defined style. If \ttt{style} is passed as a package argument, then the style must be defined before the first listing. The default style of \ttt{qolistingsmain} is the style defined in the \ttt{qolistings} package.
 
 \option[latexcomments]{latex comments}{-, true, false}{false}
 
@@ -70,10 +139,21 @@ If true (either with the U.S. or U.K. spelling), anything encased in dollar sign
 
 This flag simply sets both \texttt{latex comments} and \texttt{latex maths} to its own value. This is processed before the \texttt{latex comments} and \texttt{latex maths} options, so their values will override the \texttt{latex} flag.
 
+\option{first line}{positive integer}{1}
+
+For \verb|\qoinputlisting|, the first line of trhe file to print. This option as no effect on the \ttt{qolisting} environment.
+
+\option{last line}{positive integer}{9999}
+
+For \verb|\qoinputlisting|, the last line of trhe file to print. This option as no effect on the \ttt{qolisting} environment.
+
+\option{first number}{positive integer}{1}
+
+The line number from which to start counting.
 
 \option{mdframed options}{any}{\{\}}
 
-For better frame and background handling, all listings are encased in an \texttt{mdframed} environment. This option takes as its argument a list of key-value pairs to be passed to the \texttt{mdframed} package. Again, these should be encased in a single brace only.
+This option takes as its argument a list of key-value pairs to be passed to the \texttt{mdframed} package. Again, these should be encased in a single brace only.
 
 These key-value pairs must also be valid options for a style in the \texttt{mdframed} package. These are applied last, after any other key-value pairs are handled for the \texttt{mdframed} environment.
 
@@ -81,13 +161,98 @@ These key-value pairs must also be valid options for a style in the \texttt{mdfr
 
 If true, the listing is given a background colour of \texttt{BackgroundColour}.
 
-
 \option[roundedcorners]{rounded corners}{-, true, false}{false}
 
 If true, the listing is given rounded corners with radius 0.5\,em. This has no effect if both \texttt{background} and \texttt{frame} are false.
 
 \option[frame]{frame}{-, true, false, ltrb}{false}
 
-This option handles the frame of the listing. If true, then the listing is given a frame on all four sides. This option can also take any combination of ``\texttt{l}", ``\texttt{t}", ``\texttt{r}", and ``\texttt{b}", which correspond to a left, top, right, and bottom edge frame. Any combination of these (in any order) will draw a frame on each edge given. For example, \texttt{frame = blr} will draw a frame on all but the top edge.
+This option handles the frame of the listing. If true, then the listing is given a frame on all four sides. This option can also take any combination of ``\texttt{l}", ``\texttt{t}", ``\texttt{r}", and ``\texttt{b}", which correspond to a left, top, right, and bottom edge frame. Any combination of these (in any order) will draw a frame on each edge given. For example, \texttt{frame = blr} will draw a frame on all but the top edge. If \ttt{frame} is passed as a package argument, its value \textbf{cannot} be left blank; you must pass \ttt{frame = true} (or similar).
+
+Also note that no checks are in place to prevent unacceptable values from being passed to \ttt{frame}; with the exception of the words ``\ttt{true}" and ``\ttt{false}", any string passed as the value of \ttt{frame} will be searched for an instance of the letters ``\texttt{l}", ``\texttt{t}", ``\texttt{r}", and ``\texttt{b}", and frames will be rendered accordingly. For example, accidentally passing the value ``\ttt{fasle}" will result in a single edge drawn on the left of the listing.
+
+\section{Examples}
+
+For the purposes of examples, a python file \ttt{exampleCode.py} is used. This file consists of, verbatim and without formatting,
+\begin{mdframed}\leavevmode
+    \lstinputlisting{./exampleCode.py}
+\end{mdframed}
+
+All the following examples use the \verb|\qoinputlisting| command, but exactly the same behaviour would be achieved using the \verb|qolisting| environment and directly inputting the contents of the file; they will (in theory) be rendered identically.
+
+Before the following examples, we will use \verb|\qolstset| to set the language to Python:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qolstset{lst options = {language = Python}}
+\end{qolisting}
+\qolstset{lst options = {language = Python}}
+
+\clearpage
+
+With no other options set, \ttt{qolistings} will render the code as the following:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting{exampleCode.py}
+\end{qolisting}
+\qoinputlisting{exampleCode.py}
+
+Note that with no frame or background, the listing is aligned on the left with the main body text. When a frame or background is specified, the frame is instead aligned at the margins with the main body text, and the margin of the line numbers is adjusted such that their position remains unchanged
+
+We may add a background and frame quite easily:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame]{exampleCode.py}
+
+\clearpage
+
+We may also wish to add rounded corners:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame, rounded corners]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame, rounded corners]{exampleCode.py}
+
+We can also use the frame options to convincingly split a file and add some commentary in the middle:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame = ltr, rounded corners, first line = 1, last line = 6]{exampleCode.py}
+\lipsum[1]
+\qoinputlisting[background, frame = ltr, rounded corners, first line = 7, first number = 7]{exampleCode.py}
+\end{qolisting}
+
+\qoinputlisting[background, frame = ltr, rounded corners, first line = 1, last line = 6]{exampleCode.py}
+\lipsum[1]
+\qoinputlisting[background, frame = lbr, rounded corners, first line = 7, first number = 7]{exampleCode.py}
+
+Note that it is important to use the \ttt{qolistings} options \ttt{first line}, \ttt{last line}, and \ttt{first number} instead of passing the corresponding options \ttt{firstline}, \ttt{lastline}, and \ttt{firstnumber} to \ttt{listings} via \ttt{lst options}.\ \textbf{This will not work}, as \ttt{listings} will ignore these options when processing the key-value pairs. Unfortunately, \ttt{first line} and \ttt{last line} will have no effect in the \ttt{qolisting} environment, though it is difficult to imagine a situation in which these would be necessary.
+
+
+Now lets explore escaping to \LaTeX{}. We can use the options \ttt{latex comments} to render anything contained within the default escape tokens (\ttt{(*} and \ttt{*)}) as \LaTeX{}. This can be quite handy for describing formulae used in code.
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame, rounded corners, latex comments]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame, rounded corners, latex comments]{exampleCode.py}
+
+Alternatively, we can choose to escape to \LaTeX{} only for maths using the \ttt{latex maths} (the U.S. spelling \ttt{latex math} is also allowed).
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame, rounded corners, latex maths]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame, rounded corners, latex maths]{exampleCode.py}
+
+
+If we wish to render both comments and maths in \LaTeX{}, we could specify both \ttt{latex comments} and \ttt{latex maths}, or we could simply pass the option \ttt{latex}:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame, rounded corners, latex]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame, rounded corners, latex]{exampleCode.py}
+
+Let's suppose we want to highlight a particular listing by changing the frame colour. We can do this by passing the relevant options to \ttt{mdframed}:
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame, rounded corners, mdframed options = {linecolor = Accent3}]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame, rounded corners, mdframed options = {linecolor = Accent3}]{exampleCode.py}
+
+Another point worthy of note is that, since both \ttt{mdframed} and \ttt{listings} packages handle page breaks well, \ttt{qolistings} can also break is a consistent and well-behaved manner at page breaks.
+\begin{qolisting}[lst options = {language = {[LaTeX]TeX}}, frame, background]
+\qoinputlisting[background, frame, rounded corners, mdframed options = {linecolor = Accent3}]{exampleCode.py}
+\end{qolisting}
+\qoinputlisting[background, frame, rounded corners, mdframed options = {linecolor = Accent3}]{exampleCode.py}
 
 \end{document}

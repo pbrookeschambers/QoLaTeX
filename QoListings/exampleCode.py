@@ -5,5 +5,5 @@ def exampleFunc(arg1):  # (*This will be rendered in \LaTeX{} in appropriate sty
     return arg1.upper()
     # For some styles, maths such as $\int\limits_{0}^{\infty} \text{e}^{-x^2} \text{d}x$ will be rendered in (*\LaTeX*) regardless of whether the rest of the comment is.
 
-print("This can cause problems.")
+print("This can cause (*problems*).")
 print(r"The maths in this string will be rendered in LaTeX even though it's not a comment: $\int\limits_{0}^{\infty} \text{e}^{-x^2} \text{d}x$")
