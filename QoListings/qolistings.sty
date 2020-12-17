@@ -24,15 +24,17 @@
 \DeclareBoolOption[false]{latexmath}
 \DeclareBoolOption[false]{latex}
 \DeclareBoolOption[false]{roundedcorners}
+\DeclareBoolOption[true]{inlinebackgrounds}
+\DeclareBoolOption[false]{caps}
+\DeclareComplementaryOption{nocaps}{caps}
 
 \ProcessKeyvalOptions*
 
 % ==============================================================================
 
+
 \def\instring#1#2{TT\fi\begingroup
   \edef\x{\endgroup\noexpand\in@{#1}{#2}}\x\ifin@} % Used for frame options to tell if a given side is included
-
-\newcommand{\colourprovide}[2]{\@ifundefinedcolor{#1}{\colorlet{#1}{#2}}{}}      % (*Only defines the new colour if it has not already been defined*)
 
 % (*Now we define the default colour scheme if and only if a scheme has not already been loaded. This should avoid issues of loading order if both \texttt{qolistings} and \texttt{officecolours} packages are used.*)
 
@@ -63,7 +65,7 @@
   \colourprovide{BackgroundColour_1}{BackgroundColour!10!black}
 
 % (*Now we define a set of useful styles for listings*)
-
+\ifqolstglobalop@caps
 \lstdefinestyle{qolistingsmain}{
     commentstyle        = \color{ForegroundColour_3},
     keywordstyle        = \color{Accent1}\scshape,
@@ -87,6 +89,31 @@
     escapebegin = \normalfont\color{ForegroundColour_3},
     escapeend = \normalcolor
 }
+\else%
+\lstdefinestyle{qolistingsmain}{
+    commentstyle        = \color{ForegroundColour_3},
+    keywordstyle        = \color{Accent1},
+    numberstyle         = \tiny\color{ForegroundColour},
+    stringstyle         = \color{Accent2},
+    basicstyle          = \ttfamily\small\color{ForegroundColour},
+    breakatwhitespace   = false,
+    breaklines          = true,
+    captionpos          = b,
+    keepspaces          = true,
+    numbers             = left,
+    numbersep           = 18pt,
+    showspaces          = false,
+    showstringspaces    = false,
+    showtabs            = false,
+    tab                 = {\color{ForegroundColour_5}|\ \ \ \ },% (*Define the tab behaviour anyway so that it's already defined if \texttt{showtabs} is overridden*)
+    tabsize             = 4,
+  	xleftmargin         = 0pt,
+  	xrightmargin        = 0cm,
+    breakindent         = 1.5em,
+    escapebegin = \normalfont\color{ForegroundColour_3},
+    escapeend = \normalcolor
+}
+\fi
 
 % (*Creating command options*) =================================================
 
@@ -117,10 +144,6 @@
     latex maths = \ifqolstglobalop@latexmaths true\else \ifqolstglobalop@latex true\else false\fi\fi, % TODO -- Include US spelling as well, without overriding UK spelling
     mdframed options = {},
     style = \qolstglobalop@style
-}
-
-\newcommand{\qolstset}[1]{
-    \setkeys{qoGlobal}{#1}
 }
 
 % (*Creating booleans for options*)
@@ -172,6 +195,14 @@
 
 \def\mainstyle{, style = qolistingsmain, }
 
+\newcommand{\qolstset}[1]{
+    \setkeys{qoGlobal}{#1}
+    \expandafter\lstset\expandafter{\qoGlobal@lstearlyoptions}
+    \lstset{style = qolistingsmain}
+    \expandafter\lstset\expandafter{\qoGlobal@lstoptions}
+    \expandafter\mdfsetup\expandafter{\qoGlobal@mdframedoptions}
+}
+
 \newcommand{\qoinputlisting}[2][]{
     % Process key-value pairs
     \setkeydefaults%
@@ -200,7 +231,7 @@
         }
         %
         \expandafter\lstset\expandafter{\qoGlobal@lstoptions} % Apply remaining global lst options before local options
-        % \expandafter\lstset\expandafter{\qo@lstoptions} % Apply remaining lst options to override any in the qolistingsmain style
+        \expandafter\lstset\expandafter{\qo@lstoptions} % Apply remaining lst options to override any in the qolistingsmain style
         %
         \mdfsetup{ % Prepare the default margins for mdframed
             innerleftmargin = 5pt,
@@ -337,11 +368,16 @@
             }{
                 \mdfsetup{
                     innerleftmargin = 0pt,
-                    innerrightmargin = 0pt
+                    innerrightmargin = 0pt,
+                    skipabove = 0pt,
+                    skipbelow = 0pt,
+                    innertopmargin = 0pt,
+                    innerbottommargin = 0pt
                 }
                 \lstset{
                     xleftmargin = -1.25pt,          % Remove linewidth of mdframed to realign to the left.
-                    numbersep = 11.15pt             % Realign numbers to the same point
+                    numbersep = 11.15pt,            % Realign numbers to the same point
+                    belowskip = -1em                % remove additional space after listing. Not sure where this space comes from.
                 }
             }
         }{ % If there is a frame of some kind (\qo@frame =/= false)
@@ -381,3 +417,15 @@
         \endmdframed%
     \endgroup\ignorespaces%
 }
+
+
+\def\qoinline{\lstinline}
+
+% (*Handle the coloured backgrounds for inline listings if needed using the xparse package.*)
+
+\ifqolstglobalop@inlinebackgrounds%
+    \RequirePackage{xpatch}%
+    \RequirePackage{realboxes}%
+    \xpretocmd\lstinline{\Colorbox{BackgroundColour}\bgroup\appto\lst@DeInit{\egroup}}{}{}%
+    % \xpretocmd\lstinline{\Colorbox{BackgroundColour}\bgroup\rule[0pt]{0pt}{0.5\baselineskip}\appto\lst@DeInit{\egroup}}{}{}%
+\fi

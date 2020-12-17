@@ -21,6 +21,7 @@
 
 % --} ==========================================================================
 
+\newcommand{\colourprovide}[2]{\@ifundefinedcolor{#1}{\colorlet{#1}{#2}}{}}      % (*Only defines the new colour if it has not already been defined*)
 
 \newcommand{\DefineColourScheme}[2]{%
   % Takes the name of the scheme and the hex code colours in a comma separated list.

@@ -1,0 +1,11 @@
+\begin{qolisting}
+import example  # This will be a normal comment in all  QoListings styles
+
+def exampleFunc(arg1):  # (*This will be rendered in \LaTeX{} in appropriate styles*)
+    # Only some of this comment will be (*rendered in \LaTeX*), but the rest will be normal
+    return arg1.upper()
+    # For some styles, maths such as $\int\limits_{0}^{\infty} \text{e}^{-x^2} \text{d}x$ will be rendered in (*\LaTeX*) regardless of whether the rest of the comment is.
+
+print("This can cause (*problems*).")
+print(r"The maths in this string will be rendered in LaTeX even though it's not a comment: $\int\limits_{0}^{\infty} \text{e}^{-x^2} \text{d}x$")
+\end{qolisting}
