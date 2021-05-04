@@ -93,29 +93,41 @@
     \item[\texttt{FollowedHyperlink}] An alternative colour for external links. In MS Office, this would be used for links which have already been clicked. This is not always provided uniquely for all schemes; for schemes without a unique \texttt{Hyperlink} colour, a \textcolor[HTML]{0000AA}{dark blue} colour is used as default.
   \end{itemize}
 
-  Each colour then has 5 variants, indicated by a ``\_1" to ``\_5" suffix. \textbf{These do not match those defined in Microsoft Office.} Microsof Office derives each colour variant from the base colour by applying a multiplication factor to the lightness of the colour when expressed in the HSL (hue, saturation, lightness) colour model. The \texttt{xcolor} package, upon which this package is built, does not currently support the HSL colour model. It does support the HSB (hue, saturation, brightness, also called HSV; hue, saturation, value) colour model, which is related but defined slightly differently. Changing only the lightness in the HSL model is equivalent to changing both the brightness and the saturation in the HSB model. This means that only using the simple colour transformations allowed in the HSB model (or rgb models) supported by \texttt{xcolor} is not sufficient to accurately replicate the MS Office themes. It would be possible to transform the colours separately from the \texttt{xcolor} package, or to define the full theme outright rather than deriving the variants from the base colour. However, the purpose of this package is to define colours schemes as easily and simply as possible, so for now the schemes will not be completely accurate to MS Office themes.
-
-  Considering this, these variations are defined as follows.
-
-  \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
-    \item[\texttt{[name]\_1}] 50\% base colour, 50\% black.
-    \item[\texttt{[name]\_2}] 75\% base colour, 25\% black.
-    \item[\texttt{[name]\_3}] 60\% base colour, 40\% white.
-    \item[\texttt{[name]\_4}] 40\% base colour, 60\% white.
-    \item[\texttt{[name]\_5}] 20\% base colour, 80\% white.
+  Each colour then has 5 variants, indicated by a ``\_1" to ``\_5" suffix. These colour variants are derived from the core colour by changing only the lightness of the colour in the HSL colour model; the hue and saturation are unchanged. For these variations, ``20\% darker'' means that the lightness is brought 20\% closer to 0, and ``20\% lighter'' means that the lightness is 20\% closer to 1. Thus, unless a core colour has a lightness of 0 or 1, the variants will never have a lightness of 0 or 1 (except after rounding). The variants are defined in one of three ways depending on the lightness of the core colour.
+  \begin{itemize}
+      \item For most core colours, there are two darker variants (25\% and 50\% darker), and three lighter variants (40\%, 60\%, and 80\% lighter).
+      \item For core colours with lightness above $l = 0.8$, 5 darker variants are defined at 10\%, 25\%, 50\%, 75\%, and 90\% darker.
+      \item For core colours with lightness below $l = 0.2$, 5 lighter variants are defined at 10\%, 25\%, 50\%, 75\%, and 90\% lighter.
   \end{itemize}
+  This approximates the behaviour of the Microsoft Office colour themes as closely as possible.
 
-  The exception to this is the \texttt{BackgroundColour}, which has variants defined as follows in the light variant of the colour scheme (for the dark variant, simply replace ``black" with ``white").
+  Each scheme has two variants; ``light'' and ``dark'', which for now simply swap the ForegroundColour and BackgroundColour and change the order of the core colour variants. In the ``light'' variant of each scheme, these variants are all arranged from darkest to lightest, such that Accent1\_1 will be the darkest variant, and Accent1\_5 the lightest. In the ``dark'' variants of each scheme, this is reversed; this should mean that relative contrast is conserved as closely as possible when switching between light and dark variants.
 
-  \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
-    \item[\texttt{BackgroundColour\_1}] 90\% base colour, 10\% black.
-    \item[\texttt{BackgroundColour\_2}] 75\% base colour, 25\% black.
-    \item[\texttt{BackgroundColour\_3}] 50\% base colour, 50\% black.
-    \item[\texttt{BackgroundColour\_4}] 25\% base colour, 75\% black.
-    \item[\texttt{BackgroundColour\_5}] 10\% base colour, 90\% black.
-  \end{itemize}
+  %differently based on the lightness of the core colour, split into three different methods. For most core colours, three lighter variants and two darker variants will be defined. In the HSL colour model, the hue and saturation of these variants is unchanged from the core colour; only the lightness is changed. For the purpose of these changes, ``20\% darker'' means that the lightness is brought 20\% closer to 0, and ``20\% lighter'' means that the lightness is 20\% closer to 1.
 
-  Each scheme then has two variants: light, and dark. For now, the dark variant simply switches the \texttt{ForegroundColour} and \texttt{BackgroundColour}, though this may change in the future.
+   %\textbf{These do not match those defined in Microsoft Office.} Microsof Office derives each colour variant from the base colour by applying a multiplication factor to the lightness of the colour when expressed in the HSL (hue, saturation, lightness) colour model. The \texttt{xcolor} package, upon which this package is built, does not currently support the HSL colour model. It does support the HSB (hue, saturation, brightness, also called HSV; hue, saturation, value) colour model, which is related but defined slightly differently. Changing only the lightness in the HSL model is equivalent to changing both the brightness and the saturation in the HSB model. This means that only using the simple colour transformations allowed in the HSB model (or rgb models) supported by \texttt{xcolor} is not sufficient to accurately replicate the MS Office themes. It would be possible to transform the colours separately from the \texttt{xcolor} package, or to define the full theme outright rather than deriving the variants from the base colour. However, the purpose of this package is to define colours schemes as easily and simply as possible, so for now the schemes will not be completely accurate to MS Office themes.
+
+  % Considering this, these variations are defined as follows.
+  %
+  % \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
+  %   \item[\texttt{[name]\_1}] 50\% base colour, 50\% black.
+  %   \item[\texttt{[name]\_2}] 75\% base colour, 25\% black.
+  %   \item[\texttt{[name]\_3}] 60\% base colour, 40\% white.
+  %   \item[\texttt{[name]\_4}] 40\% base colour, 60\% white.
+  %   \item[\texttt{[name]\_5}] 20\% base colour, 80\% white.
+  % \end{itemize}
+  %
+  % The exception to this is the \texttt{BackgroundColour}, which has variants defined as follows in the light variant of the colour scheme (for the dark variant, simply replace ``black" with ``white").
+  %
+  % \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
+  %   \item[\texttt{BackgroundColour\_1}] 90\% base colour, 10\% black.
+  %   \item[\texttt{BackgroundColour\_2}] 75\% base colour, 25\% black.
+  %   \item[\texttt{BackgroundColour\_3}] 50\% base colour, 50\% black.
+  %   \item[\texttt{BackgroundColour\_4}] 25\% base colour, 75\% black.
+  %   \item[\texttt{BackgroundColour\_5}] 10\% base colour, 90\% black.
+  % \end{itemize}
+  %
+  % Each scheme then has two variants: light, and dark. For now, the dark variant simply switches the \texttt{ForegroundColour} and \texttt{BackgroundColour}, though this may change in the future.
 
   \section{Useage}
 

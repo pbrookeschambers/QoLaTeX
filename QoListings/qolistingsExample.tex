@@ -1,8 +1,9 @@
+\providecommand{\pgfsyspdfmark}[3]{}
 \documentclass{article}
 
 \usepackage[margin = 0.7in]{geometry}
 
-\usepackage[scheme = twilight, light]{../QoColours/qocolours}
+% \usepackage[scheme = twilight, light]{../QoColours/qocolours}
 \usepackage{./qolistings}
 \usepackage{hyperref}
 \usepackage{enumitem}
@@ -30,19 +31,6 @@
     \qoinputlisting[mdframed options = {linecolor = Accent3}, frame, background, rounded corners, lst options = {language = {[LaTeX]TeX}}]{./listings/#1}
 
     \input{./listings/#1}
-}
-\lstdefinestyle{exampleStyle}{
-    commentstyle        = \color{Accent3},
-    keywordstyle        = \color{ForegroundColour}\scshape,
-    numberstyle         = \tiny\color{Accent1},
-    stringstyle         = \color{Accent5},
-    basicstyle          = \ttfamily\small\color{Accent2},
-    breakatwhitespace   = false,
-    breaklines          = true,
-    keepspaces          = true,
-    showspaces          = false,
-    showstringspaces    = false,
-    showtabs            = false
 }
 
 \hypersetup{
@@ -204,11 +192,33 @@ The \LaTeX{} code is given in an \textcolor{Accent3}{orange border}, while the r
 \subsection{\ttt{lst early options}}
 
 \example{lstearlyoptions.tex}
-Note that since \ttt{stringstyle} is already set in the style, nothing changes here. This option can be useful of multiple styles are being used.
+Note that since \ttt{stringstyle} is already set in the style, nothing changes here. This option can be useful if multiple styles are being used.
 
-\qolstset{style = exampleStyle}
 
-\qoinputlisting{./listings/lstoptions.tex}
+\lstdefinestyle{exampleStyle}{
+    commentstyle        = \color{Accent3},
+    keywordstyle        = \color{ForegroundColour}\scshape,
+    numberstyle         = \tiny\color{Accent1},
+    stringstyle         = \color{Accent5},
+    basicstyle          = \ttfamily\small\color{Accent2},
+    breakatwhitespace   = false,
+    breaklines          = true,
+    keepspaces          = true,
+    showspaces          = false,
+    showstringspaces    = false,
+    showtabs            = false
+}
+
+
+\def\st{exampleStyle}
+\lstset{style = \st}
+
+\lstinputlisting{./listings/lstoptions.tex}
+
+% \qolstset{style = exampleStyle}
+
+
+
 
 % \clearpage
 % \subsection{\ttt{style}}

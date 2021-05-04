@@ -50,19 +50,19 @@
   {,}%
   {%
     \providecolor{\thislevelitem}{HTML}{\csname twilight@\thislevelitem\endcsname}%
-    \colourprovide{\thislevelitem_1}{\thislevelitem!50!black}
-    \colourprovide{\thislevelitem_2}{\thislevelitem!75!black}
-    \colourprovide{\thislevelitem_3}{\thislevelitem!60!white}
-    \colourprovide{\thislevelitem_4}{\thislevelitem!40!white}
-    \colourprovide{\thislevelitem_5}{\thislevelitem!20!white}
+    \colorlet{\thislevelitem_1}{\thislevelitem!50!black}
+    \colorlet{\thislevelitem_2}{\thislevelitem!75!black}
+    \colorlet{\thislevelitem_3}{\thislevelitem!60!white}
+    \colorlet{\thislevelitem_4}{\thislevelitem!40!white}
+    \colorlet{\thislevelitem_5}{\thislevelitem!20!white}
   }
   {ForegroundColour,Accent1,Accent2,Accent3,Accent4,Accent5,Accent6,Hyperlink,FollowedHyperlink}
   \providecolor{BackgroundColour}{HTML}{\csname twilight@BackgroundColour\endcsname}%
-  \colourprovide{BackgroundColour_5}{BackgroundColour!90!black}
-  \colourprovide{BackgroundColour_4}{BackgroundColour!75!black}
-  \colourprovide{BackgroundColour_3}{BackgroundColour!50!black}
-  \colourprovide{BackgroundColour_2}{BackgroundColour!25!black}
-  \colourprovide{BackgroundColour_1}{BackgroundColour!10!black}
+  \colorlet{BackgroundColour_5}{BackgroundColour!90!black}
+  \colorlet{BackgroundColour_4}{BackgroundColour!75!black}
+  \colorlet{BackgroundColour_3}{BackgroundColour!50!black}
+  \colorlet{BackgroundColour_2}{BackgroundColour!25!black}
+  \colorlet{BackgroundColour_1}{BackgroundColour!10!black}
 
 % (*Now we define a set of useful styles for listings*)
 \ifqolstglobalop@caps
@@ -192,8 +192,6 @@
 }}
 
 \lstset{style = qolistingsmain}
-
-\def\mainstyle{, style = qolistingsmain, }
 
 \newcommand{\qolstset}[1]{
     \setkeys{qoGlobal}{#1}

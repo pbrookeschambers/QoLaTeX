@@ -1,45 +1,82 @@
-\documentclass[]{article}
-
+\documentclass[17pt]{extarticle}
+\usepackage[table]{xcolor}
+% \usepackage[scheme=office_2007_2010, dark]{./qocolours}
+\makeatletter
+\newcommand\tic\pdfresettimer
+\newcommand{\toc}[1][time]
+  {\typeout{}\typeout{#1: \strip@pt\dimexpr\pdfelapsedtime sp\relax sec.}\typeout{}}
+\makeatother
 
 \usepackage{tikz}
 \usetikzlibrary{backgrounds, calc}
 
 \usetikzlibrary{positioning}
-\usepackage[margin = 2cm, landscape]{geometry}
+\usepackage[a3paper, top = 2cm, bottom = 2cm, left = 1cm, right = 1cm, landscape]{geometry}
 \newcommand{\ColourChart}[1]{%
 \vfill
   \UseColourScheme{#1}
   \begin{tikzpicture}[every node/.style = {rectangle, inner sep = 0pt, minimum width = 1.25cm, minimum height = 1.25cm, align = center, text = ForegroundColour}]
     \node[fill = BackgroundColour, draw = ForegroundColour] (BackgroundColour) at (0,0) {};
     \node[above = 0.5cm of BackgroundColour, scale = 1] {Background\\Colour};
-    \node[fill = ForegroundColour] (ForegroundColour) [right = 1cm of BackgroundColour] {};
+    \node[fill = ForegroundColour] (ForegroundColour) [right = 2.5cm of BackgroundColour] {};
     \node[above = 0.5cm of ForegroundColour, scale = 1] {Foreground\\Colour};
-    \node[fill = Accent1] (Accent1) [right = 1cm of ForegroundColour] {};
+    \node[fill = Accent1] (Accent1) [right = 2.5cm of ForegroundColour] {};
     \node[above = 0.5cm of Accent1, scale = 1] {Accent1};
-    \node[fill = Accent2] (Accent2) [right = 1cm of Accent1] {};
+    \node[fill = Accent2] (Accent2) [right = 2.5cm of Accent1] {};
     \node[above = 0.5cm of Accent2, scale = 1] {Accent2};
-    \node[fill = Accent3] (Accent3) [right = 1cm of Accent2] {};
+    \node[fill = Accent3] (Accent3) [right = 2.5cm of Accent2] {};
     \node[above = 0.5cm of Accent3, scale = 1] {Accent3};
-    \node[fill = Accent4] (Accent4) [right = 1cm of Accent3] {};
+    \node[fill = Accent4] (Accent4) [right = 2.5cm of Accent3] {};
     \node[above = 0.5cm of Accent4, scale = 1] {Accent4};
-    \node[fill = Accent5] (Accent5) [right = 1cm of Accent4] {};
+    \node[fill = Accent5] (Accent5) [right = 2.5cm of Accent4] {};
     \node[above = 0.5cm of Accent5, scale = 1] {Accent5};
-    \node[fill = Accent6] (Accent6) [right = 1cm of Accent5] {};
+    \node[fill = Accent6] (Accent6) [right = 2.5cm of Accent5] {};
     \node[above = 0.5cm of Accent6, scale = 1] {Accent6};
-    \node[fill = Hyperlink] (Hyperlink) [right = 1cm of Accent6] {};
+    \node[fill = Hyperlink] (Hyperlink) [right = 2.5cm of Accent6] {};
     \node[above = 0.5cm of Hyperlink, scale = 1] {Hyperlink};
-    \node[fill = FollowedHyperlink] (FollowedHyperlink) [right = 1cm of Hyperlink] {};
+    \node[fill = FollowedHyperlink] (FollowedHyperlink) [right = 2.5cm of Hyperlink] {};
     \node[above = 0.5cm of FollowedHyperlink, scale = 1] {Followed\\Hyperlink};
     \foreach \n in {1,2,3,4,5} {
       \foreach \b in {ForegroundColour, BackgroundColour, Accent1, Accent2, Accent3, Accent4, Accent5, Accent6, Hyperlink, FollowedHyperlink}{
-        \node[fill = \b_\n] (\b\n) [below = {(6-\n)*1.25cm} of \b] {\color{-\b_\n}\n};
+        \node[fill = \b_\n] (\b\n) [below = {(6-\n)*1.25cm} of \b] {};
       }
     }
+    \foreach \b in {ForegroundColour, Accent1, Accent2, Accent3, Accent4, Accent5, Accent6, Hyperlink, FollowedHyperlink}{
+      \fill[\b] (\b5.north east) let
+          \p1 = (\b1.south east)
+      in
+          rectangle ({\x1 + 1.25cm}, \y1);
+    }
+    \draw[ForegroundColour] (BackgroundColour5.north east) let
+        \p1 = (BackgroundColour1.south east)
+    in
+        rectangle ({\x1 + 1.25cm}, \y1);
+    \begin{scope}[
+            every node/.append style = {minimum width = 1.25cm, minimum height = 1.25cm},
+            shift = ($(current bounding box.south) - (current bounding box.south west)$)
+        ]
+        \foreach \n in {1,2}{
+            \node[fill = BackgroundColour_\n, ] (last) at ({(\n - 4.5) * 1.25cm}, -10cm) {};
+            \foreach \b in {ForegroundColour, Accent1, Accent2, Accent3, Accent4, Accent5, Accent6}{%, Hyperlink, FollowedHyperlink}{
+                \node[fill = \b_\n, below = 0pt of last.south, anchor = north] (last) {};
+            }
+        }
+        \node[fill = BackgroundColour, ] (last) at ({(3 - 4.5) * 1.25cm}, -10cm) {};
+        \foreach \b in {ForegroundColour, Accent1, Accent2, Accent3, Accent4, Accent5, Accent6}{%, Hyperlink, FollowedHyperlink}{
+            \node[fill = \b, below = 0pt of last.south, anchor = north] (last) {};
+        }
+        \foreach \n in {3,4,5}{
+            \node[fill = BackgroundColour_\n, ] (last) at ({(\n - 3.5) * 1.25cm}, -10cm) {};
+            \foreach \b in {ForegroundColour, Accent1, Accent2, Accent3, Accent4, Accent5, Accent6}{%, Hyperlink, FollowedHyperlink}{
+                \node[fill = \b_\n, below = 0pt of last.south, anchor = north] (last) {};
+            }
+        }
+    \end{scope}
     \begin{pgfonlayer}{background}
         \fill[BackgroundColour] ($(current bounding box.south west) + (-1, -1)$) rectangle ($(current bounding box.north east) + (1, 1)$);
     \end{pgfonlayer}
   \end{tikzpicture}%
-  \vspace{2cm}
+  \vfill
   }
 
   \def\numberline#1{}
