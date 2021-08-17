@@ -1,6 +1,6 @@
 \documentclass[]{article}
 
-\usepackage[scheme=office_2007_2010, dark]{./qocolours}
+\usepackage[]{./qocolours}
 \usepackage{multicol}
 \usepackage{tikz}
 \usetikzlibrary{backgrounds, calc}
@@ -9,6 +9,7 @@
 \usepackage{amsmath, amssymb}
 \usetikzlibrary{positioning}
 \usepackage[margin = 2cm]{geometry}
+\usepackage{enumitem}
 \newcommand{\ColourChart}[1]{%
     \vfill
   \UseColourScheme{#1}
@@ -78,7 +79,7 @@
   \pagenumbering{arabic}
 
   \section{Introduction}
-  This package defines a set of colour schemes which resemble many of those provided by the Microsoft Office suite of software. Each scheme defines 10 base colours, as well as 5 variations of each. These are then used by some of other packages within the \qo{} family of packages. The colours defined by each scheme are as follows, with a short description of their general usage in the \qo{} family of packages.
+  This package defines a set of colour schemes which resemble many of those provided by the Microsoft Office suite of software, in addition to 386 other schemes. Each scheme defines 10 base colours, as well as 5 variations of each. These are then used by some of other packages within the \qo{} family of packages. The colours defined by each scheme are as follows, with a short description of their general usage in the \qo{} family of packages.
 
   \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
     \item [\texttt{ForegroundColour}] The default text colour for all non-paragraph text (i.e., in diagrams, box titles and similar).
@@ -86,14 +87,14 @@
     \item [\texttt{Accent1}] The primary accent colour
     \item [\texttt{Accent2}] The secondary accent colour. Also used for hyperlinks in the \color{red}\_\_\_\normalcolor{} package by default.
     \item [\texttt{Accent3}] Further accent colours.
-    \item [\texttt{Accent4}] Further accent colours.
-    \item [\texttt{Accent5}] Further accent colours.
-    \item [\texttt{Accent6}] Further accent colours.
+    \item [\texttt{Accent4}] %Further accent colours.
+    \item [\texttt{Accent5}] %Further accent colours.
+    \item [\texttt{Accent6}] %Further accent colours.
     \item[\texttt{Hyperlink}] An alternative colour for external links. This is not always provided uniquely for all schemes; for schemes without a unique \texttt{Hyperlink} colour, a \textcolor[HTML]{0000FF}{blue} colour is used as default.
     \item[\texttt{FollowedHyperlink}] An alternative colour for external links. In MS Office, this would be used for links which have already been clicked. This is not always provided uniquely for all schemes; for schemes without a unique \texttt{Hyperlink} colour, a \textcolor[HTML]{0000AA}{dark blue} colour is used as default.
   \end{itemize}
 
-  Each colour then has 5 variants, indicated by a ``\_1" to ``\_5" suffix. These colour variants are derived from the core colour by changing only the lightness of the colour in the HSL colour model; the hue and saturation are unchanged. For these variations, ``20\% darker'' means that the lightness is brought 20\% closer to 0, and ``20\% lighter'' means that the lightness is 20\% closer to 1. Thus, unless a core colour has a lightness of 0 or 1, the variants will never have a lightness of 0 or 1 (except after rounding). The variants are defined in one of three ways depending on the lightness of the core colour.
+  Each colour then has 5 variants, indicated by a ``\_1" to ``\_5" suffix. These colour variants are derived from the core colour by changing only the lightness of the colour in the HSL colour model; the hue and saturation are unchanged. Note that the HSL model is diferent to the HSB or HSV colour models. For these variations, ``20\% darker'' means that the lightness is brought 20\% closer to 0, and ``20\% lighter'' means that the lightness is 20\% closer to 1. Thus, unless a core colour has a lightness of 0 or 1, the variants will never have a lightness of 0 or 1 (except after rounding). The variants are defined in one of three ways depending on the lightness of the core colour.
   \begin{itemize}
       \item For most core colours, there are two darker variants (25\% and 50\% darker), and three lighter variants (40\%, 60\%, and 80\% lighter).
       \item For core colours with lightness above $l = 0.8$, 5 darker variants are defined at 10\%, 25\%, 50\%, 75\%, and 90\% darker.
@@ -131,8 +132,28 @@
 
   \section{Useage}
 
-  The package can be loaded with \verb|\usepackage{qocolours}|. By default, this will load the \texttt{light} variant of the \hyperref[section:default]{\texttt{twilight}} scheme. To load a different scheme, one can use the keyword \texttt{scheme}. For the light and dark variants, two flags are provided; \texttt{light} and \texttt{dark}. So, to load the scheme which closely resembles the MS Office theme \textit{aspect} in its dark variant, one can use \verb|\usepackage[scheme = aspect, dark]{qocolours}|. The flags \texttt{light} and \texttt{dark} can also take boolean values, so one can also use \verb|light = false| or similar.
+  The package can be loaded with \verb|\usepackage{qocolours}|. By default, this will load the \texttt{light} variant of the \hyperref[section:default]{\texttt{twilight}} scheme. To load a different scheme, one can use the keyword \texttt{scheme}. To minimise overhead when loading the package, four optional arguments are provided; \texttt{microsoft}, \texttt{iterm}, \texttt{slidehelper}, and \texttt{all}. To have access to any of the 79 Microsoft Office-like themes, the flag \texttt{microsoft} must be included. For access to the 237 themes from \href{https://iterm2colorschemes.com/}{https://iterm2colorschemes.com/}, use the flag \texttt{iterm}. For the 150 themes from \href{https://slidehelper.com/blog/150-custom-color-palettes-for-powerpoint-word-and-excel/}{slidehelper.com}, use the flag \texttt{slidehelper}. The flag \texttt{all} provides access to all themes. For the light and dark variants, two flags are provided; \texttt{light} and \texttt{dark}. So, to load the scheme which closely resembles the MS Office theme \textit{aspect} in its dark variant, one can use \verb|\usepackage[scheme = aspect, microsoft, dark]{qocolours}| or \verb|\usepackage[scheme = aspect, all, dark]{qocolours}|. The flags \texttt{light} and \texttt{dark} can also take boolean values, so one can also use \verb|light = false| or similar.
 
-  In addition, the scheme can be changed part way through a document using the command \verb|\UseColourScheme|, which takes one required argument; the name of the new scheme. For example, the scheme can be changed to resemble the MS Office theme \textit{Black Tie} using \verb|\UseColourScheme{black_tie}|.
+  In addition, the scheme can be changed part way through a document using the command \verb|\UseColourScheme|, which takes one required argument; the name of the new scheme. For example, the scheme can be changed to resemble the MS Office theme \textit{Black Tie} using \verb|\UseColourScheme{black_tie}|. Unfortunately, the scheme cannot be changed from the light to the dark variant or back except in the call to \verb|\usepackage|.
+
+  \subsection{Additional Commands}
+
+  There are a few commands defined for use within the package. Although these are not intended to be used except by the package itself, they are documented here anyway. There is no guarantee that these commands will exist or act the same in future versions.
+  % \begin{itemize}
+  %     \item[\verb|\|\verb|getRed c|] Evaluates to the two characters representing the red value of the RGB hex string \texttt{c}. Strictly, \texttt{c} is not a single argument but 6 arguments, so care should be taken with order of expansions here.
+  %     \item[\verb|\|\verb|getGreen c|] Similar to \verb|\getRed c| except that the green value is found.
+  %     \item[\verb|\|\verb|getBlue c|] Similar to \verb|\getRed c| except that the blue value is found.
+  %     \item[\verb|\lighten{c}{p}{name}|] This command takes three arguments; a colour \texttt{c} (as an RGB hex string), a percentage \texttt{p}, and a colour name \texttt{name}. A new colour \texttt{name} will be created, which is the colour \texttt{c} lightened by \texttt{p}\%. This uses pgfmath and is not especially fast or efficient, so calls to this command should be minimised where possible.
+  %     \item[\verb|\darken{c}{p}{name}|] This acts identically to \verb|\lighten|, except that the colour \texttt{c} will be \texttt{p}\% darker.
+  %     \item[\verb|\getLightness{c}|] This takes a colour \texttt{c} (as an RGB hex string) and creates a pgfmath macro \verb|\lightness| which is set to the lightness of the colour \texttt{c}. Internally, it also sets values for pgfmath macros \verb|\r|, \verb|\g|, and \verb|\b|.
+  % \end{itemize}
+  \begin{itemize}[leftmargin = 1.75in, labelsep = 0.75cm]
+        \item[\texttt{\textbackslash{}getRed c}] Expands to the two characters representing the red value of the RGB hex string \texttt{c}. Strictly, \texttt{c} is not a single argument but 6 arguments, so care should be taken with order of expansions here.
+        \item[\texttt{\textbackslash{}getGreen c}] Similar to \verb|\getRed c| except that the green value is found.
+        \item[\texttt{\textbackslash{}getBlue c}] Similar to \verb|\getRed c| except that the blue value is found.
+        \item[\texttt{\textbackslash{}lighten\{c\}\{p\}\{name\}}] This command takes three arguments; a colour \texttt{c} (as an RGB hex string), a percentage \texttt{p}, and a colour name \texttt{name}. A new colour \texttt{name} will be created, which is the colour \texttt{c} lightened by \texttt{p}\%. This uses pgfmath and is not especially fast or efficient, so calls to this command should be minimised where possible.
+        \item[\texttt{\textbackslash{}darken\{c\}\{p\}\{name\}}] This acts identically to \verb|\lighten|, except that the new colour \texttt{name} will be \texttt{p}\% darker than \texttt{c}.
+        \item[\texttt{\textbackslash{}getLightness\{c\}}] This takes a colour \texttt{c} (as an RGB hex string) and creates a pgfmath macro \verb|\lightness| which is set to the lightness of the colour \texttt{c}. Internally, it also sets values for pgfmath macros \verb|\r|, \verb|\g|, and \verb|\b|.
+    \end{itemize}
 
 \end{document}
