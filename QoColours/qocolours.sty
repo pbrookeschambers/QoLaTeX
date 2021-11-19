@@ -32,15 +32,16 @@
 
 \newcommand{\DefineColourScheme}[2]{%
   % Takes the name of the scheme and the hex code colours in a comma separated list.
-  \DefineArrayVar%
+  \DefineArrayVar % We want to create an array using the forartray package so that we can access the hex code for colours by scheme name and colour name
   {#1}%
   {@}%
   {,}%
   {ForegroundColour,BackgroundColour,Accent1,Accent2,Accent3,Accent4,Accent5,Accent6,Hyperlink,FollowedHyperlink}%
   {,}%
-  {#2}
+  {#2}  % Since colours should be comma separated already, we don't need to do any additional processing and just pass the whole string to \DefineArrayVar
 }
 
+% Quickly grab the red, green, and blue values from a hexstring. Note that this takes the 6-character string as 6 arguments, so it can cause issues with expandable arguments.
 \newcommand\getRed[6]{#1#2}
 \newcommand\getGreen[6]{#3#4}
 \newcommand\getBlue[6]{#5#6}
@@ -53,12 +54,13 @@
     % #2 - percentage to lighten by
     % #3 - new colour name
 %
-    \pgfmathsetmacro\LIGHTENr{0x\expandafter\getRed#1 / 255}
+    \pgfmathsetmacro\LIGHTENr{0x\expandafter\getRed#1 / 255} % \getRed expects 6 arguments, so we have to use \expandafter to make sure that the argument #1 gets expanded to the string it contains *before* being passed to \getRed
     \pgfmathsetmacro\LIGHTENg{0x\expandafter\getGreen#1 / 255}
     \pgfmathsetmacro\LIGHTENb{0x\expandafter\getBlue#1 / 255}
     \pgfmathsetmacro\LIGHTENp{#2 / 100}
 %
 %   Convert to hsl =============================================================
+%   Method as described at https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
 %   Get X_max and X_min, and C:
     \pgfmathsetmacro\LIGHTENmax{max(\LIGHTENr, \LIGHTENg, \LIGHTENb)}
     \pgfmathsetmacro\LIGHTENmin{min(\LIGHTENr, \LIGHTENg, \LIGHTENb)}
@@ -70,6 +72,7 @@
     \pgfmathsetmacro\LIGHTENh{0}
     \ifthenelse{
 %       Allow some small numbers to all be assumed as 0
+%       Numeric comparisons are unpleasant, so we convert all numeric values to lengths in pt and use \lengthtest instead.
         \lengthtest{\LIGHTENC pt < 0.0001 pt}
     }{
         \pgfmathsetmacro\LIGHTENh{0}
@@ -106,6 +109,8 @@
     \pgfmathsetmacro\LIGHTENl{1 - (1 - \LIGHTENp) * (1 - \LIGHTENl)}
 %
 %   Convert to rgb =============================================================
+%   https://en.wikipedia.org/wiki/HSL_and_HSV#To_RGB
+%     The alternative version is usually better, but not in LaTeX
 %   Calculate C, H', X, and m
     \pgfmathsetmacro\LIGHTENC{(1 - abs(2 * \LIGHTENl - 1)) * \LIGHTENs}
     \pgfmathsetmacro\LIGHTENhpr{\LIGHTENh / 60}
@@ -295,6 +300,7 @@
 
 % Microsoft themes
 \ifthenelse{\boolean{colop@all} \or \boolean{colop@microsoft}}{
+  % We only define these if the correct package options have been passed, to avoid unnecessary overhead
     \DefineColourScheme{waveform}                       {073E87,            C6E7FC,            30B6FD,            4584D3,            5CCF78,            A6D02B,            F4C146,            0FE0DC,            0000FF,            0000AA           }
     \DefineColourScheme{verve}                          {666666,            D2D2D2,            FF378B,            E40059,            9C017F,            6A0480,            0860D4,            0B3CA1,            0000FF,            0000AA           }
     \DefineColourScheme{urban}                          {424456,            DEDEDE,            525389,            438086,            A04EA3,            C46730,            8E6243,            6296B7,            0000FF,            0000AA           }
@@ -379,6 +385,7 @@
 % ==================================
 % iTerm colours
 \ifthenelse{\boolean{colop@all} \or \boolean{colop@iterm}}{
+  % We only define these if the correct package options have been passed, to avoid unnecessary overhead
     \DefineColourScheme{3024_day}                       {4A4543,            F7F7F7,            01A0E4,            B5E4F4,            01A252,            FDED02,            DB2D20,            A16A94,            F7F7F7,            5C5855           }
     \DefineColourScheme{3024_night}                     {090300,            A5A2A2,            B5E4F4,            A16A94,            01A0E4,            FDED02,            01A252,            DB2D20,            F7F7F7,            5C5855           }
     \DefineColourScheme{adventure}                      {040404,            FEFFFF,            EEBB6E,            E5C499,            5DA602,            BDCFE5,            D84A33,            417AB3,            E4D5C7,            685656           }
@@ -622,6 +629,7 @@
 % slidehelper
 
 \ifthenelse{\boolean{colop@slidehelper} \or \boolean{colop@all}}{
+  % We only define these if the correct package options have been passed, to avoid unnecessary overhead
     \DefineColourScheme{slidehelper001}                 {323232,            E3DED1,            247BA0,            70C1B3,            B2DBBF,            F3FFBD,            FF1654,            BFBFBF,            247BA0,            70C1B3           }
     \DefineColourScheme{slidehelper002}                 {323232,            E3DED1,            05668D,            028090,            00A896,            02C39A,            F0F3BD,            BFBFBF,            05668D,            028090           }
     \DefineColourScheme{slidehelper003}                 {323232,            E3DED1,            50514F,            F25F5C,            FFE066,            247BA0,            70C1B3,            BFBFBF,            50514F,            F25F5C           }
@@ -780,10 +788,9 @@
 }{}
 
 %{-- Light/Dark Variants =======================================================
-% For now, light and dark variants simply switch the foreground and background
-% colours. This may change in the future
+% Light and dark variants swap foreground and background colours, and reverse order of lightening and darkening each colour
 \newcommand{\getLightness}[1]{
-    %
+    % We need a quick function to get the lightness of a colour so we know how to handle its variants.
     \pgfmathsetmacro\r{0x\expandafter\getRed#1 / 255}
     \pgfmathsetmacro\g{0x\expandafter\getBlue#1 / 255}
     \pgfmathsetmacro\b{0x\expandafter\getGreen#1 / 255}
@@ -795,15 +802,19 @@
 
 \newcommand{\UseColourScheme}[1]{%
 \ifcolop@light
-\ForEach%
+% ====================================================================
+% If we are using a light sceme
+% ====================================================================
+\ForEach % Loop through all scheme colours, since all are treated the same except for name
   {,}%
   {%
-    \definecolor{\thislevelitem}{HTML}{\csname #1@\thislevelitem\endcsname}%
-    \expandafter\getLightness\expandafter{\csname #1@\thislevelitem\endcsname}
+    \definecolor{\thislevelitem}{HTML}{\csname #1@\thislevelitem\endcsname}% Define the root colour
+    \expandafter\getLightness\expandafter{\csname #1@\thislevelitem\endcsname}  % Get its lightness
     \ifthenelse{
         \lengthtest{\lightness pt < 0.2 pt}
+        % If the colour is too dark to have darker variants:
     }{
-      %If the colour is too dark to have darker variants:
+      % Only produce lighter variants
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{10}{\thislevelitem_1}
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{25}{\thislevelitem_2}
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{50}{\thislevelitem_3}
@@ -812,16 +823,17 @@
     }{
         \ifthenelse{
             \lengthtest{\lightness pt > 0.8 pt}
+            % If colour is too light to have lighter variants:
         }
         {
-            % If colour is too light to have lighter variants:
+            % Only produce darker variants
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{90}{\thislevelitem_1}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{75}{\thislevelitem_2}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{50}{\thislevelitem_3}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{25}{\thislevelitem_4}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{10}{\thislevelitem_5}
         }{
-            % Otherwise apply normally
+            % Otherwise produce 2 darker and 3 lighter variants:
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{50}{\thislevelitem_1}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{25}{\thislevelitem_2}
             \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{40}{\thislevelitem_3}
@@ -832,6 +844,9 @@
   }
   {ForegroundColour,BackgroundColour,Accent1,Accent2,Accent3,Accent4,Accent5,Accent6,Hyperlink,FollowedHyperlink}
 \else
+% ====================================================================
+% If we are using a dark sceme
+% ====================================================================
 \ForEach%
   {,}%
   {%
@@ -839,8 +854,8 @@
     \expandafter\getLightness\expandafter{\csname #1@\thislevelitem\endcsname}
     \ifthenelse{
         \lengthtest{\lightness pt < 0.2 pt}
+        % If the colour is too dark to have darker variants:
     }{
-      %If the colour is too dark to have darker variants:
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{90}{\thislevelitem_1}
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{75}{\thislevelitem_2}
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{50}{\thislevelitem_3}
@@ -849,16 +864,16 @@
     }{
         \ifthenelse{
             \lengthtest{\lightness pt > 0.8 pt}
+            % If colour is too light to have lighter variants:
         }
         {
-            % If colour is too light to have lighter variants:
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{10}{\thislevelitem_1}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{25}{\thislevelitem_2}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{50}{\thislevelitem_3}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{75}{\thislevelitem_4}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{90}{\thislevelitem_5}
         }{
-            % Otherwise apply normally
+            % Otherwise produce 2 lighter and 3 darker variants:
             \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{50}{\thislevelitem_1}
             \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{25}{\thislevelitem_2}
             \expandafter\darken\expandafter{\csname #1@\thislevelitem\endcsname}{40}{\thislevelitem_3}
@@ -872,6 +887,7 @@
   \colorlet{temp}{BackgroundColour}
   \colorlet{BackgroundColour}{ForegroundColour}
   \colorlet{ForegroundColour}{temp}
+  % Swap their variants
   \ForEach{,}{%
     \colorlet{temp_\thislevelitem}{BackgroundColour_\thislevelitem}%
     \colorlet{BackgroundColour_\thislevelitem}{ForegroundColour_\thislevelitem}%
@@ -881,5 +897,5 @@
 }
 % --} ==========================================================================
 
-
+% Load the colour scheme given in package options, or the default
 \UseColourScheme{\colop@scheme}
