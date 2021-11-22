@@ -1,4 +1,26 @@
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{qomath}[2021/11/21 Easy math formatting for LaTeX]
 
-%does nothing for now
+\RequirePackage{amsmath}
+
+\newcommand{\uvec}[1]{\hat{x}}			%unit vector in the style of the normal \vec command
+
+%\renewcommand{\vec}[1]{\mathbf{#1}}		%bold style \vec and \uvec commands to be implemented as an option with the package later
+%\newcommand{\uvec}[1]{\mathbf{\hat{{#1}}}}
+
+\newcommand{\diverge}{\nabla\cdot}			%common uses of the nabla sybol
+\newcommand{\curl}{\nabla\times}
+\newcommand{\laplace}{\nabla^2}
+
+\newcommand{\inver}[1]{\frac{1}{{#1}}}								%derivatives, partial derivatives and reciprocals (oh my!)
+\newcommand{\deriv}[3][]{\frac{\text{d}^{#1}{#2}}{\text{d}{#3}^{#1}}}
+\newcommand{\dderiv}[3]{\frac{\text{d}^2{#1}}{\text{d}{#2}\,\text{d}{#3}}}
+\newcommand{\pderiv}[3][]{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
+\newcommand{\ppderiv}[3]{\frac{\partial^2 {#1}}{\partial {#2}\,\partial {#3}}}
+
+\newcommand{\lrbracket}[1]{\left({#1}\right)}	%[l]eft-[right] [bracket]s
+\newcommand{\lrsquare}[1]{\left[{#1}\right]}	%^^
+\newcommand{\lrbrace}[1]{\left\{{#1}\right\}}	%^^
+\newcommand{\lrangle}[1]{\left<{#1}\right>}	%^^
+\newcommand{\lrpipe}[1]{\left|{#1}\right|}	%^^
+\newcommand{\ullimit}[2]{^{^{#2}}_{_{#1}}}	%[u]pper-[l]ower [limit]s
