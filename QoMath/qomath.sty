@@ -2,6 +2,7 @@
 \ProvidesPackage{qomath}[2021/11/21 Easy math formatting for LaTeX]
 
 \RequirePackage{amsmath}
+\RequirePackage{amssymb}
 
 \newcommand{\uvec}[1]{\hat{x}}			%unit vector in the style of the normal \vec command
 
@@ -12,15 +13,33 @@
 \newcommand{\curl}{\nabla\times}
 \newcommand{\laplace}{\nabla^2}
 
+\newcommand{\real}{\mathbb{R}}			%number sets notation
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\integer}{\mathbb{Z}}
+\newcommand{\nat}{\mathbb{N}}				%\natural conflicts with an existing LaTeX symbol
+\newcommand{\rational}{\mathbb{Q}}
+\newcommand{\irrational}{\mathbb{I}}
+
 \newcommand{\inver}[1]{\frac{1}{{#1}}}								%derivatives, partial derivatives and reciprocals (oh my!)
 \newcommand{\deriv}[3][]{\frac{\text{d}^{#1}{#2}}{\text{d}{#3}^{#1}}}
 \newcommand{\dderiv}[3]{\frac{\text{d}^2{#1}}{\text{d}{#2}\,\text{d}{#3}}}
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
 \newcommand{\ppderiv}[3]{\frac{\partial^2 {#1}}{\partial {#2}\,\partial {#3}}}
 
-\newcommand{\lrbracket}[1]{\left({#1}\right)}	%[l]eft-[right] [bracket]s
+\newcommand{\lrbracket}[1]{\left({#1}\right)}	%[l]eft-[r]ight [bracket]s
 \newcommand{\lrsquare}[1]{\left[{#1}\right]}	%^^
 \newcommand{\lrbrace}[1]{\left\{{#1}\right\}}	%^^
 \newcommand{\lrangle}[1]{\left<{#1}\right>}	%^^
 \newcommand{\lrpipe}[1]{\left|{#1}\right|}	%^^
-\newcommand{\ullimit}[2]{^{^{#2}}_{_{#1}}}	%[u]pper-[l]ower [limit]s
+
+\newcommand{\ullimit}[2]{^{^{#2}}_{_{#1}}}	%Integrals, [u]pper-[l]ower [limit]s (from 1st argument to 2nd argument)
+\newcommand{\limint}[2]{\int\ullimit{#1}{#2}}
+\newcommand{\fullint}[4]{\limint{#1}{#2}{#3}\,\text{d}{#4}}
+
+\newcommand{\bra}[1]{\left<\left.{#1}\right|\right.}						%bra and ket, bra-ket is going to cause some trouble
+\newcommand{\ket}[1]{\left.\left|{#1}\right.\right>}
+
+\newcommand{\st}{^\text{st}}				%ordinal shortcuts, for use in math environment, use inline math for use in normal text
+\newcommand{\nd}{^\text{nd}}
+\newcommand{\rd}{^\text{rd}}
+%\renewcommand{\th}{^\text{th}}			%unsure whether to overwrite \th or rename to something else
