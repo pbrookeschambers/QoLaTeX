@@ -5,7 +5,7 @@
 \RequirePackage{forarray}
 \RequirePackage{kvoptions}
 \RequirePackage{ifthen}
-\RequirePackage{tikz}
+\RequirePackage{xfp}
 
 %{-- Options ===================================================================
 
@@ -46,248 +46,102 @@
 \newcommand\getGreen[6]{#3#4}
 \newcommand\getBlue[6]{#5#6}
 
-\newcommand{\lighten}[3]{%
+
+    \newdimen\rgbR
+    \newdimen\rgbG
+    \newdimen\rgbB
+    \newdimen\hslH
+    \newdimen\hslL
+    \newdimen\hslS
+    \newdimen\hslXmin
+    \newdimen\hslV
+    \newdimen\hslC
+    \newdimen\fA
+    \newdimen\fK
+    \newdimen\ftemp
+    \newdimen\fval
+    \newdimen\lightenP
+    \newdimen\darkenP
+
+
+
+\newcommand{\rgbToHSL}[1]{
+%Convert an rgb hex string (*MUST BE IN CAPITALS*) to hsl, storing values in the dimensions \hslH, \hslS, and \hslL
+    \rgbR = \fpeval{\number\numexpr"\expandafter\getRed#1\relax / 255}pt
+    \rgbG = \fpeval{\number\numexpr"\expandafter\getGreen#1\relax / 255}pt
+    \rgbB = \fpeval{\number\numexpr"\expandafter\getBlue#1\relax / 255}pt
+    \hslH=0pt
+    \hslV=\fpeval{max(\rgbR, \rgbG, \rgbB)} pt
+    \hslXmin=\fpeval{min(\rgbR, \rgbG, \rgbB)}pt
+    \hslC = \fpeval{\hslV - \hslXmin} pt
+    \hslL = \fpeval{(\hslV + \hslXmin) / 2} pt
+    \ifdim\hslC<0.0001pt\relax
+        \hslH = 0pt
+    \else
+        \ifdim \hslV = \rgbR
+            \hslH = \fpeval{60 * (\rgbG - \rgbB) / \hslC}pt
+        \else
+            \ifdim \hslV = \rgbG
+                \hslH = \fpeval{60 * (2 + (\rgbB - \rgbR) / \hslC)}pt
+            \else
+                \ifdim \hslV = \rgbB
+                    \hslH = \fpeval{60 * (4 + (\rgbR - \rgbG) / \hslC)}pt
+                \fi
+            \fi
+        \fi
+    \fi
+    \ifdim\hslL<0.0001pt\relax
+        \hslS=0pt
+    \else
+        \ifdim\hslL>0.999pt\relax
+            \hslS=0pt
+        \else
+            \hslS = \fpeval{(\hslV - \hslL) / min(\hslL, 1 - \hslL)} pt
+        \fi
+    \fi
+}
+
+\newcommand{\f}[1]{
+\fA = \fpeval{\hslS * min(\hslL, 1 - \hslL)}pt
+\ftemp = \fpeval{#1 + \hslH / 30} pt
+\fK = \fpeval{\ftemp - trunc(\ftemp / 12) * 12} pt
+    \fval = \fpeval{(\hslL - \fA * max(-1, min(\fK - 3, 9 - \fK, 1))) * 255} pt
+}
+
+\newcommand{\hslToRGB}{
+%Convert the *current* values of \hslH, \hslS, \hslL  to rgb values in the range [0, 255], storing in the dimensions \rgbR, \rgbG, and \rgbB
+    \f{0}
+    \rgbR=\fval
+    \f{8}
+    \rgbG=\fval
+    \f{4}
+    \rgbB=\fval
+}
+
+\newcommand{\lighten}[3]{
     % Lightens a colour in a hex string by a certain amount using the hsl model, leaving hue and saturation unchanged, and assigning the new colour a name.
-    % THIS IS VERY INEFFICIENT.
     %
     % #1 - original colour as a hex rgb string
     % #2 - percentage to lighten by
     % #3 - new colour name
-%
-    \pgfmathsetmacro\LIGHTENr{0x\expandafter\getRed#1 / 255} % \getRed expects 6 arguments, so we have to use \expandafter to make sure that the argument #1 gets expanded to the string it contains *before* being passed to \getRed
-    \pgfmathsetmacro\LIGHTENg{0x\expandafter\getGreen#1 / 255}
-    \pgfmathsetmacro\LIGHTENb{0x\expandafter\getBlue#1 / 255}
-    \pgfmathsetmacro\LIGHTENp{#2 / 100}
-%
-%   Convert to hsl =============================================================
-%   Method as described at https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
-%   Get X_max and X_min, and C:
-    \pgfmathsetmacro\LIGHTENmax{max(\LIGHTENr, \LIGHTENg, \LIGHTENb)}
-    \pgfmathsetmacro\LIGHTENmin{min(\LIGHTENr, \LIGHTENg, \LIGHTENb)}
-    \pgfmathsetmacro\LIGHTENC{\LIGHTENmax - \LIGHTENmin}
-%
-%   Calculate l
-    \pgfmathsetmacro\LIGHTENl{(\LIGHTENmax + \LIGHTENmin) / 2}
-%   Calculate h, setting to 0 if something goes wrong
-    \pgfmathsetmacro\LIGHTENh{0}
-    \ifthenelse{
-%       Allow some small numbers to all be assumed as 0
-%       Numeric comparisons are unpleasant, so we convert all numeric values to lengths in pt and use \lengthtest instead.
-        \lengthtest{\LIGHTENC pt < 0.0001 pt}
-    }{
-        \pgfmathsetmacro\LIGHTENh{0}
-    }{
-        \ifthenelse{
-            \lengthtest{\LIGHTENmax pt = \LIGHTENr pt}
-        }{
-            \pgfmathsetmacro\LIGHTENh{60 * (\LIGHTENg - \LIGHTENb) / \LIGHTENC}
-        }{
-        }
-        \ifthenelse{
-            \lengthtest{\LIGHTENmax pt = \LIGHTENg pt}
-        }{
-            \pgfmathsetmacro\LIGHTENh{60 * (2 + (\LIGHTENb - \LIGHTENr) / \LIGHTENC)}
-        }{
-        }
-        \ifthenelse{
-            \lengthtest{\LIGHTENmax pt = \LIGHTENb pt}
-        }{
-            \pgfmathsetmacro\LIGHTENh{60 * (4 + (\LIGHTENr - \LIGHTENg) / \LIGHTENC)}
-        }{
-        }
-    }
-%   Calculate saturation
-    \ifthenelse{
-        \lengthtest{\LIGHTENl pt < 0.0001pt} \OR \lengthtest{\LIGHTENl pt > 0.999pt}
-    }{
-        \pgfmathsetmacro\LIGHTENs{0}
-    }{
-        \pgfmathsetmacro\LIGHTENs{(\LIGHTENmax - \LIGHTENl) / min(\LIGHTENl, 1-\LIGHTENl)}
-    }
-%
-%   Apply change to lightness:
-    \pgfmathsetmacro\LIGHTENl{1 - (1 - \LIGHTENp) * (1 - \LIGHTENl)}
-%
-%   Convert to rgb =============================================================
-%   https://en.wikipedia.org/wiki/HSL_and_HSV#To_RGB
-%     The alternative version is usually better, but not in LaTeX
-%   Calculate C, H', X, and m
-    \pgfmathsetmacro\LIGHTENC{(1 - abs(2 * \LIGHTENl - 1)) * \LIGHTENs}
-    \pgfmathsetmacro\LIGHTENhpr{\LIGHTENh / 60}
-    \pgfmathsetmacro\LIGHTENx{\LIGHTENC * (1 - abs(mod(\LIGHTENhpr, 2) - 1))}
-    \pgfmathsetmacro\LIGHTENm{\LIGHTENl - \LIGHTENC / 2}
-
-    \ifthenelse{
-        \lengthtest{\LIGHTENhpr pt < 1 pt}
-    }{
-        \pgfmathsetmacro\LIGHTENr{\LIGHTENm + \LIGHTENC}
-        \pgfmathsetmacro\LIGHTENg{\LIGHTENm + \LIGHTENx}
-        \pgfmathsetmacro\LIGHTENb{\LIGHTENm}
-    }{
-        \ifthenelse{
-            \lengthtest{\LIGHTENhpr pt < 2 pt}
-        }{
-            \pgfmathsetmacro\LIGHTENr{\LIGHTENm + \LIGHTENx}
-            \pgfmathsetmacro\LIGHTENg{\LIGHTENm + \LIGHTENC}
-            \pgfmathsetmacro\LIGHTENb{\LIGHTENm}
-        }{
-            \ifthenelse{
-                \lengthtest{\LIGHTENhpr pt < 3 pt}
-            }{
-                \pgfmathsetmacro\LIGHTENr{\LIGHTENm}
-                \pgfmathsetmacro\LIGHTENg{\LIGHTENm + \LIGHTENC}
-                \pgfmathsetmacro\LIGHTENb{\LIGHTENm + \LIGHTENx}
-            }{
-                \ifthenelse{
-                    \lengthtest{\LIGHTENhpr pt < 4 pt}
-                }{
-                    \pgfmathsetmacro\LIGHTENr{\LIGHTENm}
-                    \pgfmathsetmacro\LIGHTENg{\LIGHTENm + \LIGHTENx}
-                    \pgfmathsetmacro\LIGHTENb{\LIGHTENm + \LIGHTENC}
-                }{
-                    \ifthenelse{
-                        \lengthtest{\LIGHTENhpr pt < 5 pt}
-                    }{
-                        \pgfmathsetmacro\LIGHTENr{\LIGHTENm + \LIGHTENx}
-                        \pgfmathsetmacro\LIGHTENg{\LIGHTENm}
-                        \pgfmathsetmacro\LIGHTENb{\LIGHTENm + \LIGHTENC}
-                    }{
-                        \ifthenelse{
-                            \lengthtest{\LIGHTENhpr pt < 6 pt}
-                        }{
-                            \pgfmathsetmacro\LIGHTENr{\LIGHTENm + \LIGHTENC}
-                            \pgfmathsetmacro\LIGHTENg{\LIGHTENm}
-                            \pgfmathsetmacro\LIGHTENb{\LIGHTENm + \LIGHTENx}
-                        }{
-                        }
-                    }
-                }
-            }
-        }
-    }
-%   Define new lighter colour
-    \definecolor{#3}{rgb}{\LIGHTENr, \LIGHTENg, \LIGHTENb}
+    \rgbToHSL{#1}
+    \lightenP=\fpeval{#2 / 100}pt
+    \hslL = \fpeval{1 - (1 - \hslL)(1 - \lightenP)}pt
+    \hslToRGB
+    \definecolor{#3}{RGB}{\fpeval{trunc(\rgbR)}, \fpeval{trunc(\rgbG)}, \fpeval{trunc(\rgbB)}}
 }
-
-\newcommand{\darken}[3]{%
-    % Darkens a colour in a hex string by a certain amount using the hsl model, leaving hue and saturation unchanged, and assigning the new colour a name.
-    % THIS IS VERY INEFFICIENT.
+\newcommand{\darken}[3]{
+    % darkens a colour in a hex string by a certain amount using the hsl model, leaving hue and saturation unchanged, and assigning the new colour a name.
     %
     % #1 - original colour as a hex rgb string
-    % #2 - percentage to darken by
+    % #2 - percentage to lighten by
     % #3 - new colour name
-%
-    \pgfmathsetmacro\DARKENr{0x\expandafter\getRed#1 / 255}
-    \pgfmathsetmacro\DARKENg{0x\expandafter\getGreen#1 / 255}
-    \pgfmathsetmacro\DARKENb{0x\expandafter\getBlue#1 / 255}
-    \pgfmathsetmacro\DARKENp{#2 / 100}
-%
-%   Convert to hsl =============================================================
-%   Get X_max and X_min, and C:
-    \pgfmathsetmacro\DARKENmax{max(\DARKENr, \DARKENg, \DARKENb)}
-    \pgfmathsetmacro\DARKENmin{min(\DARKENr, \DARKENg, \DARKENb)}
-    \pgfmathsetmacro\DARKENC{\DARKENmax - \DARKENmin}
-%
-%   Calculate l
-    \pgfmathsetmacro\DARKENl{(\DARKENmax + \DARKENmin) / 2}
-%   Calculate h, setting to 0 if something goes wrong
-    \pgfmathsetmacro\DARKENh{0}
-    \ifthenelse{
-%       Allow some small numbers to all be assumed as 0
-        \lengthtest{\DARKENC pt < 0.0001 pt}
-    }{
-        \pgfmathsetmacro\DARKENh{0}
-    }{
-        \ifthenelse{
-            \lengthtest{\DARKENmax pt = \DARKENr pt}
-        }{
-            \pgfmathsetmacro\DARKENh{60 * (\DARKENg - \DARKENb) / \DARKENC}
-        }{
-        }
-        \ifthenelse{
-            \lengthtest{\DARKENmax pt = \DARKENg pt}
-        }{
-            \pgfmathsetmacro\DARKENh{60 * (2 + (\DARKENb - \DARKENr) / \DARKENC)}
-        }{
-        }
-        \ifthenelse{
-            \lengthtest{\DARKENmax pt = \DARKENb pt}
-        }{
-            \pgfmathsetmacro\DARKENh{60 * (4 + (\DARKENr - \DARKENg) / \DARKENC)}
-        }{
-        }
-    }
-%   Calculate saturation
-    \ifthenelse{
-        \lengthtest{\DARKENl pt < 0.0001pt} \OR \lengthtest{\DARKENl pt > 0.999pt}
-    }{
-        \pgfmathsetmacro\DARKENs{0}
-    }{
-        \pgfmathsetmacro\DARKENs{(\DARKENmax - \DARKENl) / min(\DARKENl, 1-\DARKENl)}
-    }
-%
-%   Apply change to lightness:
-    \pgfmathsetmacro\DARKENl{(1 - \DARKENp) * \DARKENl}
-%
-%   Convert to rgb =============================================================
-%   Calculate C, H', X, and m
-    \pgfmathsetmacro\DARKENC{(1 - abs(2 * \DARKENl - 1)) * \DARKENs}
-    \pgfmathsetmacro\DARKENhpr{\DARKENh / 60}
-    \pgfmathsetmacro\DARKENx{\DARKENC * (1 - abs(mod(\DARKENhpr, 2) - 1))}
-    \pgfmathsetmacro\DARKENm{\DARKENl - \DARKENC / 2}
-
-    \ifthenelse{
-        \lengthtest{\DARKENhpr pt < 1 pt}
-    }{
-        \pgfmathsetmacro\DARKENr{\DARKENm + \DARKENC}
-        \pgfmathsetmacro\DARKENg{\DARKENm + \DARKENx}
-        \pgfmathsetmacro\DARKENb{\DARKENm}
-    }{
-        \ifthenelse{
-            \lengthtest{\DARKENhpr pt < 2 pt}
-        }{
-            \pgfmathsetmacro\DARKENr{\DARKENm + \DARKENx}
-            \pgfmathsetmacro\DARKENg{\DARKENm + \DARKENC}
-            \pgfmathsetmacro\DARKENb{\DARKENm}
-        }{
-            \ifthenelse{
-                \lengthtest{\DARKENhpr pt < 3 pt}
-            }{
-                \pgfmathsetmacro\DARKENr{\DARKENm}
-                \pgfmathsetmacro\DARKENg{\DARKENm + \DARKENC}
-                \pgfmathsetmacro\DARKENb{\DARKENm + \DARKENx}
-            }{
-                \ifthenelse{
-                    \lengthtest{\DARKENhpr pt < 4 pt}
-                }{
-                    \pgfmathsetmacro\DARKENr{\DARKENm}
-                    \pgfmathsetmacro\DARKENg{\DARKENm + \DARKENx}
-                    \pgfmathsetmacro\DARKENb{\DARKENm + \DARKENC}
-                }{
-                    \ifthenelse{
-                        \lengthtest{\DARKENhpr pt < 5 pt}
-                    }{
-                        \pgfmathsetmacro\DARKENr{\DARKENm + \DARKENx}
-                        \pgfmathsetmacro\DARKENg{\DARKENm}
-                        \pgfmathsetmacro\DARKENb{\DARKENm + \DARKENC}
-                    }{
-                        \ifthenelse{
-                            \lengthtest{\DARKENhpr pt < 6 pt}
-                        }{
-                            \pgfmathsetmacro\DARKENr{\DARKENm + \DARKENC}
-                            \pgfmathsetmacro\DARKENg{\DARKENm}
-                            \pgfmathsetmacro\DARKENb{\DARKENm + \DARKENx}
-                        }{
-                        }
-                    }
-                }
-            }
-        }
-    }
-%   Define new darker colour
-    \definecolor{#3}{rgb}{\DARKENr, \DARKENg, \DARKENb}
+    \rgbToHSL{#1}
+    \darkenP=\fpeval{#2 / 100}pt
+    \hslL = \fpeval{\hslL*(1-\darkenP)}pt
+    \hslToRGB
+    \definecolor{#3}{RGB}{\fpeval{trunc(\rgbR)}, \fpeval{trunc(\rgbG)}, \fpeval{trunc(\rgbB)}}
 }
-
 
 
 %{-- Schemes ===================================================================
@@ -789,15 +643,6 @@
 
 %{-- Light/Dark Variants =======================================================
 % Light and dark variants swap foreground and background colours, and reverse order of lightening and darkening each colour
-\newcommand{\getLightness}[1]{
-    % We need a quick function to get the lightness of a colour so we know how to handle its variants.
-    \pgfmathsetmacro\r{0x\expandafter\getRed#1 / 255}
-    \pgfmathsetmacro\g{0x\expandafter\getBlue#1 / 255}
-    \pgfmathsetmacro\b{0x\expandafter\getGreen#1 / 255}
-    \pgfmathsetmacro\lightness{
-        (max(\r, \g, \b) + min(\r, \g, \b)) / 2
-    }
-}
 
 
 \newcommand{\UseColourScheme}[1]{%
@@ -809,9 +654,9 @@
   {,}%
   {%
     \definecolor{\thislevelitem}{HTML}{\csname #1@\thislevelitem\endcsname}% Define the root colour
-    \expandafter\getLightness\expandafter{\csname #1@\thislevelitem\endcsname}  % Get its lightness
+    \expandafter\rgbToHSL\expandafter{\csname #1@\thislevelitem\endcsname}  % Get its lightness
     \ifthenelse{
-        \lengthtest{\lightness pt < 0.2 pt}
+        \lengthtest{\hslL < 0.2 pt}
         % If the colour is too dark to have darker variants:
     }{
       % Only produce lighter variants
@@ -822,7 +667,7 @@
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{90}{\thislevelitem_5}
     }{
         \ifthenelse{
-            \lengthtest{\lightness pt > 0.8 pt}
+            \lengthtest{\hslL > 0.8 pt}
             % If colour is too light to have lighter variants:
         }
         {
@@ -851,9 +696,9 @@
   {,}%
   {%
     \definecolor{\thislevelitem}{HTML}{\csname #1@\thislevelitem\endcsname}%
-    \expandafter\getLightness\expandafter{\csname #1@\thislevelitem\endcsname}
+    \expandafter\rgbToHSL\expandafter{\csname #1@\thislevelitem\endcsname}
     \ifthenelse{
-        \lengthtest{\lightness pt < 0.2 pt}
+        \lengthtest{\hslL < 0.2 pt}
         % If the colour is too dark to have darker variants:
     }{
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{90}{\thislevelitem_1}
@@ -863,7 +708,7 @@
       \expandafter\lighten\expandafter{\csname #1@\thislevelitem\endcsname}{10}{\thislevelitem_5}
     }{
         \ifthenelse{
-            \lengthtest{\lightness pt > 0.8 pt}
+            \lengthtest{\hslL > 0.8 pt}
             % If colour is too light to have lighter variants:
         }
         {
