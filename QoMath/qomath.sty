@@ -33,27 +33,81 @@
 \newcommand{\lrbrace}[1]{\left\{{#1}\right\}}	%^^
 \newcommand{\lrangle}[1]{\left<{#1}\right>}	%^^
 \newcommand{\lrpipe}[1]{\left|{#1}\right|}	%^^
+\newcommand{\rlangle}[1]{\left>{#1}\right<}	%inward pointing version of \lrangle
 
 \newcommand{\ullimit}[2]{^{^{#2}}_{_{#1}}}	%Integrals, [u]pper-[l]ower [limit]s (from 1st argument to 2nd argument)
 \newcommand{\limint}[2]{\int\ullimit{#1}{#2}}
 \newcommand{\fullint}[4]{\limint{#1}{#2}\!{#3}\,\text{d}{#4}}
 
-\newcommand{\bra}[1]{\left<\left.\!{#1}\right|\right.\!}						%bra and ket, bra-ket is going to cause some trouble
+\newcommand{\bra}[1]{\left<\left.\!{#1}\right|\right.\!}		%bra and ket
 \newcommand{\ket}[1]{\left.\!\left|{#1}\right.\!\right>}
-\newcommand{\braket}[2]{
-    \newdimen\leftheight
-    \setbox0=\hbox{\ensuremath{#1}}
-    \leftheight=\ht0
-    \advance\leftheight by \dp0
-    \newdimen\rightheight
-    \setbox0=\hbox{\ensuremath{#2}}
-    \rightheight=\ht0
-    \advance\rightheight by \dp0
-    \ifdim\leftheight>\rightheight
-        \ensuremath{\left<\left.\!{#1}\right|{#2}\right>}
-    \else
-        \ensuremath{\left<{#1}\left|{#2}\right.\!\right>}
-    \fi
+\newcommand{\braket}[2]{		%braket, scaling to the larger of the arguments
+	\newdimen\lheight
+	\setbox0=\hbox{\ensuremath{#1}}
+	\lheight=\ht0
+	\advance\lheight by \dp0
+	\newdimen\rheight
+	\setbox0=\hbox{\ensuremath{#2}}
+	\rheight=\ht0
+	\advance\rheight by \dp0
+	\ifdim\lheight>\rheight
+		\lrangle{\left.\!{#1}\right|{#2}}
+	\else
+		\lrangle{{#1}\left|{#2}\right.\!}
+	\fi
+}
+\newcommand{\ketbra}[2]{		%ketbra, scaling to the larger of the arguments
+	\newdimen\lheight
+	\setbox0=\hbox{\ensuremath{#1}}
+	\lheight=\ht0
+	\advance\lheight by \dp0
+	\newdimen\rheight
+	\setbox0=\hbox{\ensuremath{#2}}
+	\rheight=\ht0
+	\advance\rheight by \dp0
+	\ifdim\lheight>\rheight
+		\lrpipe{\left.\left.\!{#1}\right>\!\right<{#2}}
+	\else
+		\lrpipe{{#1}\left>\!\left<{#2}\right.\right.\!}
+	\fi
+}
+\newcommand{\braketwrap}[3]{		%bra and ket wrapped around a central matrix, scaling to the larger of the arguments
+	\newdimen\lheight
+	\setbox0=\hbox{\ensuremath{{#1}{#2}}}
+	\lheight=\ht0
+	\advance\lheight by \dp0
+	\newdimen\rheight
+	\setbox0=\hbox{\ensuremath{{#2}{#3}}}
+	\rheight=\ht0
+	\advance\rheight by \dp0
+	\ifdim\lheight>\rheight
+		\lrangle{\left.\left.\!{#1}\right|\!{#2}\,\right|{#3}}
+	\else
+		\ifdim\rheight>\lheight
+			\lrangle{{#1}\left|\,{#2}\!\left|{#3}\right.\right.\!}
+		\else
+			\lrangle{{#1}\lrpipe{{#2}}{#3}}
+		\fi
+	\fi
+}
+\newcommand{\ketbrawrap}[3]{		%ket and bra wrapped around a central matrix, scaling to the larger of the arguments
+	\newdimen\lheight
+	\setbox0=\hbox{\ensuremath{{#1}{#2}}}
+	\lheight=\ht0
+	\advance\lheight by \dp0
+	\newdimen\rheight
+	\setbox0=\hbox{\ensuremath{{#2}{#3}}}
+	\rheight=\ht0
+	\advance\rheight by \dp0
+	\ifdim\lheight>\rheight
+		\lrpipe{\left.\left.\!{#1}\right>\!{#2}\,\right<{#3}}
+	\else
+		\ifdim\rheight>\lheight
+			\lrpipe{{#1}\left>\,{#2}\!\left<{#3}\right.\right.\!}
+		\else
+			\lrpipe{{#1}\rlangle{{#2}}{#3}}
+		\fi
+	\fi
 }
 
 \newcommand{\st}{\textsuperscript{st}}		%ordinal shortcuts, for use in math environment and inline text
