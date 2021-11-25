@@ -4,6 +4,8 @@
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 
+\RequirePackage{ifthen} % I don't like needing this package, it's quite bulky and it'd be good if we can remove it eventually
+
 \let\thorne\th						%renaming a command that would otherwise be replaced
 
 \newcommand{\uvec}[1]{\hat{x}}			%unit vector in the style of the normal \vec command
@@ -40,8 +42,21 @@
 
 \newcommand{\bra}[1]{\left<\left.{#1}\right|\right.}						%bra and ket, bra-ket is going to cause some trouble
 \newcommand{\ket}[1]{\left.\left|{#1}\right.\right>}
-\newcommand{\Braket}[2]{\left<\left.{#1}\,\right|\left.{#2}\right.\right>}		%\bra-ket prototypes, probably not going stay as this
-\newcommand{\braKet}[2]{\left<\left.{#1}\right.\left|\,{#2}\right.\right>}		%the idea is you switch versions based on which side is taller
+% \newcommand{\Braket}[2]{\left<\left.{#1}\,\right|\left.{#2}\right.\right>}		%\bra-ket prototypes, probably not going stay as this
+% \newcommand{\braKet}[2]{\left<\left.{#1}\right.\left|\,{#2}\right.\right>}		%the idea is you switch versions based on which side is taller
+\newcommand{\braket}[2]{
+    \newdimen\leftheight
+    \setbox0=\hbox{\ensuremath{#1}}
+    \leftheight=\ht0 \advance\leftheight by \dp0
+    \newdimen\rightheight
+    \setbox0=\hbox{\ensuremath{#2}}
+    \rightheight=\ht0 \advance\rightheight by \dp0
+    \ifthenelse{\lengthtest{\leftheight > \rightheight}}{
+        \ensuremath{\left\langle \left. #1 \right| #2 \right\rangle}
+    }{
+        \ensuremath{\left\langle #1 \left| #2 \right. \right\rangle}
+    }
+}
 
 \newcommand{\st}{\textsuperscript{st}}		%ordinal shortcuts, for use in math environment and inline text
 \newcommand{\nd}{\textsuperscript{nd}}
