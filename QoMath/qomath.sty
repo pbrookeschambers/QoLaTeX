@@ -4,7 +4,12 @@
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 
-\let\thorne\th						%renaming a command that would otherwise be replaced
+\let\thorn\th						%renaming a command that would otherwise be replaced
+
+% Dimensions
+\newdimen\mheight
+\newdimen\lheight
+\newdimen\rheight
 
 \newcommand{\uvec}[1]{\hat{x}}			%unit vector in the style of the normal \vec command
 
@@ -28,33 +33,60 @@
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
 \newcommand{\ppderiv}[3]{\frac{\partial^2 {#1}}{\partial {#2}\,\partial {#3}}}
 
-\newcommand{\lrbracket}[1]{\left({#1}\right)}	%[l]eft-[r]ight [bracket]s
-\newcommand{\lrsquare}[1]{\left[{#1}\right]}	%^^
-\newcommand{\lrbrace}[1]{\left\{{#1}\right\}}	%^^
-\newcommand{\lrangle}[1]{\left<{#1}\right>}	%^^
-\newcommand{\lrpipe}[1]{\left|{#1}\right|}	%^^
-\newcommand{\rlangle}[1]{\left>{#1}\right<}	%inward pointing version of \lrangle
+\newcommand{\lrbracket}[1]{\mathopen{}\left({#1}\right)}	%[l]eft-[r]ight [bracket]s
+\newcommand{\lrsquare}[1]{\mathopen{}\left[{#1}\right]}	%^^
+\newcommand{\lrbrace}[1]{\mathopen{}\left\{{#1}\right\}}	%^^
+\newcommand{\lrangle}[1]{\mathopen{}\left<{#1}\right>}	%^^
+\newcommand{\lrpipe}[1]{\mathopen{}\left|{#1}\right|}	%^^
+\newcommand{\rlangle}[1]{\mathopen{}\left>{#1}\right<}	%inward pointing version of \lrangle
 
 \newcommand{\ullimit}[2]{^{^{#2}}_{_{#1}}}	%Integrals, [u]pper-[l]ower [limit]s (from 1st argument to 2nd argument)
 \newcommand{\limint}[2]{\int\ullimit{#1}{#2}}
 \newcommand{\fullint}[4]{\limint{#1}{#2}\!{#3}\,\text{d}{#4}}
 
-\newcommand{\bra}[1]{\left<\left.\!{#1}\right|\right.\!}		%bra and ket
-\newcommand{\ket}[1]{\left.\!\left|{#1}\right.\!\right>}
-\newcommand{\braket}[2]{		%braket, scaling to the larger of the arguments
-	\newdimen\lheight
-	\setbox0=\hbox{\ensuremath{#1}}
+\newcommand{\bra}[1]{\mathopen{}\left<\mathopen{}\left.\!{#1}\right|\right.\!}		%bra and ket
+\newcommand{\ket}[1]{\mathopen{}\left.\!\mathopen{}\left|{#1}\right.\!\right>}
+
+\newcommand{\braket}[3][\@nil]{		%braket, scaling to the larger of the arguments, with a third optional argument for the inner operator.
+	\setbox0=\hbox{\ensuremath{#2}}
 	\lheight=\ht0
 	\advance\lheight by \dp0
-	\newdimen\rheight
-	\setbox0=\hbox{\ensuremath{#2}}
+	\setbox0=\hbox{\ensuremath{#3}}
 	\rheight=\ht0
 	\advance\rheight by \dp0
-	\ifdim\lheight>\rheight
-		\lrangle{\left.\!{#1}\right|{#2}}
-	\else
-		\lrangle{{#1}\left|{#2}\right.\!}
-	\fi
+  \def\tmp{#1}%
+  \ifx\tmp\@nnil
+    % No optional argument was passed, proceed with <a|b>
+  	\ifdim\lheight>\rheight
+      % Using \mathopen and \mathclose and \mspace to redistribute spacing "correctly" around mismatched brackets
+  		\ensuremath{\mathopen{}\left\langle\mathopen{}\left.{#2}\mspace{1.75mu}\right|\mathclose{}\mspace{1.75mu}{#3}\mspace{1.75mu}\right\rangle\mathclose{}}
+  	\else
+  		\ensuremath{\mathopen{}\left\langle\mspace{1.75mu}{#2}\mspace{1.75mu}\mathopen{}\left|\mspace{1.75mu}{#3}\right.\mathclose{}\right\rangle\mathclose{}}
+  	\fi
+  \else
+    % Optional argument was passed, proceed with <a|H|b>
+    % We need the middle height too
+  	\setbox0=\hbox{\ensuremath{#1}}
+  	\mheight=\ht0
+  	\advance\mheight by \dp0
+    \ifdim\lheight>\mheight
+      \ifdim\lheight>\rheight
+        % Left is tallest
+      \ensuremath{\mathopen{}\left\langle \mathopen{}\left. \mathopen{}\left. #2 \right|\mathclose{} #1 \right|\mathclose{} #3 \mspace{1.75mu}\right\rangle\mathclose{}}
+      \else
+        % Right is tallest
+        \ensuremath{\mathopen{}\left\langle \mspace{1.75mu} #2 \mathopen{}\left| #1 \mathopen{}\left| #3 \right.\mathclose{} \right.\mathclose{}} \right\rangle\mathclose{}
+      \fi
+    \else
+      \ifdim\mheight>\rheight
+        % Middle is tallest
+        \ensuremath{\mathopen{}\left\langle \mspace{1.75mu} #2 \mathopen{}\left|\mathopen{}\left. #1 \right|\mathclose{}\right.\mathclose{} #3 \right\rangle\mathclose{}}
+      \else
+        % Right is tallest
+        \ensuremath{\mathopen{}\left\langle \mspace{1.75mu} #2 \mathopen{}\left| #1 \mathopen{}\left| #3 \right.\mathclose{} \right.\mathclose{}} \right\rangle\mathclose{}
+      \fi
+    \fi
+  \fi
 }
 \newcommand{\ketbra}[2]{		%ketbra, scaling to the larger of the arguments
 	\newdimen\lheight
@@ -66,47 +98,9 @@
 	\rheight=\ht0
 	\advance\rheight by \dp0
 	\ifdim\lheight>\rheight
-		\lrpipe{\left.\left.\!{#1}\right>\!\right<{#2}}
+		\lrpipe{\mathopen{}\left.\mathopen{}\left.\!{#1}\right>\!\right<{#2}}
 	\else
-		\lrpipe{{#1}\left>\!\left<{#2}\right.\right.\!}
-	\fi
-}
-\newcommand{\braketwrap}[3]{		%bra and ket wrapped around a central matrix, scaling to the larger of the arguments
-	\newdimen\lheight
-	\setbox0=\hbox{\ensuremath{{#1}{#2}}}
-	\lheight=\ht0
-	\advance\lheight by \dp0
-	\newdimen\rheight
-	\setbox0=\hbox{\ensuremath{{#2}{#3}}}
-	\rheight=\ht0
-	\advance\rheight by \dp0
-	\ifdim\lheight>\rheight
-		\lrangle{\left.\left.\!{#1}\right|\!{#2}\,\right|{#3}}
-	\else
-		\ifdim\rheight>\lheight
-			\lrangle{{#1}\left|\,{#2}\!\left|{#3}\right.\right.\!}
-		\else
-			\lrangle{{#1}\lrpipe{{#2}}{#3}}
-		\fi
-	\fi
-}
-\newcommand{\ketbrawrap}[3]{		%ket and bra wrapped around a central matrix, scaling to the larger of the arguments
-	\newdimen\lheight
-	\setbox0=\hbox{\ensuremath{{#1}{#2}}}
-	\lheight=\ht0
-	\advance\lheight by \dp0
-	\newdimen\rheight
-	\setbox0=\hbox{\ensuremath{{#2}{#3}}}
-	\rheight=\ht0
-	\advance\rheight by \dp0
-	\ifdim\lheight>\rheight
-		\lrpipe{\left.\left.\!{#1}\right>\!{#2}\,\right<{#3}}
-	\else
-		\ifdim\rheight>\lheight
-			\lrpipe{{#1}\left>\,{#2}\!\left<{#3}\right.\right.\!}
-		\else
-			\lrpipe{{#1}\rlangle{{#2}}{#3}}
-		\fi
+		\lrpipe{{#1}\mathopen{}\left>\!\mathopen{}\left<{#2}\right.\right.\!}
 	\fi
 }
 
