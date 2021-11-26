@@ -36,16 +36,16 @@
 \newcommand{\lrbracket}[1]{\mathopen{}\left({#1}\right)}	%[l]eft-[r]ight [bracket]s
 \newcommand{\lrsquare}[1]{\mathopen{}\left[{#1}\right]}	%^^
 \newcommand{\lrbrace}[1]{\mathopen{}\left\{{#1}\right\}}	%^^
-\newcommand{\lrangle}[1]{\mathopen{}\left<{#1}\right>}	%^^
-\newcommand{\lrpipe}[1]{\mathopen{}\left|{#1}\right|}	%^^
-\newcommand{\rlangle}[1]{\mathopen{}\left>{#1}\right<}	%inward pointing version of \lrangle
+\newcommand{\lrangle}[1]{\mathopen{}\left\langle{#1}\right\rangle}	%^^
+\newcommand{\lrpipe}[1]{\mathopen{}\left|{#1}\right|}		%^^
+\newcommand{\rlangle}[1]{\mathopen{}\left\rangle{#1}\right\langle}	%inward pointing version of \lrangle
 
 \newcommand{\ullimit}[2]{^{^{#2}}_{_{#1}}}	%Integrals, [u]pper-[l]ower [limit]s (from 1st argument to 2nd argument)
 \newcommand{\limint}[2]{\int\ullimit{#1}{#2}}
 \newcommand{\fullint}[4]{\limint{#1}{#2}\!{#3}\,\text{d}{#4}}
 
-\newcommand{\bra}[1]{\mathopen{}\left<\mathopen{}\left.\!{#1}\right|\right.\!}		%bra and ket
-\newcommand{\ket}[1]{\mathopen{}\left.\!\mathopen{}\left|{#1}\right.\!\right>}
+\newcommand{\bra}[1]{\mathopen{}\left\langle\mathopen{}\left.\!{#1}\right|\right.\!}		%bra and ket
+\newcommand{\ket}[1]{\mathopen{}\left.\!\mathopen{}\left|{#1}\right.\!\right\rangle}
 
 \newcommand{\braket}[3][\@nil]{		%braket, scaling to the larger of the arguments, with a third optional argument for the inner operator.
 	\setbox0=\hbox{\ensuremath{#2}}
@@ -54,82 +54,87 @@
 	\setbox0=\hbox{\ensuremath{#3}}
 	\rheight=\ht0
 	\advance\rheight by \dp0
-  \def\tmp{#1}%
-  \ifx\tmp\@nnil
-    % No optional argument was passed, proceed with <a|b>
-  	\ifdim\lheight>\rheight
-      % Using \mathopen and \mathclose and \mspace to redistribute spacing "correctly" around mismatched brackets
-  		\ensuremath{\mathopen{}\left\langle\mathopen{}\left.{#2}\mspace{1.75mu}\right|\mathclose{}\mspace{1.75mu}{#3}\mspace{1.75mu}\right\rangle\mathclose{}}
-  	\else
-  		\ensuremath{\mathopen{}\left\langle\mspace{1.75mu}{#2}\mspace{1.75mu}\mathopen{}\left|\mspace{1.75mu}{#3}\right.\mathclose{}\right\rangle\mathclose{}}
-  	\fi
-  \else
-    % Optional argument was passed, proceed with <a|H|b>
-    % We need the middle height too
-  	\setbox0=\hbox{\ensuremath{#1}}
-  	\mheight=\ht0
-  	\advance\mheight by \dp0
-    \ifdim\lheight>\mheight
-      \ifdim\lheight>\rheight
-        % Left is tallest
-      \ensuremath{\mathopen{}\left\langle \mathopen{}\left. \mathopen{}\left. #2 \right|\mathclose{} #1 \right|\mathclose{} #3 \mspace{1.75mu}\right\rangle\mathclose{}}
-      \else
-        % Right is tallest
-        \ensuremath{\mathopen{}\left\langle \mspace{1.75mu} #2 \mathopen{}\left| #1 \mathopen{}\left| #3 \right.\mathclose{} \right.\mathclose{}} \right\rangle\mathclose{}
-      \fi
-    \else
-      \ifdim\mheight>\rheight
-        % Middle is tallest
-        \ensuremath{\mathopen{}\left\langle \mspace{1.75mu} #2 \mathopen{}\left|\mathopen{}\left. #1 \right|\mathclose{}\right.\mathclose{} #3 \right\rangle\mathclose{}}
-      \else
-        % Right is tallest
-        \ensuremath{\mathopen{}\left\langle \mspace{1.75mu} #2 \mathopen{}\left| #1 \mathopen{}\left| #3 \right.\mathclose{} \right.\mathclose{}} \right\rangle\mathclose{}
-      \fi
-    \fi
-  \fi
+	\def\tmp{#1}%
+	\ifx\tmp\@nnil
+		% No optional argument was passed, proceed with <a|b>
+		\ifdim\lheight>\rheight
+			% Left is tallest
+			% Using \mathopen and \mathclose and \mspace to redistribute spacing "correctly" around mismatched brackets
+			\ensuremath{\mathopen{}\left\langle\mathopen{}\left.{#2}\mspace{1.75mu}\right|\mathclose{}\mspace{1.75mu}{#3}\mspace{1.75mu}\right\rangle\mathclose{}}
+		\else
+			% Right is tallest
+			\ensuremath{\mathopen{}\left\langle\mspace{1.75mu}{#2}\mspace{1.75mu}\mathopen{}\left|\mspace{1.75mu}{#3}\right.\mathclose{}\right\rangle\mathclose{}}
+		\fi
+	\else
+		% Optional argument was passed, proceed with <a|H|b>
+		% We need the middle height too
+		\setbox0=\hbox{\ensuremath{#1}}
+		\mheight=\ht0
+		\advance\mheight by \dp0
+		\ifdim\lheight>\mheight
+			\ifdim\lheight>\rheight
+				% Left is tallest
+				\ensuremath{\mathopen{}\left\langle \mathopen{}\left. \mathopen{}\left. {#2} \right|\mathclose{} {#1} \right|\mathclose{} {#3} \mspace{1.75mu}\right\rangle\mathclose{}}
+			\else
+				% Right is tallest
+				\ensuremath{\mathopen{}\left\langle \mspace{1.75mu} {#2} \mathopen{}\left| {#1} \mathopen{}\left| {#3} \right.\mathclose{} \right.\mathclose{}} \right\rangle\mathclose{}
+			\fi
+		\else
+			\ifdim\mheight>\rheight
+				% Middle is tallest
+				\ensuremath{\mathopen{}\left\langle \mspace{1.75mu} {#2} \mathopen{}\left|\mathopen{}\left. {#1} \right|\mathclose{}\right.\mathclose{} {#3} \right\rangle\mathclose{}}
+			\else
+				% Right is tallest
+				\ensuremath{\mathopen{}\left\langle \mspace{1.75mu} {#2} \mathopen{}\left| {#1} \mathopen{}\left| {#3} \right.\mathclose{} \right.\mathclose{}} \right\rangle\mathclose{}
+			\fi
+		\fi
+	\fi
 }
 
-\newcommand{\ketbra}[3][\@nil]{		%braket, scaling to the larger of the arguments
-	\newdimen\lheight
+\newcommand{\ketbra}[3][\@nil]{		%ketbra, scaling to the larger of the arguments
 	\setbox0=\hbox{\ensuremath{#2}}
 	\lheight=\ht0
 	\advance\lheight by \dp0
-	\newdimen\rheight
 	\setbox0=\hbox{\ensuremath{#3}}
 	\rheight=\ht0
 	\advance\rheight by \dp0
-  \def\tmp{#1}%
-  \ifx\tmp\@nnil
-    % No optional argument was passed, proceed with <a|b>
-  	\ifdim\lheight>\rheight
-  		\ensuremath{\mathopen{}\left\rangle\mathopen{}\left.{#2}\mspace{1.75mu}\right|\mathclose{}\mspace{1.75mu}{#3}\mspace{1.75mu}\right\langle\mathclose{}}
-  	\else
-  		\ensuremath{\mathopen{}\left\rangle\mspace{1.75mu}{#2}\mspace{1.75mu}\mathopen{}\left|\mspace{1.75mu}{#3}\right.\mathclose{}\right\langle\mathclose{}}
-  	\fi
-  \else
-    % Optional argument was passed, proceed with <a|H|b>
-  	\newdimen\mheight
-  	\setbox0=\hbox{\ensuremath{#1}}
-  	\mheight=\ht0
-  	\advance\mheight by \dp0
-    \ifdim\lheight>\mheight
-      \ifdim\lheight>\rheight
-        % Left is largest
-      \ensuremath{\mathopen{}\left\rangle \mathopen{}\left. \mathopen{}\left. #2 \right|\mathclose{} #1 \right|\mathclose{} #3 \mspace{1.75mu}\right\langle\mathclose{}}
-      \else
-        % Right is largest
-        \ensuremath{\mathopen{}\left\rangle \mspace{1.75mu} #2 \mathopen{}\left| #1 \mathopen{}\left| #3 \right.\mathclose{} \right.\mathclose{}\right\langle\mathclose{}}
-      \fi
-    \else
-      \ifdim\mheight>\rheight
-        % Middle is largest
-        \ensuremath{\mathopen{}\left\rangle \mspace{1.75mu} #2 \mathopen{}\left|\mathopen{}\left. \mspace{-0.875mu}#1 \right|\mathclose{}\right.\mathclose{} #3 \mspace{0.875mu}\right\langle\mathclose{}}
-      \else
-        % Right is largest
-        \ensuremath{\mathopen{}\left\rangle \mspace{1.75mu} #2 \mathopen{}\left| #1 \mathopen{}\left| #3 \right.\mathclose{} \right.\mathclose{}\right\langle\mathclose{}}
-      \fi
-    \fi
-  \fi
+	\def\tmp{#1}%
+	\ifx\tmp\@nnil
+		% No optional argument was passed, proceed with |a><b|
+		\ifdim\lheight>\rheight
+			%Boring non-touching version
+			\ensuremath{\mathopen{}\left|\mathopen{}\left.\left.{#2}\mspace{1.75mu}\right\rangle\right\langle\mathclose{}\mspace{1.75mu}{#3}\mspace{1.75mu}\right|\mathclose{}}
+			%Sick-nasty touching version
+			%\ensuremath{\mathopen{}\left|\mathopen{}\left.\left.{#2}\mspace{1.75mu}\right\rangle\mspace{-4.8mu}\right\langle\mathclose{}\mspace{1.75mu}{#3}\mspace{1.75mu}\right|\mathclose{}}
+		\else
+			%Virgin non-touching version
+			\ensuremath{\mathopen{}\left|\mspace{1.75mu}{#2}\mspace{1.75mu}\mathopen{}\left\rangle\left\langle\mspace{1.75mu}{#3}\right.\right.\mathclose{}\right|\mathclose{}}
+			%Chad touching version
+			%\ensuremath{\mathopen{}\left|\mspace{1.75mu}{#2}\mspace{1.75mu}\mathopen{}\left\rangle\mspace{-4.8mu}\left\langle\mspace{1.75mu}{#3}\right.\right.\mathclose{}\right|\mathclose{}}
+		\fi
+	\else
+		% Optional argument was passed, proceed with |a>H<b|
+		\setbox0=\hbox{\ensuremath{#1}}
+		\mheight=\ht0
+		\advance\mheight by \dp0	
+		\ifdim\lheight>\mheight
+			\ifdim\lheight>\rheight
+				% Left is largest
+				\ensuremath{\mathopen{}\left| \mathopen{}\left. \mathopen{}\left. {#2} \right\rangle\mathclose{} {#1} \right\langle\mathclose{} {#3} \mspace{1.75mu}\right|\mathclose{}}
+			\else
+				% Right is largest
+				\ensuremath{\mathopen{}\left| \mspace{1.75mu} {#2} \mathopen{}\left\rangle {#1} \mathopen{}\left\langle {#3} \right.\mathclose{} \right.\mathclose{}\right|\mathclose{}}
+			\fi
+		\else
+			\ifdim\mheight>\rheight
+				% Middle is largest
+				\ensuremath{\mathopen{}\left| \mspace{1.75mu} {#2} \mathopen{}\left\rangle\mathopen{}\left. \mspace{-0.875mu}{#1} \right\langle\mathclose{}\right.\mathclose{} {#3} \mspace{0.875mu}\right|\mathclose{}}
+			\else
+				% Right is largest
+				\ensuremath{\mathopen{}\left|\mspace{1.75mu} {#2} \mathopen{}\left\rangle {#1} \mathopen{}\left\langle {#3} \right.\mathclose{} \right.\mathclose{}\right|\mathclose{}}
+			\fi
+		\fi
+	\fi
 }
 
 \newcommand{\st}{\textsuperscript{st}}		%ordinal shortcuts, for use in math environment and inline text
